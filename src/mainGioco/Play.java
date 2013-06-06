@@ -1,4 +1,5 @@
-package main;
+package mainGioco;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -10,35 +11,48 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Play extends BasicGameState {
 
-	
-	public Play(int state) {
-		// TODO Auto-generated constructor stub
+	public Play(int state) { // costruttore inutile per ora, ma necessario
+
 	}
 
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-
-		
-
+		/*
+		 * codice per inizializzare (eseguito all'avvio della classe, quando si
+		 * entra nello stato
+		 */
 
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
+		// la g indica la grafica, quando si vuole
+		// disegnare si passa sempre da lei.
+
+		/*
+		 * disegno sullo schermo le cose
+		 */
 
 	}
 
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
+
 		return 1;
 	}
 
 	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
+	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
-		// TODO Auto-generated method stub
-		
+		// delta indica il tempo in ms passato dall'ultimo
+		// update dello schermo. utile per standardizzare
+		// animazioni/movimenti
+
+		/*
+		 * qui va inserito tutto quello che si vuole venga eseguito ad ogni
+		 * update
+		 */
+
 	}
 
 }
