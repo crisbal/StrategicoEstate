@@ -1,5 +1,8 @@
 package mainGioco;
 
+import materiali.Materiali;
+import materiali.QuadratoGenerico;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -11,6 +14,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Play extends BasicGameState {
 
+	
+	QuadratoGenerico blocco1,blocco2;
+	
 	public Play(int state) { // costruttore inutile per ora, ma necessario
 
 	}
@@ -21,7 +27,8 @@ public class Play extends BasicGameState {
 		 * codice per inizializzare (eseguito all'avvio della classe, quando si
 		 * entra nello stato
 		 */
-
+		blocco1= new QuadratoGenerico(Materiali.ERBA);
+		blocco2= new QuadratoGenerico(Materiali.STRADA);
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
@@ -32,7 +39,9 @@ public class Play extends BasicGameState {
 		/*
 		 * disegno sullo schermo le cose
 		 */
-
+		
+		blocco1.Disegna(0f, 0f, g);
+		blocco2.Disegna(64f, 64f, g);
 	}
 
 	@Override
