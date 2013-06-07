@@ -1,8 +1,10 @@
 package mainGioco;
 
+import gui.Bottone;
 import materiali.Materiali;
 import materiali.QuadratoGenerico;
 
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -16,7 +18,7 @@ public class Play extends BasicGameState {
 
 	
 	QuadratoGenerico blocco1,blocco2;
-	
+	Bottone bot,bot2;
 	public Play(int state) { // costruttore inutile per ora, ma necessario
 
 	}
@@ -29,6 +31,8 @@ public class Play extends BasicGameState {
 		 */
 		blocco1= new QuadratoGenerico(Materiali.ERBA);
 		blocco2= new QuadratoGenerico(Materiali.STRADA);
+		bot= new Bottone("QUESTO E' UNA SPECIE DI BOTTONE!");
+		bot2=new Bottone("Cliccalo per eliminarlo!");
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
@@ -42,6 +46,8 @@ public class Play extends BasicGameState {
 		
 		blocco1.Disegna(0f, 0f, g);
 		blocco2.Disegna(64f, 64f, g);
+		bot.Disegna(0, gc.getHeight()/2, g);
+		bot2.Disegna(gc.getWidth()/2, 0, g);
 	}
 
 	@Override
@@ -61,7 +67,10 @@ public class Play extends BasicGameState {
 		 * qui va inserito tutto quello che si vuole venga eseguito ad ogni
 		 * update
 		 */
+		bot.Update(gc);
+		bot2.Update(gc);
 
+		
 	}
 
 }
