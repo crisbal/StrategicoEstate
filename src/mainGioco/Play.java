@@ -1,5 +1,7 @@
 package mainGioco;
 
+import java.util.ArrayList;
+
 import gui.Bottone;
 import materiali.Materiali;
 import materiali.QuadratoGenerico;
@@ -14,11 +16,14 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import utils.CaricaMappa;
+
 public class Play extends BasicGameState {
 
-	
-	QuadratoGenerico blocco1,blocco2;
-	Bottone bot,bot2;
+	Bottone bot, bot2;
+	boolean caricato = false;
+	ArrayList<QuadratoGenerico> quadrati = new ArrayList<QuadratoGenerico>();
+
 	public Play(int state) { // costruttore inutile per ora, ma necessario
 
 	}
@@ -29,10 +34,31 @@ public class Play extends BasicGameState {
 		 * codice per inizializzare (eseguito all'avvio della classe, quando si
 		 * entra nello stato
 		 */
-		blocco1= new QuadratoGenerico(Materiali.ERBA);
-		blocco2= new QuadratoGenerico(Materiali.STRADA);
-		bot= new Bottone("QUESTO E' UNA SPECIE DI BOTTONE!");
-		bot2=new Bottone("Cliccalo per eliminarlo!");
+
+		CaricaMappa gestoreMappa = new CaricaMappa();
+		int[] mappa = gestoreMappa.Carica();
+
+		if (!caricato)
+			for (int i = 0; i < mappa.length; i++) {
+				caricato = true;
+				String Tipo = "";
+				switch (mappa[i]) {
+				case 0:
+					Tipo = Materiali.ERBA;
+					break;
+				case 1:
+					Tipo = Materiali.ACQUA;
+					break;
+				case 2:
+					Tipo = Materiali.MONTAGNA;
+					break;
+				}
+				quadrati.add(new QuadratoGenerico(Tipo));
+				System.out.println(i + Tipo);
+			}
+
+		bot = new Bottone("QUESTO E' UNA SPECIE DI BOTTONE!");
+		bot2 = new Bottone("Cliccalo per eliminarlo!");
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
@@ -43,11 +69,24 @@ public class Play extends BasicGameState {
 		/*
 		 * disegno sullo schermo le cose
 		 */
+		int j=0;
+		int x=0;
+		for(int i=0;i<quadrati.size();i++)
+		{
+			if(i%6==0&&i!=0)
+			{
+				j++;
+				x=0;
+			}
+			
+			quadrati.get(i).Disegna(j*quadrati.get(i).Texture.getWidth(),x*quadrati.get(i).Texture.getHeight(), g);
+			x++;
+		}
 		
-		blocco1.Disegna(0f, 0f, g);
-		blocco2.Disegna(64f, 64f, g);
-		bot.Disegna(0, gc.getHeight()/2, g);
-		bot2.Disegna(gc.getWidth()/2, 0, g);
+		bot.Disegna(0, gc.getHeight() / 2, g);
+		
+		
+		bot2.Disegna(gc.getWidth() / 2, 0, g);
 	}
 
 	@Override
@@ -70,7 +109,6 @@ public class Play extends BasicGameState {
 		bot.Update(gc);
 		bot2.Update(gc);
 
-		
 	}
 
 }

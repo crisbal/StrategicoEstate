@@ -17,7 +17,7 @@ public class Bottone {
 	Font font=new Font("Verdana", Font.PLAIN, 16);   //il testo e' verdana 16 normale PLAIN
 	TrueTypeFont ttf = new TrueTypeFont(font, true);  //creo la ttf per stamparlo a video
 	
-	boolean visualizza=true;
+	boolean visualizza=true,cliccabile=true;
 	float x, y, larghezza, altezza;
 
 	public Bottone(String contenuto) throws SlickException {
@@ -50,7 +50,7 @@ public class Bottone {
 	public boolean Cliccato(GameContainer gc){
 		float MouseY=gc.getHeight()-Mouse.getY()-1;  //la gestione della Y e' stupida, per avere quella vera devo comportarmi cosi'
 		
-		if(Mouse.isButtonDown(0)&&visualizza)
+		if(Mouse.isButtonDown(0)&&visualizza&&cliccabile)
 		{
 			
 			if(Mouse.getX()>x&&Mouse.getX()<(x+larghezza))

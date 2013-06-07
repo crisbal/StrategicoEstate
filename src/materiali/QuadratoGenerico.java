@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 
 public class QuadratoGenerico {
 	
-	Image Texture;
+	public Image Texture;
 	
 	public QuadratoGenerico(String tipo) throws SlickException {   //costruttore, viene passato il tipo di blocco nel formato Materiali.nome
 		Texture= new Image(tipo);
