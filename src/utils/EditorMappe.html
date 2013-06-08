@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+	<title>GeneraMappe</title>
+	<style>
+	td{
+		border: solid 1px black;
+		width: 25px;
+		height: 25px;
+	}
+	</style>
+	<script type="text/javascript">
+	var ALTEZZA=8;
+	var LARGHEZZA=16;
+	function cambia(i,j)
+	{
+		var colore=document.getElementById('colore').value;
+		var coloreStile="green";
+		switch(colore)
+		{
+			case "0":
+			coloreStile="green";
+			break;
+			case "1":
+			coloreStile="blue";
+			break;
+			case "2":
+			coloreStile="#787878"
+			break;
+			case "3":
+			coloreStile="#660000"
+			break;
+
+		}
+		document.getElementById(i+","+j).style.backgroundColor=coloreStile;
+	}
+
+	function genera()
+	{
+		document.getElementById("codice").innerHTML="int[][]mappa=new int[][]{";
+
+		for(var i=0;i<ALTEZZA;i++)
+		{
+			document.getElementById("codice").innerHTML+="{";
+			for(var j=0;j<LARGHEZZA;j++)
+			{
+				console.log(i+","+j);
+				var colore=document.getElementById(i+","+j).style.backgroundColor;
+				var valore;
+				switch(colore)
+				{
+					case "green":
+					valore=0;
+					break;
+					case "blue":
+					valore=1;
+					break;
+					case "rgb(120, 120, 120)":
+					valore=2
+					break;
+					case "rgb(102, 0, 0)":
+					valore=3;
+					break;
+				}
+				document.getElementById("codice").innerHTML+=valore+", ";
+			}
+			document.getElementById("codice").innerHTML+="}";
+			if(i!=ALTEZZA-1)
+				document.getElementById("codice").innerHTML+=",";
+		}
+		document.getElementById("codice").innerHTML+="};";
+	}
+	</script>
+</head>
+<body>
+	<select name="colore" id="colore">
+		<option value="0">ERBA</option>
+		<option value="1">ACQUA</option>
+		<option value="2">STRADA</option>
+		<option value="3">MONTAGNA</option>
+	</select>
+	<table>
+		<script>
+		for(var i=0;i<ALTEZZA;i++)
+		{
+			document.write("<tr>");
+			for(var j=0;j<LARGHEZZA;j++)
+			{
+				document.write('<td id="'+i+','+j+'" onclick="cambia('+i+','+j+')" style="background-color:green;">');
+				document.write('</td>');
+			}
+			document.write("</tr>")
+		}
+		</script>
+	</table>
+	
+	<input type="button" onclick="genera()" value="Genera il codice della mappa!">
+	<div id="codice"></div>
+</table>
+</body>
+</html>
