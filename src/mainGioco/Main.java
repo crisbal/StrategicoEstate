@@ -35,7 +35,7 @@ public class Main extends StateBasedGame {
 		AppGameContainer appgc;
 		try {
 			appgc = new AppGameContainer(new Main(NomeGioco));
-			appgc.setDisplayMode(800, 600, false); // 800x600
+			appgc.setDisplayMode(1024, 600, false); // 800x600
 			appgc.start(); // la apre/avvia
 		} catch (SlickException e) {
 			e.printStackTrace();

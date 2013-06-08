@@ -8,35 +8,47 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.SlickException;
+
+import materiali.Materiali;
+import materiali.QuadratoGenerico;
+
 public class CaricaMappa {
 
-	public int[] Carica() {
-		List<Integer> list = new ArrayList<Integer>();
-		File file = new File("mappa.txt");
-		BufferedReader reader = null;
-		int[] mappa = new int[6];
-		try {
-			reader = new BufferedReader(new FileReader(file));
-			String text = null;
-			int i = 0;
-			while ((text = reader.readLine()) != null) {
-				mappa[i] = Integer.parseInt(text);
-				i++;
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (reader != null) {
-					reader.close();
-				}
-			} catch (IOException e) {
-			}
-		}
-
+	public static int[][] livello1() {
+	
+		int[][]mappa=new int[][]{
+				  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+				};
+		
 		return mappa;
 	}
 
+	
+	public static ArrayList<QuadratoGenerico> caricaQuadrati() throws SlickException{
+		ArrayList<QuadratoGenerico> quadrati = new ArrayList<QuadratoGenerico>();
+		int[][] mappa=livello1();
+		for(int i=0;i<mappa.length;i++)
+		{
+			for(int j=0;j<mappa[i].length;j++)
+			{
+				switch(mappa[i][j])
+				{
+				case 0:
+					quadrati.add(new QuadratoGenerico(Materiali.ERBA,j,i));
+				break;
+				}
+			}
+		}
+		return quadrati;
+		
+	}
 }

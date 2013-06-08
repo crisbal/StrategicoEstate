@@ -2,6 +2,8 @@ package mainGioco;
 
 import java.util.ArrayList;
 
+import entities.PersonaggioGenerico;
+import entities.Tipo;
 import gui.Bottone;
 import materiali.Materiali;
 import materiali.QuadratoGenerico;
@@ -21,6 +23,7 @@ import utils.CaricaMappa;
 public class Play extends BasicGameState {
 
 	Bottone bot, bot2;
+	PersonaggioGenerico pers1,pers2;
 	boolean caricato = false;
 	ArrayList<QuadratoGenerico> quadrati = new ArrayList<QuadratoGenerico>();
 
@@ -35,30 +38,12 @@ public class Play extends BasicGameState {
 		 * entra nello stato
 		 */
 
-		CaricaMappa gestoreMappa = new CaricaMappa();
-		int[] mappa = gestoreMappa.Carica();
-
-		if (!caricato)
-			for (int i = 0; i < mappa.length; i++) {
-				caricato = true;
-				String Tipo = "";
-				switch (mappa[i]) {
-				case 0:
-					Tipo = Materiali.ERBA;
-					break;
-				case 1:
-					Tipo = Materiali.ACQUA;
-					break;
-				case 2:
-					Tipo = Materiali.MONTAGNA;
-					break;
-				}
-				quadrati.add(new QuadratoGenerico(Tipo));
-				System.out.println(i + Tipo);
-			}
+		quadrati=CaricaMappa.caricaQuadrati();
 
 		bot = new Bottone("QUESTO E' UNA SPECIE DI BOTTONE!");
 		bot2 = new Bottone("Cliccalo per eliminarlo!");
+		pers1=new PersonaggioGenerico(0, 0, Tipo.SOLDATO);
+		pers2=new PersonaggioGenerico(3, 0, Tipo.CARRO);
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
@@ -69,23 +54,15 @@ public class Play extends BasicGameState {
 		/*
 		 * disegno sullo schermo le cose
 		 */
-		int j=0;
-		int x=0;
 		for(int i=0;i<quadrati.size();i++)
 		{
-			if(i%6==0&&i!=0)
-			{
-				j++;
-				x=0;
-			}
-			
-			quadrati.get(i).Disegna(j*quadrati.get(i).Texture.getWidth(),x*quadrati.get(i).Texture.getHeight(), g);
-			x++;
+			quadrati.get(i).Disegna();
 		}
 		
+		pers1.Disegna();
+		pers2.Disegna();
+		
 		bot.Disegna(0, gc.getHeight() / 2, g);
-		
-		
 		bot2.Disegna(gc.getWidth() / 2, 0, g);
 	}
 
