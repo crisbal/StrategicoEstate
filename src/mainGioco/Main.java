@@ -24,6 +24,7 @@ public class Main extends StateBasedGame {
 
 	public void initStatesList(GameContainer gc) throws SlickException {
 		// this.getState(menu).init(gc, this); //li inizializzo
+		gc.setShowFPS(false);
 		this.getState(gioca).init(gc, this);
 		this.enterState(gioca);
 
@@ -35,7 +36,7 @@ public class Main extends StateBasedGame {
 		AppGameContainer appgc;
 		try {
 			appgc = new AppGameContainer(new Main(NomeGioco));
-			appgc.setDisplayMode(1024, 600, false); // 800x600
+			appgc.setDisplayMode(Config.LARGHEZZA, Config.ALTEZZA, false);
 			appgc.start(); // la apre/avvia
 		} catch (SlickException e) {
 			e.printStackTrace();

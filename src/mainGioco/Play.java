@@ -5,26 +5,22 @@ import java.util.ArrayList;
 import entities.PersonaggioGenerico;
 import entities.Tipo;
 import gui.Bottone;
-import materiali.Materiali;
 import materiali.QuadratoGenerico;
 
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import utils.CaricaMappa;
+import utils.GestoreMouse;
 
 public class Play extends BasicGameState {
 
-	Bottone bot, bot2;
-	PersonaggioGenerico pers1,pers2;
-	boolean caricato = false;
+	PersonaggioGenerico pers1, pers2;
+	Bottone bot;
 	ArrayList<QuadratoGenerico> quadrati = new ArrayList<QuadratoGenerico>();
 
 	public Play(int state) { // costruttore inutile per ora, ma necessario
@@ -38,12 +34,10 @@ public class Play extends BasicGameState {
 		 * entra nello stato
 		 */
 
-		quadrati=CaricaMappa.caricaQuadrati();
+		quadrati = CaricaMappa.caricaQuadrati();
 
-		bot = new Bottone("QUESTO E' UNA SPECIE DI BOTTONE!");
-		bot2 = new Bottone("Cliccalo per eliminarlo!");
-		pers1=new PersonaggioGenerico(0, 0, Tipo.SOLDATO);
-		pers2=new PersonaggioGenerico(3, 0, Tipo.CARRO);
+		pers1 = new PersonaggioGenerico(2, 5, Tipo.SOLDATO);
+		pers2 = new PersonaggioGenerico(3, 8, Tipo.CARRO);
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
@@ -54,16 +48,16 @@ public class Play extends BasicGameState {
 		/*
 		 * disegno sullo schermo le cose
 		 */
-		for(int i=0;i<quadrati.size();i++)
-		{
+		for (int i = 0; i < quadrati.size(); i++) {
 			quadrati.get(i).Disegna();
 		}
-		
+
 		pers1.Disegna();
 		pers2.Disegna();
-		
-		bot.Disegna(0, gc.getHeight() / 2, g);
-		bot2.Disegna(gc.getWidth() / 2, 0, g);
+
+		if (bot != null) {
+			bot.Disegna(250, 250);
+		}
 	}
 
 	@Override
@@ -75,6 +69,7 @@ public class Play extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
+		Input input = gc.getInput();
 		// delta indica il tempo in ms passato dall'ultimo
 		// update dello schermo. utile per standardizzare
 		// animazioni/movimenti
@@ -83,8 +78,19 @@ public class Play extends BasicGameState {
 		 * qui va inserito tutto quello che si vuole venga eseguito ad ogni
 		 * update
 		 */
-		bot.Update(gc);
-		bot2.Update(gc);
+
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) { // se preme il
+																// bottone del
+																// mouse
+			int[] ArrayClick = GestoreMouse.ZonaClick(); // ottendo la casella
+															// su cui ha
+															// cliccato
+			if (ArrayClick[0] == pers1.x && ArrayClick[1] == pers1.y)
+				System.out.println("Hai cliccato il giocatore 1");
+
+			if (ArrayClick[0] == pers2.x && ArrayClick[1] == pers2.y)
+				System.out.println("Hai cliccato il giocatore 2");
+		}
 
 	}
 

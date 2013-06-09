@@ -5,7 +5,6 @@ import java.awt.Font;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
@@ -26,7 +25,7 @@ public class Bottone {
 		visualizza=true;
 	}
 
-	public void Disegna(float x, float y, Graphics g) {
+	public void Disegna(float x, float y) {
 		if(visualizza)
 		{
 			this.x = x;
