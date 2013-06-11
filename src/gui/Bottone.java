@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.Font;
 
+import mainGioco.Config;
+
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -23,6 +25,7 @@ public class Bottone {
 		Immagine = new Image("res/GUI/Bottone.png", false, Image.FILTER_NEAREST);   //uso l'ultimo parametro per rimuovere il blur dell'immagine
 		Testo = contenuto;
 		visualizza=true;
+		cliccabile=true;
 	}
 
 	public void Disegna(float x, float y) {
@@ -46,8 +49,8 @@ public class Bottone {
 
 	}
 
-	public boolean Cliccato(GameContainer gc){
-		float MouseY=gc.getHeight()-Mouse.getY()-1;  //la gestione della Y e' stupida, per avere quella vera devo comportarmi cosi'
+	public boolean Cliccato(){
+		float MouseY=Config.ALTEZZA-Mouse.getY()-1;  //la gestione della Y e' stupida, per avere quella vera devo comportarmi cosi'
 		
 		if(Mouse.isButtonDown(0)&&visualizza&&cliccabile)
 		{
@@ -71,11 +74,15 @@ public class Bottone {
 	}
 
 	
-	public void Update(GameContainer gc) {
+	public void Update() {
 		if(visualizza)
-			if(Cliccato(gc))
+			if(Cliccato())
 			{
 				Elimina();
 			}
+	}
+	
+	public boolean Visibile(){
+		return visualizza;
 	}
 }

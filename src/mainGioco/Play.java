@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import entities.PersonaggioGenerico;
 import entities.Tipo;
 import gui.Bottone;
+import materiali.Materiale;
 import materiali.QuadratoGenerico;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -19,9 +21,12 @@ import utils.GestoreMouse;
 
 public class Play extends BasicGameState {
 
-	PersonaggioGenerico pers1, pers2;
-	Bottone bot;
+	ArrayList<PersonaggioGenerico> personaggio = new ArrayList<PersonaggioGenerico>();
 	ArrayList<QuadratoGenerico> quadrati = new ArrayList<QuadratoGenerico>();
+
+	int[] ArrayClick = new int[2];
+	Bottone banner;
+	Bottone avviso;
 
 	public Play(int state) { // costruttore inutile per ora, ma necessario
 
@@ -33,11 +38,19 @@ public class Play extends BasicGameState {
 		 * codice per inizializzare (eseguito all'avvio della classe, quando si
 		 * entra nello stato
 		 */
+		banner = new Bottone(
+				"Clicca con il tasto sinistro per selezionare, poi dx per muovere!");
 
 		quadrati = CaricaMappa.caricaQuadrati();
-
-		pers1 = new PersonaggioGenerico(2, 5, Tipo.SOLDATO);
-		pers2 = new PersonaggioGenerico(3, 8, Tipo.CARRO);
+		personaggio.add(new PersonaggioGenerico(2, 5, Tipo.SOLDATO));
+		personaggio.add(new PersonaggioGenerico(0, 0, Tipo.CARRO));
+		personaggio.add(new PersonaggioGenerico(1, 0, Tipo.CARRO));
+		personaggio.add(new PersonaggioGenerico(2, 0, Tipo.CARRO));
+		personaggio.add(new PersonaggioGenerico(3, 0, Tipo.CARRO));
+		personaggio.add(new PersonaggioGenerico(4, 0, Tipo.CARRO));
+		personaggio.add(new PersonaggioGenerico(5, 0, Tipo.CARRO));
+		personaggio.add(new PersonaggioGenerico(6, 0, Tipo.CARRO));
+		personaggio.add(new PersonaggioGenerico(7, 0, Tipo.CARRO));
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
@@ -51,13 +64,13 @@ public class Play extends BasicGameState {
 		for (int i = 0; i < quadrati.size(); i++) {
 			quadrati.get(i).Disegna();
 		}
-
-		pers1.Disegna();
-		pers2.Disegna();
-
-		if (bot != null) {
-			bot.Disegna(250, 250);
+		for (int i = 0; i < personaggio.size(); i++) {
+			personaggio.get(i).Disegna();
 		}
+
+		banner.Disegna(250, Config.ALTEZZA - 64);
+		if (avviso != null)
+			avviso.Disegna(300, Config.ALTEZZA / 2);
 	}
 
 	@Override
@@ -79,19 +92,41 @@ public class Play extends BasicGameState {
 		 * update
 		 */
 
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) { // se preme il
-																// bottone del
-																// mouse
-			int[] ArrayClick = GestoreMouse.ZonaClick(); // ottendo la casella
-															// su cui ha
-															// cliccato
-			if (ArrayClick[0] == pers1.x && ArrayClick[1] == pers1.y)
-				System.out.println("Hai cliccato il giocatore 1");
+		if (avviso != null)
+			if (avviso.Cliccato())
+				avviso.Elimina();
 
-			if (ArrayClick[0] == pers2.x && ArrayClick[1] == pers2.y)
-				System.out.println("Hai cliccato il giocatore 2");
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) // se preme il
+															// bottone sinsitro
+															// del mouse
+		{
+			ArrayClick = GestoreMouse.ZonaClick(); // ottendo la casella // su
+													// cui ha // cliccato
+			for (int i = 0; i < personaggio.size(); i++) {
+				if (ArrayClick[0] == personaggio.get(i).x
+						&& ArrayClick[1] == personaggio.get(i).y) {
+					if (personaggio.get(i).selezionato == false) {
+						personaggio.get(i).selezionato = true;
+					} else
+						personaggio.get(i).selezionato = false;
+
+				}
+			}
 		}
+		if (input.isMousePressed(Input.MOUSE_RIGHT_BUTTON))
+			for (int i = 0; i < personaggio.size(); i++) {
+				if (personaggio.get(i).selezionato) {
+					ArrayClick = GestoreMouse.ZonaClick();
+					if (Materiale.Controllo(ArrayClick)) {
+						System.out
+								.println(CaricaMappa.mappa[ArrayClick[1]][ArrayClick[0]]);
+						personaggio.get(i).Sposta(ArrayClick[1], ArrayClick[0]);
+					} else
+						avviso = new Bottone(
+								"Non puoi muoverti sull'acqua! Clicca per far scomparire");
+				}
+
+			}
 
 	}
-
 }

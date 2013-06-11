@@ -4,22 +4,24 @@ import java.util.ArrayList;
 import org.newdawn.slick.SlickException;
 
 import mainGioco.Config;
-import materiali.Materiali;
+import materiali.Materiale;
 import materiali.QuadratoGenerico;
 
 public class CaricaMappa {
 
+	public static int[][] mappa = null;
+
 	public static int[][] livello1() {
 
-		int[][] mappa = new int[][] {
-				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-				{ 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 2, },
-				{ 0, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-				{ 0, 0, 2, 2, 0, 3, 3, 2, 2, 2, 0, 2, 0, 0, 0, 0, },
-				{ 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, },
-				{ 0, 0, 0, 0, 0, 3, 2, 2, 3, 3, 0, 1, 0, 0, 0, 0, },
-				{ 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, },
-				{ 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, } };
+		mappa = new int[][] {
+				{ 2, 2, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 2, 2, },
+				{ 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 2, 2, },
+				{ 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 2, 2, },
+				{ 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 2, 2, },
+				{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, },
+				{ 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 2, 2, },
+				{ 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 2, 2, },
+				{ 2, 2, 3, 3, 3, 3, 3, 1, 1, 3, 3, 3, 3, 3, 2, 2, } };
 		return mappa;
 	}
 
@@ -31,17 +33,17 @@ public class CaricaMappa {
 			for (int j = 0; j < Config.COLONNE; j++) {
 				switch (mappa[i][j]) {
 				case 0:
-					quadrati.add(new QuadratoGenerico(Materiali.ERBA, j, i));
+					quadrati.add(new QuadratoGenerico(Materiale.ERBA, j, i));
 					break;
 
 				case 1:
-					quadrati.add(new QuadratoGenerico(Materiali.ACQUA, j, i));
+					quadrati.add(new QuadratoGenerico(Materiale.ACQUA, j, i));
 					break;
 				case 2:
-					quadrati.add(new QuadratoGenerico(Materiali.STRADA, j, i));
+					quadrati.add(new QuadratoGenerico(Materiale.STRADA, j, i));
 					break;
 				case 3:
-					quadrati.add(new QuadratoGenerico(Materiali.MONTAGNA, j, i));
+					quadrati.add(new QuadratoGenerico(Materiale.MONTAGNA, j, i));
 					break;
 				}
 			}
