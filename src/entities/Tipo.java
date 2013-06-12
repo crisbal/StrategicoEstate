@@ -7,6 +7,6 @@ public class Tipo {
 	 */
 	
 	static String Path = "res/Personaggi/"; 
-	public static final String SOLDATO = Path + "Soldato.png";
-	public static final String CARRO = Path + "Carro.png";
+	public static final String SOLDATO = Path + "Soldato";
+	public static final String CARRO = Path + "Carro";
 }

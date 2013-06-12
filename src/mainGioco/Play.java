@@ -25,6 +25,7 @@ public class Play extends BasicGameState {
 	ArrayList<QuadratoGenerico> quadrati = new ArrayList<QuadratoGenerico>();
 
 	int[] ArrayClick = new int[2];
+	boolean inBattaglia = false;
 	Bottone banner;
 	Bottone avviso;
 
@@ -42,15 +43,15 @@ public class Play extends BasicGameState {
 				"Clicca con il tasto sinistro per selezionare, poi dx per muovere!");
 
 		quadrati = CaricaMappa.caricaQuadrati();
-		personaggio.add(new PersonaggioGenerico(2, 5, Tipo.SOLDATO));
-		personaggio.add(new PersonaggioGenerico(0, 0, Tipo.CARRO));
-		personaggio.add(new PersonaggioGenerico(1, 0, Tipo.CARRO));
-		personaggio.add(new PersonaggioGenerico(2, 0, Tipo.CARRO));
-		personaggio.add(new PersonaggioGenerico(3, 0, Tipo.CARRO));
-		personaggio.add(new PersonaggioGenerico(4, 0, Tipo.CARRO));
-		personaggio.add(new PersonaggioGenerico(5, 0, Tipo.CARRO));
-		personaggio.add(new PersonaggioGenerico(6, 0, Tipo.CARRO));
-		personaggio.add(new PersonaggioGenerico(7, 0, Tipo.CARRO));
+		personaggio.add(new PersonaggioGenerico(2, 5, Tipo.SOLDATO, 1));
+		personaggio.add(new PersonaggioGenerico(0, 0, Tipo.CARRO, 2));
+		personaggio.add(new PersonaggioGenerico(1, 0, Tipo.CARRO, 3));
+		personaggio.add(new PersonaggioGenerico(2, 0, Tipo.CARRO, 2));
+		personaggio.add(new PersonaggioGenerico(3, 0, Tipo.CARRO, 2));
+		personaggio.add(new PersonaggioGenerico(4, 0, Tipo.CARRO, 3));
+		personaggio.add(new PersonaggioGenerico(5, 0, Tipo.CARRO, 1));
+		personaggio.add(new PersonaggioGenerico(6, 0, Tipo.CARRO, 1));
+		personaggio.add(new PersonaggioGenerico(7, 0, Tipo.CARRO, 2));
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
@@ -110,17 +111,31 @@ public class Play extends BasicGameState {
 					} else
 						personaggio.get(i).selezionato = false;
 
-				}
+				} else
+					personaggio.get(i).selezionato = false;
 			}
 		}
 		if (input.isMousePressed(Input.MOUSE_RIGHT_BUTTON))
 			for (int i = 0; i < personaggio.size(); i++) {
 				if (personaggio.get(i).selezionato) {
 					ArrayClick = GestoreMouse.ZonaClick();
+					for (int j = 0; j < personaggio.size(); j++) {
+						if (i != j) {
+							if (personaggio.get(j).x == ArrayClick[0]
+									&& personaggio.get(j).y == ArrayClick[1]
+									&& personaggio.get(i).squadra != personaggio
+											.get(j).squadra) {
+								inBattaglia = true;
+								break;
+							}
+						}
+					}
 					if (Materiale.Controllo(ArrayClick)) {
-						System.out
-								.println(CaricaMappa.mappa[ArrayClick[1]][ArrayClick[0]]);
-						personaggio.get(i).Sposta(ArrayClick[1], ArrayClick[0]);
+
+						{
+							personaggio.get(i).Sposta(ArrayClick[1],
+									ArrayClick[0]);
+						}
 					} else
 						avviso = new Bottone(
 								"Non puoi muoverti sull'acqua! Clicca per far scomparire");

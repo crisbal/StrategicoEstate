@@ -29,7 +29,7 @@ public class Bottone {
 	}
 
 	public void Disegna(float x, float y) {
-		if(visualizza)
+		if(visualizza&&Immagine!=null)
 		{
 			this.x = x;
 			this.y = y;
@@ -73,15 +73,6 @@ public class Bottone {
 		visualizza=false;
 	}
 
-	
-	public void Update() {
-		if(visualizza)
-			if(Cliccato())
-			{
-				Elimina();
-			}
-	}
-	
 	public boolean Visibile(){
 		return visualizza;
 	}
