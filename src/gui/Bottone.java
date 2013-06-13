@@ -22,7 +22,7 @@ public class Bottone {
 	float x, y, larghezza, altezza;
 
 	public Bottone(String contenuto) throws SlickException {
-		Immagine = new Image("res/GUI/Bottone.png", false, Image.FILTER_NEAREST);   //uso l'ultimo parametro per rimuovere il blur dell'immagine
+		Immagine = new Image("res/GUI/Bottone.png", false, Image.FILTER_NEAREST).getScaledCopy(Config.Scala);   //uso l'ultimo parametro per rimuovere il blur dell'immagine
 		Testo = contenuto;
 		visualizza=true;
 		cliccabile=true;
@@ -39,8 +39,8 @@ public class Bottone {
 			float coeffLungh=(LunghezzaTesto/Immagine.getWidth());   //determina l'ingrossamento del bottone
 			float coeffAltez=(AltezzaTesto/Immagine.getHeight());
 			
-			larghezza=Immagine.getWidth()*coeffLungh+15*coeffLungh;  
-			altezza=Immagine.getHeight()*coeffAltez+100*coeffAltez;
+			larghezza=Immagine.getWidth()*coeffLungh+15*coeffLungh*Config.Scala;  
+			altezza=Immagine.getHeight()*coeffAltez+100*coeffAltez*Config.Scala;
 	
 			Immagine.draw(x, y, larghezza, altezza);   //disegno l'immagine
 			

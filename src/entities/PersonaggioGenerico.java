@@ -1,5 +1,7 @@
 package entities;
 
+import mainGioco.Config;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -9,8 +11,8 @@ public class PersonaggioGenerico {
 	public float x, y;
 	public float xDisegno, yDisegno;
 	Image TextureGenerica, TextureSpecifica;
-	Image Selezionato = new Image("res/GUI/Selezionato.png");
-	Image Movimento = new Image("res/TextureTerreno/BloccoMovimento.png");
+	Image Selezionato = new Image("res/GUI/Selezionato.png").getScaledCopy(Config.Scala);
+	Image Movimento = new Image("res/TextureTerreno/BloccoMovimento.png").getScaledCopy(Config.Scala);
 	public boolean selezionato = false;
 	public boolean inVita = true;
 	Color colore;
@@ -21,8 +23,8 @@ public class PersonaggioGenerico {
 
 	public PersonaggioGenerico(int y, int x, String tipo, int squadra)
 			throws SlickException {
-		TextureGenerica = new Image(tipo + "Generico.png");
-		TextureSpecifica = new Image(tipo + "Specifico.png");
+		TextureGenerica = new Image(tipo + "Generico.png").getScaledCopy(Config.Scala);
+		TextureSpecifica = new Image(tipo + "Specifico.png").getScaledCopy(Config.Scala);
 		this.x = x; // la casella di appartenenza
 		this.y = y;
 		xDisegno = this.x * TextureGenerica.getWidth(); // il luogo sullo
@@ -38,7 +40,7 @@ public class PersonaggioGenerico {
 			colore = new Color(0f, 0f, 1f);
 
 		if (tipo == Tipo.CARRO)
-			raggio = 1;
+			raggio = 2;
 		if (tipo == Tipo.SOLDATO)
 			raggio = 3;
 	}
@@ -63,13 +65,25 @@ public class PersonaggioGenerico {
 
 	public void MostraMovimento() {
 		// TODO Auto-generated method stub
-		for (int i = 0; i < raggio * 2 + 1; i++)
-			for (int j = 0; j < raggio * 2 + 1; j++)
-				if (Math.abs(j - raggio) + Math.abs(i - raggio) <= raggio)
-					if (i != raggio || j != raggio)
-						Movimento.draw((x + j - raggio) * Movimento.getWidth(),
-								(y + i - raggio) * Movimento.getHeight(),
-								colore);
+		//if (raggio % 2 != 0) {
+			for (int i = 0; i < raggio * 2 + 1; i++)
+				for (int j = 0; j < raggio * 2 + 1; j++)
+					if (Math.abs(j - raggio) + Math.abs(i - raggio) <= raggio)
+						if (i != raggio || j != raggio)
+							Movimento.draw(
+									(x + j - raggio) * Movimento.getWidth(), (y
+											+ i - raggio)
+											* Movimento.getHeight(), colore);
+		/*} 
+		else
+			for (int i = 1; i < raggio * 2 ; i++)
+				for (int j = 1; j < raggio * 2 ; j++)
+					if (Math.abs(j - raggio) + Math.abs(i - raggio) <= raggio)
+						if (i != raggio || j != raggio)
+							Movimento.draw(
+									(x + j - raggio) * Movimento.getWidth(), (y
+											+ i - raggio)
+											* Movimento.getHeight(), colore);*/
 
 	}
 }
