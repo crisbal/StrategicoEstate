@@ -10,8 +10,8 @@
 	}
 	</style>
 	<script type="text/javascript">
-	var ALTEZZA=8;
-	var LARGHEZZA=16;
+	var ALTEZZA=10;
+	var LARGHEZZA=20;
 	function cambia(i,j)
 	{
 		var colore=document.getElementById('colore').value;
@@ -37,7 +37,7 @@
 
 	function genera()
 	{
-		document.getElementById("codice").innerHTML="int[][]mappa=new int[][]{";
+		document.getElementById("codice").innerHTML="mappa = new int[][]{";
 
 		for(var i=0;i<ALTEZZA;i++)
 		{

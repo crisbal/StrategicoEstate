@@ -3,6 +3,8 @@ package mainGioco;
 import java.util.ArrayList;
 
 import entities.PersonaggioGenerico;
+import entities.QuadratoMovimento;
+import entities.Squadra;
 import entities.Tipo;
 import gui.Bottone;
 import materiali.Materiale;
@@ -10,7 +12,6 @@ import materiali.QuadratoGenerico;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -23,7 +24,7 @@ public class Play extends BasicGameState {
 
 	ArrayList<PersonaggioGenerico> personaggio = new ArrayList<PersonaggioGenerico>();
 	ArrayList<QuadratoGenerico> quadrati = new ArrayList<QuadratoGenerico>();
-
+	ArrayList<QuadratoMovimento> movimenti = new ArrayList<QuadratoMovimento>();
 	int[] ArrayClick = new int[2];
 	boolean inBattaglia = false;
 	Bottone banner;
@@ -39,19 +40,19 @@ public class Play extends BasicGameState {
 		 * codice per inizializzare (eseguito all'avvio della classe, quando si
 		 * entra nello stato
 		 */
-		banner = new Bottone(
-				"Clicca con il tasto sinistro per selezionare, poi dx per muovere!");
+		banner = new Bottone("Clicca con il tasto sinistro per selezionare, poi dx per muovere!");
 
 		quadrati = CaricaMappa.caricaQuadrati();
-		personaggio.add(new PersonaggioGenerico(2, 5, Tipo.SOLDATO, 1));
-		personaggio.add(new PersonaggioGenerico(0, 0, Tipo.CARRO, 2));
-		personaggio.add(new PersonaggioGenerico(1, 0, Tipo.CARRO, 3));
-		personaggio.add(new PersonaggioGenerico(2, 0, Tipo.CARRO, 2));
-		personaggio.add(new PersonaggioGenerico(3, 0, Tipo.CARRO, 2));
-		personaggio.add(new PersonaggioGenerico(4, 0, Tipo.CARRO, 3));
-		personaggio.add(new PersonaggioGenerico(5, 0, Tipo.CARRO, 1));
-		personaggio.add(new PersonaggioGenerico(6, 0, Tipo.CARRO, 1));
-		personaggio.add(new PersonaggioGenerico(7, 0, Tipo.CARRO, 2));
+		
+		personaggio.add(new PersonaggioGenerico(2, 5, Tipo.SOLDATO, Squadra.ROSSA));
+		personaggio.add(new PersonaggioGenerico(0, 0, Tipo.CARRO, Squadra.VERDE));
+		personaggio.add(new PersonaggioGenerico(1, 0, Tipo.CARRO, Squadra.ROSSA));
+		personaggio.add(new PersonaggioGenerico(2, 0, Tipo.CARRO, Squadra.VERDE));
+		personaggio.add(new PersonaggioGenerico(3, 0, Tipo.CARRO, Squadra.BLU));
+		personaggio.add(new PersonaggioGenerico(4, 0, Tipo.CARRO, Squadra.BLU));
+		personaggio.add(new PersonaggioGenerico(5, 0, Tipo.CARRO, Squadra.ROSSA));
+		personaggio.add(new PersonaggioGenerico(6, 0, Tipo.CARRO, Squadra.ROSSA));
+		personaggio.add(new PersonaggioGenerico(7, 0, Tipo.CARRO, Squadra.VERDE));
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
@@ -65,8 +66,14 @@ public class Play extends BasicGameState {
 		for (int i = 0; i < quadrati.size(); i++) {
 			quadrati.get(i).Disegna();
 		}
+		
+		for (int i = 0; i < movimenti.size(); i++) {
+			movimenti.get(i).Disegna();
+		}
+		
 		for (int i = 0; i < personaggio.size(); i++) {
 			personaggio.get(i).Disegna();
+			
 		}
 
 		banner.Disegna(250, Config.ALTEZZA - 64);
@@ -84,6 +91,7 @@ public class Play extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
 		Input input = gc.getInput();
+		ArrayClick = GestoreMouse.ZonaClick();
 		// delta indica il tempo in ms passato dall'ultimo
 		// update dello schermo. utile per standardizzare
 		// animazioni/movimenti
@@ -97,51 +105,49 @@ public class Play extends BasicGameState {
 			if (avviso.Cliccato())
 				avviso.Elimina();
 
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) // se preme il
-															// bottone sinsitro
-															// del mouse
-		{
-			ArrayClick = GestoreMouse.ZonaClick(); // ottendo la casella // su
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) 
+		{ 													
+			 // ottendo la casella // su
 													// cui ha // cliccato
-			for (int i = 0; i < personaggio.size(); i++) {
+			for (int i = 0; i < personaggio.size(); i++) 
+			{
 				if (ArrayClick[0] == personaggio.get(i).x
-						&& ArrayClick[1] == personaggio.get(i).y) {
-					if (personaggio.get(i).selezionato == false) {
+						&& ArrayClick[1] == personaggio.get(i).y) 
+				{
+					if (personaggio.get(i).selezionato == false) 
+					{
 						personaggio.get(i).selezionato = true;
-					} else
+					} 
+					else
 						personaggio.get(i).selezionato = false;
 
-				} else
-					personaggio.get(i).selezionato = false;
-			}
-		}
-		if (input.isMousePressed(Input.MOUSE_RIGHT_BUTTON))
-			for (int i = 0; i < personaggio.size(); i++) {
-				if (personaggio.get(i).selezionato) {
-					ArrayClick = GestoreMouse.ZonaClick();
-					for (int j = 0; j < personaggio.size(); j++) {
-						if (i != j) {
-							if (personaggio.get(j).x == ArrayClick[0]
-									&& personaggio.get(j).y == ArrayClick[1]
-									&& personaggio.get(i).squadra != personaggio
-											.get(j).squadra) {
-								inBattaglia = true;
-								break;
-							}
-						}
-					}
-					if (Materiale.Controllo(ArrayClick)) {
-
-						{
-							personaggio.get(i).Sposta(ArrayClick[1],
-									ArrayClick[0]);
-						}
-					} else
-						avviso = new Bottone(
-								"Non puoi muoverti sull'acqua! Clicca per far scomparire");
 				}
-
+				else
+				{
+					personaggio.get(i).selezionato = false;
+				}
+				
+				
+			}	
+		}
+		
+		if (input.isMousePressed(Input.MOUSE_RIGHT_BUTTON))
+			for (int i = 0; i < personaggio.size(); i++) 
+			{
+				if (personaggio.get(i).selezionato) 
+				{
+					ArrayClick = GestoreMouse.ZonaClick();
+					if (Materiale.Controllo(ArrayClick)) 
+					{
+							if(Math.abs(personaggio.get(i).x-ArrayClick[0])+Math.abs(personaggio.get(i).y-ArrayClick[1])<=personaggio.get(i).raggio)
+							{
+								personaggio.get(i).Sposta(ArrayClick[1],ArrayClick[0]);
+							}
+					} 
+					else
+						avviso = new Bottone("Non puoi muoverti sull'acqua! Clicca per far scomparire");
+				}
 			}
-
 	}
+
 }

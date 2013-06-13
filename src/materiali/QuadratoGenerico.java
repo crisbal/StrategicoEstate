@@ -16,4 +16,5 @@ public class QuadratoGenerico {
 	public void Disegna(){   //la x, la y e il parametro g fisso per disegnare
 		Texture.draw(x, y);
 	}
+
 }
