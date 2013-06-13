@@ -1,7 +1,5 @@
 package entities;
 
-import mainGioco.Config;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -12,7 +10,7 @@ public class QuadratoMovimento {
 	public float y;
 	int squadra;
 	public QuadratoMovimento(String tipo,int x,int y, int squadra) throws SlickException {   //costruttore, viene passato il tipo di blocco nel formato Materiali.nome
-		Texture= new Image(tipo).getScaledCopy(Config.Scala);
+		Texture= new Image(tipo);
 		this.x=Texture.getWidth()*x;
 		this.y=Texture.getHeight()*y;
 		this.squadra=squadra;

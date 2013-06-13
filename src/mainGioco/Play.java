@@ -44,7 +44,8 @@ public class Play extends BasicGameState {
 
 		quadrati = CaricaMappa.caricaQuadrati();
 		
-		personaggio.add(new PersonaggioGenerico(0, 0, Tipo.SOLDATO, Squadra.ROSSA));
+		personaggio.add(new PersonaggioGenerico(2, 5, Tipo.SOLDATO, Squadra.ROSSA));
+		personaggio.add(new PersonaggioGenerico(0, 0, Tipo.CARRO, Squadra.VERDE));
 		personaggio.add(new PersonaggioGenerico(1, 0, Tipo.CARRO, Squadra.ROSSA));
 		personaggio.add(new PersonaggioGenerico(2, 0, Tipo.CARRO, Squadra.VERDE));
 		personaggio.add(new PersonaggioGenerico(3, 0, Tipo.CARRO, Squadra.BLU));
