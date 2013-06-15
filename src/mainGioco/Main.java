@@ -3,31 +3,29 @@ package mainGioco;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 
+import entities.CachePersonaggi;
+
 public class Main extends StateBasedGame {
 
 	public static final String NomeGioco = "StrategicoGenerico"; // il titolo
-	public static final int menu = 0;
 	public static final int gioca = 1;
-	public static final int opzioni = 2;
-	public static final int splash = 3;
-
+	public static final int battaglia = 2;
 	public Main(String NomeGioco) {
 		super(NomeGioco);
-		// this.addState(new Menu(menu)); //aggiungo i vari stati del gioco
-		// this.addState(new Opzioni(opzioni));
-		// this.addState(new Splash(splash));
-
-		this.addState(new Play(gioca));
-
+		
+		this.addState(new Gioca(gioca));
+		this.addState(new Battaglia(battaglia));
+		
 		// TODO Auto-generated constructor stub
 	}
 
 	public void initStatesList(GameContainer gc) throws SlickException {
-		// this.getState(menu).init(gc, this); //li inizializzo
 		gc.setShowFPS(false);
+		CachePersonaggi.pulisciLista();
 		this.getState(gioca).init(gc, this);
+		this.getState(battaglia).init(gc, this);
 		this.enterState(gioca);
-
+		
 	}
 
 	public static void main(String[] args) {

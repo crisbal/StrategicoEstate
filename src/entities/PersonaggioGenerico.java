@@ -31,11 +31,11 @@ public class PersonaggioGenerico {
 		yDisegno = this.y * TextureSpecifica.getHeight();
 		this.squadra = squadra;
 		if (squadra == Squadra.ROSSA)
-			colore = new Color(1f, 0f, 0f);
+			colore = new Color(1f, 0.5f, 0.5f);
 		if (squadra == Squadra.VERDE)
-			colore = new Color(0f, 1f, 0f);
+			colore = new Color(0f, 0.5f, 0.5f);
 		if (squadra == Squadra.BLU)
-			colore = new Color(0f, 0f, 1f);
+			colore = new Color(1f, 1f, 1f);
 
 		if (tipo == Tipo.CARRO)
 			raggio = 1;
