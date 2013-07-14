@@ -30,6 +30,7 @@ public class GestoreMouse {
 		vettorePosizione[1]/=Config.DIMENSIONE_IMMAGINE;
 		vettorePosizione[0]--;   //gli tolgo 1 per avere coordinate che partono da 0,0
 		vettorePosizione[1]--;
+		
 		return vettorePosizione;
 		
 	}

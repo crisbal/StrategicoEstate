@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+	<title>GeneraMappe</title>
+	<style>
+	td{
+		border: solid 1px black;
+		width: 50px;
+		height: 50px;
+	}
+	td img {display: block;
+			width:50px; height: 50px;}
+	</style>
+	<script type="text/javascript">
+
+	var ALTEZZA=5;
+	var LARGHEZZA=5;
+
+	function cambia(i,j)
+	{
+		var tile=document.getElementById('tile').value;
+		var tileSrc = tile + ".png";
+		document.getElementById(i+","+j).alt = tile
+		document.getElementById(i+","+j).src="resHTML/"+tileSrc;
+	}
+
+	function genera()
+	{
+		
+		var xml = '<?xml version="1.0"?>';
+		var xml =  xml + "<mappa>\n<nome>" + document.getElementById("nomemappa").value + "</nome>\n<larghezza>" + LARGHEZZA + "</larghezza>\n<altezza>"+ ALTEZZA +"</altezza>\n<quadrati>\n";
+					for (var i = 0; i<ALTEZZA;i++)
+						for(var j = 0;j<LARGHEZZA;j++)
+							{
+								var immagine = document.getElementById(i+","+j).getAttribute("src") ;
+								
+								xml = xml + '<tile x="'+(j)+'" y="'+(i)+'" >'+ document.getElementById(i+","+j).alt + '</tile>\n';
+							}
+					xml = xml + "</quadrati>\n";
+
+					xml = xml + "</mappa>\n";
+		console.log(xml);
+		document.getElementById("codice").innerHTML = xml;
+	}
+
+	</script>
+</head>
+<body>
+	<select name="tile" id="tile" onchange"aggiornaSelect()">
+		<option value="erba">Erba</option>
+		<option value="acqua">Acqua</option>
+		<option value="strada">Strada</option>
+		<option value="montagna">Montagna</option>
+		<option value="foresta">Foresta</option>
+		<option value="acquaBoA">Acqua Bordo Alto</option>
+		<option value="acquaBoB">Acqua Bordo Basso</option>
+		<option value="acquaBoS">Acqua Bordo Sinistra</option>
+		<option value="acquaBoD">Acqua Bordo Destra</option>
+		<option value="acquaAS">Acqua Alto Sinistra</option>
+		<option value="acquaAD">Acqua Alto Destra</option>
+		<option value="acquaAS">Acqua Alto Sinistra</option>
+		<option value="acquaBS">Acqua Basso Sinistra</option>
+		<option value="acquaBD">Acqua Basso Destra</option>
+		<option value="acquaDBO">Acqua Doppio Bordo Oriz</option>
+		<option value="acquaDBV">Acqua Doppio Bordo Vert</option>
+		<option value="ponteO">Ponte Ori</option>
+		<option value="ponteV">Ponte Vert</option>
+	</select>
+	<label>Nome Mappa:</label><input type="text" id="nomemappa" name="nomemappa" />
+	<table>
+		<script>
+		for(var i=0;i<ALTEZZA;i++)
+		{
+			document.write("<tr>");
+			for(var j=0;j<LARGHEZZA;j++)
+			{
+				document.write('<td  onclick="cambia('+i+','+j+')" ><img alt="erba" src="resHTML/erba.png" id="'+i+','+j+'" />');
+				document.write('</td>');
+			}
+			document.write("</tr>")
+		}
+		</script>
+	</table>
+	
+	<input type="button" onclick="genera()" value="Genera il codice della mappa!">
+	<br><textarea id="codice" rows="25" cols="50"></textarea>
+</table>
+</body>
+</html>

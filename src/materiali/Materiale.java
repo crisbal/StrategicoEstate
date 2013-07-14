@@ -3,24 +3,16 @@ package materiali;
 import utils.CaricaMappa;
 
 public class Materiale {
-
+	
 	/*
-	 * Accessibili con
-	 * Materiali.nome
+	 * Accessibili con Materiali.nome
 	 */
 	
-	static String Path = "res/TextureTerreno/"; 
-	public static final String ERBA = Path + "Erba.png";
-	public static final String ACQUA = Path + "Acqua.png";
-	public static final String STRADA = Path + "Strada.png";
-	public static final String MONTAGNA = Path + "Montagna.png";
-	public static final String MOVIMENTO = Path + "BloccoMovimento.png";
-	
+	public static final String				Path		= "res/TextureTerreno/";
 	public static boolean Controllo(int[] arrayClick) {
-		if(CaricaMappa.mappa[arrayClick[1]][arrayClick[0]]==1)
+		if (CaricaMappa.mappa[arrayClick[1]][arrayClick[0]].contains("acqua"))
 			return false;
 		return true;
 	}
-	
 	
 }

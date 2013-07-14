@@ -1,0 +1,32 @@
+<?xml version="1.0"?><mappa>
+<nome></nome>
+<larghezza>5</larghezza>
+<altezza>5</altezza>
+<quadrati>
+<tile x="0" y="0" >erba</tile>
+<tile x="1" y="0" >acqua</tile>
+<tile x="2" y="0" >strada</tile>
+<tile x="3" y="0" >montagna</tile>
+<tile x="4" y="0" >foresta</tile>
+<tile x="0" y="1" >acquaBoA</tile>
+<tile x="1" y="1" >acquaBoB</tile>
+<tile x="2" y="1" >acquaBoS</tile>
+<tile x="3" y="1" >acquaBoD</tile>
+<tile x="4" y="1" >acquaAS</tile>
+<tile x="0" y="2" >acquaAD</tile>
+<tile x="1" y="2" >acquaBS</tile>
+<tile x="2" y="2" >acquaBD</tile>
+<tile x="3" y="2" >acquaDBO</tile>
+<tile x="4" y="2" >acquaDBV</tile>
+<tile x="0" y="3" >ponteO</tile>
+<tile x="1" y="3" >ponteV</tile>
+<tile x="2" y="3" >erba</tile>
+<tile x="3" y="3" >erba</tile>
+<tile x="4" y="3" >erba</tile>
+<tile x="0" y="4" >erba</tile>
+<tile x="1" y="4" >erba</tile>
+<tile x="2" y="4" >erba</tile>
+<tile x="3" y="4" >erba</tile>
+<tile x="4" y="4" >erba</tile>
+</quadrati>
+</mappa>
