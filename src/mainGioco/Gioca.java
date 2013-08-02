@@ -17,8 +17,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.Transition;
-
 import utils.CaricaMappa;
 import utils.GestoreMouse;
 
@@ -27,9 +25,8 @@ public class Gioca extends BasicGameState {
 	QuadratoMappa[][]				mappa		= new QuadratoMappa[Config.COLONNE][Config.RIGHE];
 	ArrayList<QuadratoMovimento>	movimenti	= new ArrayList<QuadratoMovimento>();
 	int[]							ArrayClick	= new int[2];
-	boolean							inBattaglia	= false;
+	boolean							inBattaglia	= false,caricato = false;
 	Bottone							banner;
-	Bottone							avviso;
 	
 	public Gioca(int state) { // costruttore inutile per ora, ma necessario
 	
@@ -43,10 +40,11 @@ public class Gioca extends BasicGameState {
 		banner = new Bottone("Clicca con il tasto sinistro per selezionare, poi dx per muovere!");
 		
 		mappa = CaricaMappa.caricaQuadrati();
-		if (Personaggi.personaggio.size() == 0)
+		if(!caricato)
 		{
-			Personaggi.personaggio.add(new PersonaggioGenerico(0, 0, Tipo.SOLDATO, Squadra.ROSSA));
-			Personaggi.personaggio.add(new PersonaggioGenerico(0, 1, Tipo.SOLDATO, Squadra.BLU));
+			caricato = !caricato;
+			Personaggi.personaggio.add(new PersonaggioGenerico(0, 0, Tipo.SOLDATO, Squadra.ROSSA,0));
+			Personaggi.personaggio.add(new PersonaggioGenerico(0, 1, Tipo.CARRO, Squadra.BLU,1));
 		}
 		
 	}
@@ -75,8 +73,6 @@ public class Gioca extends BasicGameState {
 		}
 		
 		banner.Disegna(250, Config.ALTEZZA - 64);
-		if (avviso != null)
-			avviso.Disegna(300, Config.ALTEZZA / 2);
 	}
 	
 	@Override
@@ -97,10 +93,6 @@ public class Gioca extends BasicGameState {
 		 * qui va inserito tutto quello che si vuole venga eseguito ad ogni
 		 * update
 		 */
-		
-		if (avviso != null)
-			if (avviso.Cliccato())
-				avviso.Elimina();
 		
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
 		{
@@ -131,23 +123,31 @@ public class Gioca extends BasicGameState {
 			{
 				if (Personaggi.personaggio.get(i).selezionato)
 				{
-					
-					
 					ArrayClick = GestoreMouse.ZonaClick();
 					
 					if (Math.abs(Personaggi.personaggio.get(i).x - ArrayClick[0])
 							+ Math.abs(Personaggi.personaggio.get(i).y - ArrayClick[1]) <= Personaggi.personaggio
 								.get(i).raggio)
 					{
-						if (Personaggi.clickSuPersonaggioNemico(Personaggi.personaggio.get(i),ArrayClick[1], ArrayClick[0]))
+						Personaggi.difensore = Personaggi.clickSuPersonaggioNemico(Personaggi.personaggio.get(i),ArrayClick[1], ArrayClick[0]);
+						if (Personaggi.difensore != null)
 						{
 							Personaggi.attaccante = Personaggi.personaggio.get(i);
+							System.out.println(Personaggi.attaccante.Classe);
+							System.out.println(Personaggi.difensore.Classe);
+							Battaglia.caricato = false;
+							Battaglia.risolto = false;
+							Battaglia.timer = 0;
 							sbg.enterState(Main.battaglia);
 							Personaggi.attaccante.selezionato = false;
+							break;
 							
 						}
 						else if (Materiale.Controllo(ArrayClick))
+						{
 							Personaggi.personaggio.get(i).Sposta(ArrayClick[1], ArrayClick[0]);
+							//break;
+						}
 					}
 				}
 			}

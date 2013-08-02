@@ -14,19 +14,18 @@ public class Personaggi {
 	}
 	
 	
-	public static boolean clickSuPersonaggioNemico(PersonaggioGenerico personaggioAttuale, int yClick, int xClick)
+	public static PersonaggioGenerico clickSuPersonaggioNemico(PersonaggioGenerico personaggioAttuale, int yClick, int xClick)
 	{
 		for ( int i = 0; i<personaggio.size();i++)
 		{
 			if (personaggio.get(i).x == xClick && personaggio.get(i).y == yClick && personaggioAttuale.squadra != personaggio.get(i).squadra)
 			{
-				Personaggi.difensore = personaggio.get(i);
-				return true;
+				return personaggio.get(i);
 			}
 				
 		}
 		
-		return false;
+		return null;
 		
 	}
 }

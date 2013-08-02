@@ -13,15 +13,20 @@ public class PersonaggioGenerico {
 	Image			Movimento	= new Image("res/TextureTerreno/BloccoMovimento.png");
 	public boolean	selezionato	= false;
 	public boolean	inVita		= true;
+	public String	Classe;
 	Color			colore;
 	
 	public int		vita		= 100;
 	public int		squadra;
 	public int		raggio		= 2;
+	public int		potenzaAttacco,potenzaDifesa;
+	public int Identificativo;
 	
-	public PersonaggioGenerico(int y, int x, String tipo, int squadra) throws SlickException {
+	public PersonaggioGenerico(int y, int x, String tipo, int squadra,int id) throws SlickException {
+		
 		TextureGenerica = new Image(tipo + "Generico.png");
 		TextureSpecifica = new Image(tipo + "Specifico.png");
+		Classe = tipo;
 		this.x = x; // la casella di appartenenza
 		this.y = y;
 		xDisegno = this.x * TextureGenerica.getWidth(); // il luogo sullo
@@ -37,9 +42,19 @@ public class PersonaggioGenerico {
 			colore = new Color(0f, 0f, 1f);
 		
 		if (tipo == Tipo.CARRO)
+		{
 			raggio = 1;
+			potenzaAttacco = 110;
+			potenzaDifesa = 45;
+		}
 		if (tipo == Tipo.SOLDATO)
+		{
 			raggio = 3;
+			potenzaAttacco = 50;
+			potenzaDifesa = 50;
+		}
+		
+		Identificativo = id;
 	}
 	
 	public void Disegna() {
@@ -51,6 +66,11 @@ public class PersonaggioGenerico {
 			Selezionato.draw(xDisegno, yDisegno);
 			MostraMovimento();
 		}
+	}
+	
+	public void DisegnaXY(float x, float y) {
+		TextureGenerica.draw(x, y);
+		TextureSpecifica.draw(x, y, colore);
 	}
 	
 	public void Sposta(int y, int x) {
