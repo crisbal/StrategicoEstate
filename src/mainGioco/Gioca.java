@@ -44,7 +44,8 @@ public class Gioca extends BasicGameState {
 		{
 			caricato = !caricato;
 			Personaggi.personaggio.add(new PersonaggioGenerico(0, 0, Tipo.SOLDATO, Squadra.ROSSA,0));
-			Personaggi.personaggio.add(new PersonaggioGenerico(0, 1, Tipo.CARRO, Squadra.BLU,1));
+			Personaggi.personaggio.add(new PersonaggioGenerico(0, 1, Tipo.AEREO, Squadra.VERDE,1));
+			Personaggi.personaggio.add(new PersonaggioGenerico(0, 3, Tipo.CARRO, Squadra.BLU,1));
 		}
 		
 	}

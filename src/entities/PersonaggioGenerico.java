@@ -39,7 +39,7 @@ public class PersonaggioGenerico {
 		if (squadra == Squadra.VERDE)
 			colore = new Color(0f, 1f, 0f);
 		if (squadra == Squadra.BLU)
-			colore = new Color(0f, 0f, 1f);
+			colore = new Color(0.376f, 0.314f, 0.659f);
 		
 		if (tipo == Tipo.CARRO)
 		{
@@ -53,14 +53,20 @@ public class PersonaggioGenerico {
 			potenzaAttacco = 50;
 			potenzaDifesa = 50;
 		}
-		
+		if (tipo == Tipo.AEREO)
+		{
+			raggio = 8;
+			potenzaAttacco = 50;
+			potenzaDifesa = 100;
+		}
 		Identificativo = id;
 	}
 	
 	public void Disegna() {
-		TextureGenerica.draw(xDisegno, yDisegno);
+		
 		
 		TextureSpecifica.draw(xDisegno, yDisegno, colore);
+		TextureGenerica.draw(xDisegno, yDisegno);
 		if (selezionato)
 		{
 			Selezionato.draw(xDisegno, yDisegno);
@@ -69,8 +75,9 @@ public class PersonaggioGenerico {
 	}
 	
 	public void DisegnaXY(float x, float y) {
-		TextureGenerica.draw(x, y);
 		TextureSpecifica.draw(x, y, colore);
+		TextureGenerica.draw(x, y);
+		
 	}
 	
 	public void Sposta(int y, int x) {
