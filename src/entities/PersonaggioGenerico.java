@@ -41,24 +41,25 @@ public class PersonaggioGenerico {
 		if (squadra == Squadra.BLU)
 			colore = new Color(0.376f, 0.314f, 0.659f);
 		
-		if (tipo == Tipo.CARRO)
+		if (tipo.matches(Tipo.CARRO))
 		{
 			raggio = 1;
 			potenzaAttacco = 110;
 			potenzaDifesa = 45;
 		}
-		if (tipo == Tipo.SOLDATO)
+		if (tipo.matches(Tipo.SOLDATO))
 		{
 			raggio = 3;
 			potenzaAttacco = 50;
 			potenzaDifesa = 50;
 		}
-		if (tipo == Tipo.AEREO)
+		if (tipo.matches(Tipo.AEREO))
 		{
 			raggio = 8;
 			potenzaAttacco = 50;
 			potenzaDifesa = 100;
 		}
+		System.out.println(Tipo.SOLDATO);
 		Identificativo = id;
 	}
 	

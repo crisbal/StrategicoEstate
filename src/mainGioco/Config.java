@@ -8,5 +8,5 @@ public class Config { // classe di configurazione, modificare questa per
 	public static int	RIGHE;
 	public static int	COLONNE;
 	public static final int	DIMENSIONE_IMMAGINE	= 64;
-	public static int		Inizio				= 0;
+
 }

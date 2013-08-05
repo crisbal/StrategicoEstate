@@ -1,18 +1,16 @@
 package utils;
 
 import java.io.File;
-import java.io.IOException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.newdawn.slick.SlickException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import entities.Personaggi;
+import entities.PersonaggioGenerico;
+import entities.Tipo;
 
 import mainGioco.Config;
 import materiali.Materiale;
@@ -50,6 +48,19 @@ public class CaricaMappa {
 					
 					mappa[Integer.parseInt(tile.getAttribute("y"))][Integer.parseInt(tile.getAttribute("x"))] = tile.getTextContent();
 					
+				}
+			}
+			
+			Personaggi.pulisciLista();
+			NodeList personaggi = doc.getElementsByTagName("personaggio");
+			for (int i = 0; i < personaggi.getLength(); i++)
+			{
+				Node nNode = personaggi.item(i);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					 
+					Element personaggio = (Element) nNode;
+					System.out.println(personaggio);
+					Personaggi.personaggio.add(new PersonaggioGenerico(Integer.parseInt(personaggio.getAttribute("y")), Integer.parseInt(personaggio.getAttribute("x")),Tipo.Path + personaggio.getTextContent(), Integer.parseInt(personaggio.getAttribute("squadra")), i));
 				}
 			}
 			
