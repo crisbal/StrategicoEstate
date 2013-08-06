@@ -18,17 +18,17 @@ public class Nuvola {
 			Random rnd = new Random();
 			immagine = new Image("res/GUI/nuvola.png");
 			boolean orien = rnd.nextBoolean();
-			if(orien)
+			/*if(!orien)
 			{
 				x = 0 - rnd.nextInt(200);
-				y = rnd.nextInt(100);
+				y = rnd.nextInt(100)*Config.Scala;
 				do{
 					speed = rnd.nextFloat() + 0.1f;
 				}while(speed >0.5 || speed <0.2);
 				
 				
 			}
-			else
+			else*/
 			{
 				x = Config.LARGHEZZA + rnd.nextInt(200);
 				y = rnd.nextInt(100);
@@ -39,7 +39,7 @@ public class Nuvola {
 			}
 			
 			do{
-				scala = rnd.nextFloat() + 0.1f;
+				scala = (rnd.nextFloat() + 0.1f)*Config.Scala;
 			}while(scala <0.3);
 			
 		}

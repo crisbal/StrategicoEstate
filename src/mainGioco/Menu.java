@@ -13,13 +13,13 @@ import org.newdawn.slick.state.StateBasedGame;
 import entities.Nuvola;
 
 public class Menu  extends BasicGameState {
-	int offset = 100;
-	Image menu,selettore;
-	Nuvola[] nuvole = new Nuvola[4]; 
-	int selezionato = 0;
-	boolean indietro;
-	Animation allies;
-	int	spostamento = 0;
+	private int offset = 100;
+	private Image menu,selettore;
+	private Nuvola[] nuvole = new Nuvola[4]; 
+	private int selezionato = 0;
+	private boolean indietro;
+	private Animation allies;
+	private int	spostamento = 0;
 	public Menu(int menu2) {
 		// TODO Auto-generated constructor stub
 	}
@@ -44,28 +44,28 @@ public class Menu  extends BasicGameState {
 
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException {
 		// TODO Auto-generated method stub
-		menu.draw();
+		menu.draw(0,0,Config.Scala);
 		for(int i = 0;i<4;i++)
 		{
-			nuvole[i].immagine.draw(nuvole[i].x, nuvole[i].y,nuvole[i].scala);
+			nuvole[i].immagine.draw(nuvole[i].x*Config.Scala, nuvole[i].y*Config.Scala,nuvole[i].scala*Config.Scala);
 		}
 		
 		if(selezionato == 0)
 		{
-			selettore.draw(550 - offset, 200 - selettore.getHeight()/2);
+			selettore.draw((550*Config.Scala - offset), (200*Config.Scala - selettore.getHeight()/2));
 		}
 		else if(selezionato == 1)
 		{
-			selettore.draw(550 - offset , 287 - selettore.getHeight()/2);
+			selettore.draw((550*Config.Scala - offset) , (287*Config.Scala - selettore.getHeight()/2));
 		}
 		else if(selezionato == 2)
 		{
-			selettore.draw(550 - offset , 375 - selettore.getHeight()/2);
+			selettore.draw((550*Config.Scala - offset), (375*Config.Scala - selettore.getHeight()/2));
 		}
 		
 		for(int i = 0;i<10;i++)
 			for(int j = 0;j<8;j++)
-				allies.draw(100 + i * 30  +spostamento,450+j*30);
+				allies.draw((100 + i * 30  +spostamento)*Config.Scala,(450+j*30)*Config.Scala,allies.getWidth()*Config.Scala,allies.getHeight()*Config.Scala);
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
@@ -86,21 +86,24 @@ public class Menu  extends BasicGameState {
 			switch(selezionato)
 			{
 				case 0:
+					System.out.println("nabbo");
 					sbg.enterState(Main.gioca);
+					break;
 				case 2:
 					gc.exit();
+					break;
 			}
 		if(selezionato < 0)
 			selezionato = 2;
 		if(selezionato > 2)
 			selezionato = 0;
 		
-		if(offset > 150 || indietro)
+		if(offset > (150)*Config.Scala || indietro)
 		{
 			offset -= 0.2f * delta;
 			indietro = true;
 		}
-		if(offset <= 100 || !indietro)
+		if(offset <= (100)*Config.Scala || !indietro)
 		{
 			offset += 0.2f * delta;
 			indietro = false;
@@ -109,13 +112,13 @@ public class Menu  extends BasicGameState {
 		for(int i = 0;i<4;i++)
 		{
 			nuvole[i].x += nuvole[i].speed * delta;
-			if(nuvole[i].x < -200 || nuvole[i].x > Config.LARGHEZZA + 200)
+			if(nuvole[i].x < (-200) || nuvole[i].x > (Config.LARGHEZZA + 200))
 				nuvole[i] = new Nuvola();
 		}
 		
 		spostamento += 0.07f*delta;
-		if(spostamento > 1200)
-			spostamento = -500;
+		if(spostamento > Config.LARGHEZZA*Config.Scala + allies.getWidth()*20*Config.Scala)
+			spostamento = (int) (-allies.getWidth()*20-100);
 	}
 
 

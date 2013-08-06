@@ -3,6 +3,8 @@ package utils;
 import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -10,6 +12,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import entities.Personaggi;
 import entities.PersonaggioGenerico;
+import entities.Squadra;
 import entities.Tipo;
 
 import mainGioco.Config;
@@ -18,9 +21,9 @@ import materiali.QuadratoMappa;
 
 public class CaricaMappa {
 	
-	public static String[][]			mappa			= null;
+	public static String[][]		mappa			= null;
 	public static QuadratoMappa[][]	quadratoMappa	= null;
-
+	
 	public static String[][] creaMatriceMappa() {
 		
 		try
@@ -42,11 +45,13 @@ public class CaricaMappa {
 			for (int i = 0; i < quadrati.getLength(); i++)
 			{
 				Node nNode = quadrati.item(i);
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					 
+				if (nNode.getNodeType() == Node.ELEMENT_NODE)
+				{
+					
 					Element tile = (Element) nNode;
 					
-					mappa[Integer.parseInt(tile.getAttribute("y"))][Integer.parseInt(tile.getAttribute("x"))] = tile.getTextContent();
+					mappa[Integer.parseInt(tile.getAttribute("y"))][Integer.parseInt(tile.getAttribute("x"))] = tile
+							.getTextContent();
 					
 				}
 			}
@@ -56,14 +61,20 @@ public class CaricaMappa {
 			for (int i = 0; i < personaggi.getLength(); i++)
 			{
 				Node nNode = personaggi.item(i);
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					 
+				if (nNode.getNodeType() == Node.ELEMENT_NODE)
+				{
+					
 					Element personaggio = (Element) nNode;
 					System.out.println(personaggio);
-					Personaggi.personaggio.add(new PersonaggioGenerico(Integer.parseInt(personaggio.getAttribute("y")), Integer.parseInt(personaggio.getAttribute("x")),Tipo.Path + personaggio.getTextContent(), Integer.parseInt(personaggio.getAttribute("squadra")), i));
+					Personaggi.personaggio.add(new PersonaggioGenerico(Integer.parseInt(personaggio.getAttribute("y")), Integer
+							.parseInt(personaggio.getAttribute("x")), Tipo.Path + personaggio.getTextContent(), Integer
+							.parseInt(personaggio.getAttribute("squadra")), i));
 				}
 			}
 			
+			Squadra.squadra.put(1, new Color(1f, 0f, 0f));
+			Squadra.squadra.put(2, new Color(0f, 1f, 0f));
+			Squadra.squadra.put(3, new Color(0.376f, 0.314f, 0.659f));
 			
 		} catch (Exception e)
 		{
@@ -81,7 +92,7 @@ public class CaricaMappa {
 		{
 			for (int j = 0; j < Config.COLONNE; j++)
 			{
-				quadratoMappa[i][j] = new QuadratoMappa(Materiale.Path + mappa[i][j] + ".png",j,i);
+				quadratoMappa[i][j] = new QuadratoMappa(mappa[i][j], j, i);
 			}
 		}
 		return quadratoMappa;
