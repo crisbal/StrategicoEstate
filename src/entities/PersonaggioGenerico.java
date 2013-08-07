@@ -16,7 +16,7 @@ public class PersonaggioGenerico {
 	public boolean	selezionato	= false;
 	public boolean	inVita		= true;
 	public String	Classe;
-	private Color	colore;
+	public Color	colore;
 	
 	public int		vita		= 100;
 	public int		squadra;
@@ -26,8 +26,8 @@ public class PersonaggioGenerico {
 	
 	public PersonaggioGenerico(int y, int x, String tipo, int squadra, int id) throws SlickException {
 		
-		TextureGenerica = new Image(tipo + "Generico.png");
-		TextureSpecifica = new Image(tipo + "Specifico.png");
+		TextureGenerica = new Image(Tipo.Path + tipo + "Generico.png");
+		TextureSpecifica = new Image(Tipo.Path + tipo + "Specifico.png");
 		Classe = tipo;
 		this.x = x; // la casella di appartenenza
 		this.y = y;
@@ -41,19 +41,19 @@ public class PersonaggioGenerico {
 
 		colore = (Color) Squadra.squadra.get(this.squadra);
 		
-		if (tipo.matches(Tipo.CARRO))
+		if ((Tipo.Path + tipo).matches(Tipo.CARRO))
 		{
 			raggio = 1;
 			potenzaAttacco = 110;
 			potenzaDifesa = 45;
 		}
-		if (tipo.matches(Tipo.SOLDATO))
+		if ((Tipo.Path + tipo).matches(Tipo.SOLDATO))
 		{
 			raggio = 3;
 			potenzaAttacco = 50;
 			potenzaDifesa = 50;
 		}
-		if (tipo.matches(Tipo.AEREO))
+		if ((Tipo.Path + tipo).matches(Tipo.AEREO))
 		{
 			raggio = 8;
 			potenzaAttacco = 50;
@@ -96,5 +96,14 @@ public class PersonaggioGenerico {
 						Movimento.draw((x + j - raggio) * Movimento.getWidth() * Config.Scala,
 								(y + i - raggio) * Movimento.getHeight() * Config.Scala, Config.Scala, colore);
 		
+	}
+	
+	
+	public float getWidth(){
+		return TextureSpecifica.getWidth()*Config.Scala;
+	}
+	
+	public float getHeight(){
+		return TextureSpecifica.getHeight()*Config.Scala;
 	}
 }

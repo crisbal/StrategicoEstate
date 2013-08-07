@@ -14,19 +14,19 @@ public class Main extends StateBasedGame {
 	public Main(String NomeGioco) {
 		super(NomeGioco);
 		
-		this.addState(new Gioca(gioca));
-		this.addState(new Battaglia(battaglia));
-		this.addState(new Menu(menu));
 		// TODO Auto-generated constructor stub
 	}
 	
+	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
-		gc.setShowFPS(false);
+		gc.setShowFPS(true);
 		Personaggi.pulisciLista();
-		this.getState(gioca).init(gc, this);
-		this.getState(battaglia).init(gc, this);
-		this.getState(menu).init(gc, this);
+
+		this.addState(new Gioca(gioca));
+		this.addState(new Battaglia(battaglia));
+		this.addState(new Menu(menu));
 		this.enterState(menu);
+		
 		
 	}
 	

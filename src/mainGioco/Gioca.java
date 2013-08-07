@@ -16,10 +16,14 @@ import materiali.QuadratoMappa;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
+
 import utils.CaricaMappa;
 import utils.GestoreMouse;
 
@@ -37,6 +41,7 @@ public class Gioca extends BasicGameState {
 	
 	}
 	
+	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		/*
 		 * codice per inizializzare (eseguito all'avvio della classe, quando si
@@ -45,16 +50,10 @@ public class Gioca extends BasicGameState {
 		testoTurno = new Testo(Font.BOLD, 25);
 		turno =turnoTotale= 1;
 		mappa = CaricaMappa.caricaQuadrati();
-		if (!caricato)
-		{
-			caricato = !caricato;
-			Personaggi.personaggio.add(new PersonaggioGenerico(0, 0, Tipo.SOLDATO, Squadra.ROSSA, 0));
-			Personaggi.personaggio.add(new PersonaggioGenerico(0, 1, Tipo.AEREO, Squadra.VERDE, 1));
-			Personaggi.personaggio.add(new PersonaggioGenerico(0, 3, Tipo.CARRO, Squadra.BLU, 1));
-		}
 		
 	}
 	
+	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		// la g indica la grafica, quando si vuole
 		// disegnare si passa sempre da lei.
@@ -164,8 +163,7 @@ public class Gioca extends BasicGameState {
 							if (Personaggi.difensore != null)
 							{
 								Personaggi.attaccante = Personaggi.personaggio.get(i);
-								System.out.println(Personaggi.attaccante.Classe);
-								System.out.println(Personaggi.difensore.Classe);
+
 								Battaglia.caricato = false;
 								Battaglia.risolto = false;
 								Battaglia.timer = 0;

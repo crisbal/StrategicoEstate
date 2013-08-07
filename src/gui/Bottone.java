@@ -14,7 +14,7 @@ public class Bottone {
 
 	private Image Immagine;
 	private String Testo;
-	private Font font=new Font("Verdana", Font.PLAIN, 16);   //il testo e' verdana 16 normale PLAIN
+	private Font font=new Font("Verdana", Font.PLAIN,(int)(16*Config.Scala));   //il testo e' verdana 16 normale PLAIN
 	private TrueTypeFont ttf = new TrueTypeFont(font, true);  //creo la ttf per stamparlo a video
 	
 	private boolean visualizza=true,cliccabile=true;
@@ -30,8 +30,8 @@ public class Bottone {
 	public void Disegna(float x, float y) {
 		if(visualizza&&Immagine!=null)
 		{
-			this.x = x;
-			this.y = y;
+			this.x = x*Config.Scala;
+			this.y = y*Config.Scala;
 			
 			float LunghezzaTesto=ttf.getWidth(Testo);
 			float AltezzaTesto=ttf.getHeight(Testo);

@@ -57,6 +57,9 @@ public class CaricaMappa {
 			}
 			
 			Personaggi.pulisciLista();
+			Squadra.squadra.put(1, new Color(1f, 0f, 0f));
+			Squadra.squadra.put(2, new Color(0f, 1f, 0f));
+			Squadra.squadra.put(3, new Color(0.376f, 0.314f, 0.659f));
 			NodeList personaggi = doc.getElementsByTagName("personaggio");
 			for (int i = 0; i < personaggi.getLength(); i++)
 			{
@@ -67,14 +70,11 @@ public class CaricaMappa {
 					Element personaggio = (Element) nNode;
 					System.out.println(personaggio);
 					Personaggi.personaggio.add(new PersonaggioGenerico(Integer.parseInt(personaggio.getAttribute("y")), Integer
-							.parseInt(personaggio.getAttribute("x")), Tipo.Path + personaggio.getTextContent(), Integer
+							.parseInt(personaggio.getAttribute("x")), personaggio.getTextContent(), Integer
 							.parseInt(personaggio.getAttribute("squadra")), i));
 				}
 			}
 			
-			Squadra.squadra.put(1, new Color(1f, 0f, 0f));
-			Squadra.squadra.put(2, new Color(0f, 1f, 0f));
-			Squadra.squadra.put(3, new Color(0.376f, 0.314f, 0.659f));
 			
 		} catch (Exception e)
 		{
