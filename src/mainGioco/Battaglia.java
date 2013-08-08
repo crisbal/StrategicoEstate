@@ -49,12 +49,12 @@ public class Battaglia extends BasicGameState {
 			for (int i = 0; i < Math.round(attaccante.vita / 10); i++)
 			{
 				//attSpecifico.draw(posXAtt[i] * Config.Scala, posYAtt[i] * Config.Scala, attaccante.colore);
-				attGenerico.draw(posXAtt[i] * Config.Scala, posYAtt[i] * Config.Scala);
+				attGenerico.draw(posXAtt[i], posYAtt[i]);
 			}
 			for (int i = 0; i < Math.round(difensore.vita / 10); i++)
 			{
 				//difSpecifico.draw(posXDif[i] * Config.Scala, posYDif[i] * Config.Scala, difensore.colore);
-				difGenerico.draw(posXDif[i] * Config.Scala, posYDif[i] * Config.Scala);
+				difGenerico.draw(posXDif[i], posYDif[i]);
 				
 			}
 			
@@ -124,16 +124,15 @@ public class Battaglia extends BasicGameState {
 			
 			for (int i = 0; i < nAttaccanti; i++)
 			{
-				posXAtt[i] = rnd.nextInt((int) (Config.LARGHEZZA / 2 - attaccante.getWidth()));
-				posYAtt[i] = (int) (360 * Config.Scala + rnd.nextInt((int) (Config.ALTEZZA - 360 * Config.Scala - attaccante
-						.getHeight())));
+				posXAtt[i] = rnd.nextInt((int) (Config.LARGHEZZA / 2 - 32 * Config.Scala));
+				posYAtt[i] = (int) (Config.ALTEZZA/2 +  rnd.nextInt((int) (Config.ALTEZZA/2 - 32 * Config.Scala)));
+				System.out.println(posYAtt[i]);
 			}
 			
 			for (int i = 0; i < nDifensori; i++)
 			{
-				posXDif[i] = Config.LARGHEZZA / 2 + rnd.nextInt((int) (Config.LARGHEZZA / 2 - difensore.getWidth()));
-				posYDif[i] = (int) (360 * Config.Scala + rnd.nextInt((int) (Config.ALTEZZA - 360 * Config.Scala - difensore
-						.getHeight())));
+				posXDif[i] = Config.LARGHEZZA / 2 + rnd.nextInt((int) (Config.LARGHEZZA / 2 - 32 * Config.Scala));
+				posYDif[i] = (int) (Config.ALTEZZA/2 +  rnd.nextInt((int) (Config.ALTEZZA/2 - 32 * Config.Scala)));
 			}
 			
 		}

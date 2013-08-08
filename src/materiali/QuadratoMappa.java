@@ -21,4 +21,8 @@ public class QuadratoMappa {
 		Texture.draw(x, y, Config.Scala);
 	}
 	
+	public void DisegnaScalato(int x, int y, float scala) { // la x, la y e il parametro g fisso per disegnare
+		Texture.draw((this.x* scala + x* Config.Scala)  , (this.y*scala + y* Config.Scala), Config.Scala*scala);
+	}
+	
 }

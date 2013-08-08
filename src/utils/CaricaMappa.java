@@ -24,7 +24,7 @@ public class CaricaMappa {
 	public static String[][]		mappa			= null;
 	public static QuadratoMappa[][]	quadratoMappa	= null;
 	
-	public static String[][] creaMatriceMappa(String nomeMappa) {
+	private static String[][] creaMatriceMappa(String nomeMappa) {
 		
 		try
 		{
@@ -72,7 +72,6 @@ public class CaricaMappa {
 				{
 					
 					Element personaggio = (Element) nNode;
-					System.out.println(personaggio);
 					Personaggi.personaggio.add(new PersonaggioGenerico(Integer.parseInt(personaggio.getAttribute("y")), Integer
 							.parseInt(personaggio.getAttribute("x")), personaggio.getTextContent(), Integer
 							.parseInt(personaggio.getAttribute("squadra")), i));

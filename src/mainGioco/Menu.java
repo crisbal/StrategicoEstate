@@ -97,7 +97,7 @@ public class Menu  extends BasicGameState {
 			switch(selezionato)
 			{
 				case 0:
-					sbg.enterState(Main.gioca,new FadeOutTransition(Color.black),new FadeInTransition(Color.black));
+					sbg.enterState(Main.scegliMappa);
 					break;
 				case 2:
 					gc.exit();

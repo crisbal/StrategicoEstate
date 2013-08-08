@@ -8,7 +8,8 @@ public class Config { // classe di configurazione, modificare questa per
 	
 	public static int			RIGHE;
 	public static int			COLONNE;
-	public static final float	Scala				= 1f;
+	public static String	mappa="";
+	public static final float	Scala				= 0.75f;
 	public static final int		ALTEZZA				= (int) (720 * Scala);	// schermo
 	public static final int		LARGHEZZA			= (int) (1280 * Scala); // schermo
 	public static final int		DIMENSIONE_IMMAGINE	= 64;

@@ -29,12 +29,12 @@ import utils.GestoreMouse;
 
 public class Gioca extends BasicGameState {
 	
-	public static QuadratoMappa[][]				mappa		= new QuadratoMappa[Config.COLONNE][Config.RIGHE];
+	public static QuadratoMappa[][]			mappa;
 	private ArrayList<QuadratoMovimento>	movimenti	= new ArrayList<QuadratoMovimento>();
 	private int[]							ArrayClick	= new int[2];
 	private boolean							inBattaglia	= false, caricato = false;
 	private Bottone							banner;
-	private int								turno,turnoTotale;
+	private int								turno, turnoTotale;
 	private Testo							testoTurno;
 	
 	public Gioca(int state) { // costruttore inutile per ora, ma necessario
@@ -47,9 +47,6 @@ public class Gioca extends BasicGameState {
 		 * codice per inizializzare (eseguito all'avvio della classe, quando si
 		 * entra nello stato
 		 */
-		testoTurno = new Testo(Font.BOLD, 25);
-		turno =turnoTotale= 1;
-		mappa = CaricaMappa.caricaQuadrati("mappa.xml");
 		
 	}
 	
@@ -61,37 +58,41 @@ public class Gioca extends BasicGameState {
 		/*
 		 * disegno sullo schermo le cose
 		 */
-		for (int i = 0; i < Config.RIGHE; i++)
+		if (caricato)
 		{
-			for (int j = 0; j < Config.COLONNE; j++)
-				mappa[i][j].Disegna();
-		}
-		
-		for (int i = 0; i < movimenti.size(); i++)
-		{
-			movimenti.get(i).Disegna();
-		}
-		
-		for (int i = 0; i < Personaggi.personaggio.size(); i++)
-		{
-			if (Personaggi.personaggio.get(i).inVita)
-				Personaggi.personaggio.get(i).Disegna();
-		}
-		for (int i = 0; i < Config.RIGHE; i++)
-		{
-			for (int j = 0; j < Config.COLONNE; j++)
+			for (int i = 0; i < Config.RIGHE; i++)
 			{
-				if(mappa[i][j].tipo.equals("acqua"))
+				for (int j = 0; j < Config.COLONNE; j++)
 					mappa[i][j].Disegna();
 			}
+			
+			for (int i = 0; i < movimenti.size(); i++)
+			{
+				movimenti.get(i).Disegna();
+			}
+			
+			for (int i = 0; i < Personaggi.personaggio.size(); i++)
+			{
+				if (Personaggi.personaggio.get(i).inVita)
+					Personaggi.personaggio.get(i).Disegna();
+			}
+			for (int i = 0; i < Config.RIGHE; i++)
+			{
+				for (int j = 0; j < Config.COLONNE; j++)
+				{
+					if (mappa[i][j].tipo.equals("acqua"))
+						mappa[i][j].Disegna();
+				}
+			}
+			
+			for (int i = 0; i < Personaggi.giocatori.size(); i++)
+			{
+				Personaggi.giocatori.get(i).Disegna(0, 600, gc);
+				Personaggi.giocatori.get(i).Disegna(1100, 600, gc);
+			}
+			testoTurno.disegna("Turno " + Integer.toString(turnoTotale), Testo.CENTROORIZ,
+					gc.getHeight() - Testo.ttf.getHeight(Integer.toString(turno)), (Color) Squadra.squadra.get(turno), gc);
 		}
-		
-		for(int i=0;i<Personaggi.giocatori.size();i++)
-		{
-			Personaggi.giocatori.get(i).Disegna(0, 600,gc);
-			Personaggi.giocatori.get(i).Disegna(1100,600,gc);
-		}
-		testoTurno.disegna("Turno " + Integer.toString(turnoTotale), Testo.CENTROORIZ, gc.getHeight()-Testo.ttf.getHeight(Integer.toString(turno)),(Color) Squadra.squadra.get(turno), gc);
 	}
 	
 	@Override
@@ -103,6 +104,15 @@ public class Gioca extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		Input input = gc.getInput();
+		
+		if (!caricato)
+		{
+			caricato = !caricato;
+			testoTurno = new Testo(Font.BOLD, 25);
+			turno = turnoTotale = 1;
+			if (Config.mappa != "")
+				mappa = CaricaMappa.caricaQuadrati(Config.mappa);
+		}
 		ArrayClick = GestoreMouse.ZonaClick();
 		// delta indica il tempo in ms passato dall'ultimo
 		// update dello schermo. utile per standardizzare
@@ -167,7 +177,7 @@ public class Gioca extends BasicGameState {
 							if (Personaggi.difensore != null)
 							{
 								Personaggi.attaccante = Personaggi.personaggio.get(i);
-
+								
 								Battaglia.caricato = false;
 								Battaglia.risolto = false;
 								Battaglia.timer = 0;
