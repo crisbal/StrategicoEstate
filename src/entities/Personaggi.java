@@ -8,6 +8,7 @@ public class Personaggi {
 	
 	public static ArrayList<PersonaggioGenerico>	personaggio	= new ArrayList<PersonaggioGenerico>();
 	public static PersonaggioGenerico				attaccante, difensore;
+	public static ArrayList<Giocatore> giocatori = new ArrayList<Giocatore>();
 	
 	public static void pulisciLista() throws SlickException {
 		personaggio.clear();

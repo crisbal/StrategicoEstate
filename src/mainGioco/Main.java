@@ -8,9 +8,8 @@ import entities.Personaggi;
 public class Main extends StateBasedGame {
 	
 	public static final String	NomeGioco	= "StrategicoGenerico"; // il titolo
-	public static final int		gioca		= 1;
-	public static final int		battaglia	= 2;
-	public static final int		menu	= 3;
+	public static final int		gioca		= 1, battaglia = 2, menu = 3, creaPersonaggio = 4;
+	
 	public Main(String NomeGioco) {
 		super(NomeGioco);
 		
@@ -21,12 +20,12 @@ public class Main extends StateBasedGame {
 	public void initStatesList(GameContainer gc) throws SlickException {
 		gc.setShowFPS(true);
 		Personaggi.pulisciLista();
-
+		
 		this.addState(new Gioca(gioca));
 		this.addState(new Battaglia(battaglia));
 		this.addState(new Menu(menu));
-		this.enterState(menu);
-		
+		this.addState(new CreaPersonaggio());
+		this.enterState(gioca);
 		
 	}
 	
