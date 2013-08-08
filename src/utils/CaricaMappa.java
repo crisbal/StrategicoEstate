@@ -24,11 +24,11 @@ public class CaricaMappa {
 	public static String[][]		mappa			= null;
 	public static QuadratoMappa[][]	quadratoMappa	= null;
 	
-	public static String[][] creaMatriceMappa() {
+	public static String[][] creaMatriceMappa(String nomeMappa) {
 		
 		try
 		{
-			File fXmlFile = new File("mappa.xml");
+			File fXmlFile = new File("mappe/" + nomeMappa);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlFile);
@@ -58,8 +58,12 @@ public class CaricaMappa {
 			
 			Personaggi.pulisciLista();
 			Squadra.squadra.put(1, new Color(1f, 0f, 0f));
-			Squadra.squadra.put(2, new Color(0f, 1f, 0f));
-			Squadra.squadra.put(3, new Color(0.376f, 0.314f, 0.659f));
+			Squadra.squadra.put(3, new Color(0f, 1f, 0f));
+			Squadra.squadra.put(2, new Color(1f, 0.906f, 0.004f));
+			
+			Tipo.tipo.put("Soldato", 0);
+			Tipo.tipo.put("Carro", 1);
+			
 			NodeList personaggi = doc.getElementsByTagName("personaggio");
 			for (int i = 0; i < personaggi.getLength(); i++)
 			{
@@ -84,8 +88,8 @@ public class CaricaMappa {
 		return mappa;
 	}
 	
-	public static QuadratoMappa[][] caricaQuadrati() throws SlickException {
-		String[][] mappa = creaMatriceMappa();
+	public static QuadratoMappa[][] caricaQuadrati(String NomeMappa) throws SlickException {
+		String[][] mappa = creaMatriceMappa(NomeMappa);
 		
 		quadratoMappa = new QuadratoMappa[Config.RIGHE][Config.COLONNE];
 		for (int i = 0; i < Config.RIGHE; i++)

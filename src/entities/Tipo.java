@@ -1,9 +1,15 @@
 package entities;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Tipo {
 	/*
 	 * Accessibili con Tipo.nome
 	 */
+	
+	
+	public static Map tipo = new HashMap();
 	
 	public static final String	Path	= "res/Personaggi/";
 	public static final String	SOLDATO	= Path + "Soldato";

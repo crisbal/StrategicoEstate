@@ -49,7 +49,7 @@ public class Gioca extends BasicGameState {
 		 */
 		testoTurno = new Testo(Font.BOLD, 25);
 		turno =turnoTotale= 1;
-		mappa = CaricaMappa.caricaQuadrati();
+		mappa = CaricaMappa.caricaQuadrati("mappa.xml");
 		
 	}
 	

@@ -15,6 +15,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import entities.Personaggi;
 import entities.PersonaggioGenerico;
+import entities.Tipo;
 
 public class Battaglia extends BasicGameState {
 	
@@ -47,12 +48,12 @@ public class Battaglia extends BasicGameState {
 			
 			for (int i = 0; i < Math.round(attaccante.vita / 10); i++)
 			{
-				attSpecifico.draw(posXAtt[i] * Config.Scala, posYAtt[i] * Config.Scala, attaccante.colore);
+				//attSpecifico.draw(posXAtt[i] * Config.Scala, posYAtt[i] * Config.Scala, attaccante.colore);
 				attGenerico.draw(posXAtt[i] * Config.Scala, posYAtt[i] * Config.Scala);
 			}
 			for (int i = 0; i < Math.round(difensore.vita / 10); i++)
 			{
-				difSpecifico.draw(posXDif[i] * Config.Scala, posYDif[i] * Config.Scala, difensore.colore);
+				//difSpecifico.draw(posXDif[i] * Config.Scala, posYDif[i] * Config.Scala, difensore.colore);
 				difGenerico.draw(posXDif[i] * Config.Scala, posYDif[i] * Config.Scala);
 				
 			}
@@ -87,20 +88,20 @@ public class Battaglia extends BasicGameState {
 			attSpecifico = new Animation();
 			difGenerico = new Animation();
 			difSpecifico = new Animation();
-			SpriteSheet sheetAttaccanteGenerico = new SpriteSheet("res/Battaglia/" + attaccante.Classe + "SparoGenerico.png", 80,
-					57);
-			SpriteSheet sheetAttaccanteSpecifico = new SpriteSheet("res/Battaglia/" + attaccante.Classe + "SparoSpecifico.png",
-					80, 57);
-			SpriteSheet sheetDifensoreGenerico = new SpriteSheet("res/Battaglia/" + difensore.Classe + "SparoGenerico.png", 80,
-					57);
-			SpriteSheet sheetDifensoreSpecifico = new SpriteSheet("res/Battaglia/" + difensore.Classe + "SparoSpecifico.png", 80,
-					57);
+			SpriteSheet sheetAttaccanteGenerico = new SpriteSheet("res/sprite/" +attaccante.squadra +""+  Tipo.tipo.get(attaccante.Classe) + ".png", 32,
+					32);
+			//SpriteSheet sheetAttaccanteSpecifico = new SpriteSheet("res/Battaglia/" + attaccante.Classe + "SparoSpecifico.png",
+					//80, 57);
+			SpriteSheet sheetDifensoreGenerico = new SpriteSheet("res/sprite/" +difensore.squadra +""+  Tipo.tipo.get(difensore.Classe) + ".png", 32,
+					32);
+			//SpriteSheet sheetDifensoreSpecifico = new SpriteSheet("res/Battaglia/" + difensore.Classe + "SparoSpecifico.png", 80,
+					//57);
 			for (int i = 0; i < 2; i++)
 			{
-				attGenerico.addFrame(sheetAttaccanteGenerico.getSprite(i, 0).getFlippedCopy(true, false), 150);
-				attSpecifico.addFrame(sheetAttaccanteSpecifico.getSprite(i, 0).getFlippedCopy(true, false), 150);
-				difGenerico.addFrame(sheetDifensoreGenerico.getSprite(i, 0), 150);
-				difSpecifico.addFrame(sheetDifensoreSpecifico.getSprite(i, 0), 150);
+				attGenerico.addFrame(sheetAttaccanteGenerico.getSprite(i, 1).getFlippedCopy(true, false), 150);
+				//attSpecifico.addFrame(sheetAttaccanteSpecifico.getSprite(i, 0).getFlippedCopy(true, false), 150);
+				difGenerico.addFrame(sheetDifensoreGenerico.getSprite(i, 1), 150);
+				//difSpecifico.addFrame(sheetDifensoreSpecifico.getSprite(i, 0), 150);
 			}
 			
 			for (int i = 0; i < 2; i++)
