@@ -85,11 +85,8 @@ public class Gioca extends BasicGameState {
 				}
 			}
 			
-			for (int i = 0; i < Personaggi.giocatori.size(); i++)
-			{
-				Personaggi.giocatori.get(i).Disegna(0, 600, gc);
-				Personaggi.giocatori.get(i).Disegna(1100, 600, gc);
-			}
+			//Personaggi.giocatori[turno-1].Disegna(0*Config.Scala, 600*Config.Scala, gc);
+			
 			testoTurno.disegna("Turno " + Integer.toString(turnoTotale), Testo.CENTROORIZ,
 					gc.getHeight() - Testo.ttf.getHeight(Integer.toString(turno)), (Color) Squadra.squadra.get(turno), gc);
 		}

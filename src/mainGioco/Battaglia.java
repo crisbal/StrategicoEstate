@@ -26,7 +26,7 @@ public class Battaglia extends BasicGameState {
 	public static int		timer;
 	private PersonaggioGenerico	attaccante, difensore;
 	private int					idAtt, idDif;
-	private Animation			attGenerico, attSpecifico, difGenerico, difSpecifico;
+	private Animation			attGenerico, difGenerico;
 	public static final String	Path	= "res/Battaglia/";
 	
 	public Battaglia(int state) {
@@ -85,9 +85,9 @@ public class Battaglia extends BasicGameState {
 			yDif = difensore.y;
 			
 			attGenerico = new Animation();
-			attSpecifico = new Animation();
+			new Animation();
 			difGenerico = new Animation();
-			difSpecifico = new Animation();
+			new Animation();
 			SpriteSheet sheetAttaccanteGenerico = new SpriteSheet("res/sprite/" +attaccante.squadra +""+  Tipo.tipo.get(attaccante.Classe) + ".png", 32,
 					32);
 			//SpriteSheet sheetAttaccanteSpecifico = new SpriteSheet("res/Battaglia/" + attaccante.Classe + "SparoSpecifico.png",
@@ -163,33 +163,57 @@ public class Battaglia extends BasicGameState {
 	
 	private void risolviBattaglia(PersonaggioGenerico attaccante, PersonaggioGenerico difensore) {
 		// da bilanciare!!
+		int potenzaAttacco = 0,potenzaDifesa = 0;
 		
-		if (attaccante.potenzaAttacco * attaccante.vita > difensore.potenzaDifesa * difensore.vita)
+		if(attaccante.Classe.matches("Soldato"))
 		{
-			int danno = attaccante.potenzaAttacco * attaccante.vita / 100 - difensore.potenzaDifesa;
-			if (danno > 0)
-				difensore.vita -= danno;
-			// else
-			// attaccante.vita -= danno;
+			potenzaAttacco += 5;
+			if(attaccante.piuAttacco)
+				potenzaAttacco += 5;
 		}
-		else if (attaccante.potenzaAttacco * attaccante.vita < difensore.potenzaDifesa * difensore.vita)
+		else if(attaccante.Classe.matches("Carro"))
 		{
-			int danno = difensore.potenzaDifesa * difensore.vita / 100 - attaccante.potenzaAttacco;
-			if (danno > 0)
-				attaccante.vita -= danno;
-			// else
-			// difensore.vita -= danno;
+			potenzaAttacco += 5;
+			if(attaccante.piuAttacco)
+				potenzaAttacco += 5;
 		}
-		else
-		// attacco == difesa && vita==vita
+		
+		if(difensore.Classe.matches("Soldato"))
 		{
-			Random rnd = new Random();
+			potenzaDifesa += 5;
+			if(difensore.piuAttacco)
+				potenzaDifesa += 5;
+		}
+		else if(difensore.Classe.matches("Carro"))
+		{
+			potenzaDifesa += 5;
+			if(difensore.piuAttacco)
+				potenzaDifesa += 5;
+		}
+		
+		/* calcolo dell'attacco, della difesa, del danno, ecc. per tipo unita */
+		if (attaccante.veicolo)
+			if(attaccante.vsFanteria &&  !difensore.veicolo)
+				potenzaAttacco += 5;
+		
+		/* calcolo i vantaggi e gli svantaggi tra unita vs unita */
+		if(attaccante.veicolo && !difensore.veicolo)
+		{
+			potenzaAttacco += 5;
+			potenzaDifesa -= 5;
+		}
+		else if(!attaccante.veicolo && difensore.veicolo)
+		{
+			potenzaDifesa += 5;
+			potenzaAttacco -= 5;
+		}
+		
+		potenzaAttacco = Math.round(potenzaAttacco * (attaccante.vita / 100));
+		potenzaDifesa = Math.round(potenzaDifesa * (difensore.vita / 100));
+		
+		attaccante.vita -=potenzaDifesa;
+		difensore.vita -=potenzaAttacco;
 			
-			int danno = rnd.nextInt(attaccante.potenzaAttacco);
-			attaccante.vita -= danno;
-			difensore.vita -= danno;
-			
-		}
 	}
 	
 	@Override

@@ -1,20 +1,14 @@
 package mainGioco;
 
 import java.io.File;
-import java.nio.file.Files;
-
 import materiali.QuadratoMappa;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
-
 import utils.CaricaMappa;
 
 public class ScegliMappa extends BasicGameState {
@@ -52,7 +46,7 @@ public class ScegliMappa extends BasicGameState {
 		// TODO Auto-generated method stub
 		Input input = gc.getInput();
 		
-		if (input.isKeyPressed(input.KEY_W))
+		if (input.isKeyPressed(Input.KEY_W))
 		{
 			puntatore--;
 			if (puntatore < 0)
@@ -60,7 +54,7 @@ public class ScegliMappa extends BasicGameState {
 			
 			mappa = CaricaMappa.caricaQuadrati(files[puntatore].getName());
 		}
-		else if (input.isKeyPressed(input.KEY_S))
+		else if (input.isKeyPressed(Input.KEY_S))
 		{
 			puntatore++;
 			if (puntatore > files.length-1)
@@ -69,10 +63,11 @@ public class ScegliMappa extends BasicGameState {
 			mappa = CaricaMappa.caricaQuadrati(files[puntatore].getName());
 		}
 		
-		if (input.isKeyPressed(input.KEY_ENTER))
+		if (input.isKeyPressed(Input.KEY_ENTER))
 		{
 			Config.mappa = files[puntatore].getName();
-			sbg.enterState(Main.gioca,new FadeOutTransition(Color.black),new FadeInTransition(Color.black));
+			sbg.enterState(Main.creaPersonaggio);
+			//sbg.enterState(Main.gioca,new FadeOutTransition(Color.black),new FadeInTransition(Color.black));
 		}
 		
 	}

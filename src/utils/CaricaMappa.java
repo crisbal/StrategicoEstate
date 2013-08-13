@@ -16,7 +16,6 @@ import entities.Squadra;
 import entities.Tipo;
 
 import mainGioco.Config;
-import materiali.Materiale;
 import materiali.QuadratoMappa;
 
 public class CaricaMappa {
@@ -24,6 +23,7 @@ public class CaricaMappa {
 	public static String[][]		mappa			= null;
 	public static QuadratoMappa[][]	quadratoMappa	= null;
 	
+	@SuppressWarnings("unchecked")
 	private static String[][] creaMatriceMappa(String nomeMappa) {
 		
 		try

@@ -3,22 +3,19 @@ package mainGioco;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.soap.Text;
-
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import entities.Giocatore;
 import entities.Personaggi;
+import entities.Squadra;
 
 public class CreaPersonaggio extends BasicGameState {
 	
@@ -27,8 +24,9 @@ public class CreaPersonaggio extends BasicGameState {
 	
 	Image					Base;
 	Image[]					ImmagineElementi	= new Image[4];
-	int						puntatore			= 0;
+	int						puntatore			= 0,nAdd = 0;
 	TextField				nome;
+	Giocatore[] gDaAggiungere = new Giocatore[2];
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
@@ -65,40 +63,53 @@ public class CreaPersonaggio extends BasicGameState {
 		{
 			ImmagineElementi[i] = new Image("res/Giocatori/" + i + "/" + ElementiPersonaggio.get(i) + ".png", false,
 					Image.FILTER_NEAREST);
-		}
+}
 		
 		Input input = gc.getInput();
 		
-		if (input.isKeyPressed(input.KEY_W))
+		if (input.isKeyPressed(Input.KEY_W))
 		{
 			puntatore--;
 			if (puntatore < 0)
 				puntatore = 3;
 		}
-		else if (input.isKeyPressed(input.KEY_S))
+		else if (input.isKeyPressed(Input.KEY_S))
 		{
 			puntatore++;
 			if (puntatore > 3)
 				puntatore = 0;
 		}
 		
-		if (input.isKeyPressed(input.KEY_A))
+		if (input.isKeyPressed(Input.KEY_A))
 		{
 			ElementiPersonaggio.put(puntatore, (int) ElementiPersonaggio.get(puntatore) - 1);
 			if ((int) ElementiPersonaggio.get(puntatore) < 0)
 				ElementiPersonaggio.put(puntatore, 3);
 		}
-		else if (input.isKeyPressed(input.KEY_D))
+		else if (input.isKeyPressed(Input.KEY_D))
 		{
 			ElementiPersonaggio.put(puntatore, (int) ElementiPersonaggio.get(puntatore) + 1);
 			if ((int) ElementiPersonaggio.get(puntatore) > 3)
 				ElementiPersonaggio.put(puntatore, 0);
 		}
 		
-		if (input.isKeyPressed(input.KEY_ENTER))
+		if (input.isKeyPressed(Input.KEY_ENTER))
 		{
-			Personaggi.giocatori.add(new Giocatore("Player", ElementiPersonaggio));
-			sbg.enterState(Main.gioca);
+			gDaAggiungere[nAdd] = new Giocatore("Player" + nAdd, ElementiPersonaggio);
+			
+			Personaggi.giocatori[nAdd]=(gDaAggiungere[nAdd]);
+			nAdd++;
+			//System.out.println(Personaggi.giocatori.get(0).elementi.get(0));
+			if(nAdd<2)
+			{
+				init(gc, sbg);
+				
+			}
+			else
+			{
+				//Personaggi.giocatori.addAll();
+				sbg.enterState(Main.gioca);
+			}
 		}
 	}
 	

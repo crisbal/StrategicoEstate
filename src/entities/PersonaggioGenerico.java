@@ -24,6 +24,9 @@ public class PersonaggioGenerico {
 	public int		potenzaAttacco, potenzaDifesa;
 	public int		Identificativo;
 	
+	
+	public boolean veicolo;
+	public boolean piuAttacco,piuDifesa,vsVeicolo,vsFanteria;
 	public PersonaggioGenerico(int y, int x, String tipo, int squadra, int id) throws SlickException {
 		
 		TextureGenerica = new Image(Tipo.Path + tipo + "Generico.png");
@@ -44,20 +47,16 @@ public class PersonaggioGenerico {
 		if ((Tipo.Path + tipo).matches(Tipo.CARRO))
 		{
 			raggio = 1;
-			potenzaAttacco = 110;
-			potenzaDifesa = 45;
+			veicolo = true;
 		}
 		if ((Tipo.Path + tipo).matches(Tipo.SOLDATO))
 		{
 			raggio = 3;
-			potenzaAttacco = 50;
-			potenzaDifesa = 50;
 		}
 		if ((Tipo.Path + tipo).matches(Tipo.AEREO))
 		{
 			raggio = 8;
-			potenzaAttacco = 50;
-			potenzaDifesa = 100;
+			veicolo = true;
 		}
 		Identificativo = id;
 	}

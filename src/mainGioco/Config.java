@@ -1,7 +1,5 @@
 package mainGioco;
 
-import org.newdawn.slick.Color;
-
 public class Config { // classe di configurazione, modificare questa per
 	// modificare le proprieta'
 	// della finestra, della mappa e della risoluzione dell'immagine
