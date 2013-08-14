@@ -60,8 +60,9 @@ public class CaricaMappa {
 			Squadra.squadra.put(1, new Color(1f, 0f, 0f));
 			Squadra.squadra.put(3, new Color(0f, 1f, 0f));
 			Squadra.squadra.put(2, new Color(1f, 0.906f, 0.004f));
-			
-			Tipo.tipo.put("Soldato", 0);
+			Squadra.squadraAWT.put(1, java.awt.Color.red);
+			Squadra.squadraAWT.put(3, java.awt.Color.green);
+			Squadra.squadraAWT.put(2,java.awt.Color.yellow);
 			Tipo.tipo.put("Carro", 1);
 			
 			NodeList personaggi = doc.getElementsByTagName("personaggio");

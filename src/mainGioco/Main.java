@@ -26,7 +26,7 @@ public class Main extends StateBasedGame {
 		this.addState(new Menu(menu));
 		this.addState(new CreaPersonaggio());
 		this.addState(new ScegliMappa());
-		this.enterState(scegliMappa);
+		this.enterState(menu);
 		
 	}
 	

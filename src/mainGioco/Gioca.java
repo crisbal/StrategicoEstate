@@ -9,6 +9,7 @@ import entities.QuadratoMovimento;
 import entities.Squadra;
 import entities.Tipo;
 import gui.Bottone;
+import gui.FinestraInfo;
 import gui.Testo;
 import materiali.Materiale;
 import materiali.QuadratoMappa;
@@ -36,6 +37,9 @@ public class Gioca extends BasicGameState {
 	private Bottone							banner;
 	private int								turno, turnoTotale;
 	private Testo							testoTurno;
+	FinestraInfo							info		= null;
+	private PersonaggioGenerico				pPrec;
+	Bottone									potenz;
 	
 	public Gioca(int state) { // costruttore inutile per ora, ma necessario
 	
@@ -85,10 +89,20 @@ public class Gioca extends BasicGameState {
 				}
 			}
 			
-			//Personaggi.giocatori[turno-1].Disegna(0*Config.Scala, 600*Config.Scala, gc);
+			g.setColor(Color.black);
+			g.fillRect(0, Config.RIGHE * Config.DIMENSIONE_IMMAGINE * Config.Scala, Config.LARGHEZZA, Config.ALTEZZA);
+			
+			// Personaggi.giocatori[turno-1].Disegna(0*Config.Scala,
+			// 600*Config.Scala, gc);
+			
+			if (info != null)
+			{
+				info.Disegna(g, gc);
+				potenz.Disegna((int) (Personaggi.attaccante.x>Config.COLONNE/2 ? 0 + (info.larghezza - potenz.larghezza)/2:Config.LARGHEZZA - info.larghezza + (info.larghezza - potenz.larghezza)/2),75);
+			}
 			
 			testoTurno.disegna("Turno " + Integer.toString(turnoTotale), Testo.CENTROORIZ,
-					gc.getHeight() - Testo.ttf.getHeight(Integer.toString(turno)), (Color) Squadra.squadra.get(turno), gc);
+					gc.getHeight() - testoTurno.ttf.getHeight("Turno"));
 		}
 	}
 	
@@ -104,8 +118,10 @@ public class Gioca extends BasicGameState {
 		
 		if (!caricato)
 		{
+			potenz = new Bottone("Potenziamenti");
+			potenz.Elimina();
 			caricato = !caricato;
-			testoTurno = new Testo(Font.BOLD, 25);
+			testoTurno = new Testo("Verdana", Font.BOLD, 20,(java.awt.Color) Squadra.squadraAWT.get(1));
 			turno = turnoTotale = 1;
 			if (Config.mappa != "")
 				mappa = CaricaMappa.caricaQuadrati(Config.mappa);
@@ -126,34 +142,65 @@ public class Gioca extends BasicGameState {
 			turnoTotale++;
 			if (turno > 2)
 				turno = 1;
+			testoTurno = new Testo("Verdana", Font.BOLD, 20,(java.awt.Color) Squadra.squadraAWT.get(turno));
 			
 			for (int i = 0; i < Personaggi.personaggio.size(); i++)
 			{
 				Personaggi.personaggio.get(i).selezionato = false;
 			}
+			Personaggi.attaccante = null;
+			info = null;
+			potenz.Elimina();
 		}
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
 		{
 			// ottendo la casella // su
 			// cui ha // cliccato
-			for (int i = 0; i < Personaggi.personaggio.size(); i++)
+			if (potenz.Cliccato())
 			{
-				
-				if (Personaggi.personaggio.get(i).inVita)
-					if (Personaggi.personaggio.get(i).squadra == turno)
-						if (ArrayClick[0] == Personaggi.personaggio.get(i).x && ArrayClick[1] == Personaggi.personaggio.get(i).y)
-						{
-							if (Personaggi.personaggio.get(i).selezionato == false)
+				System.out.println("gnomo");
+			}
+			else
+			{
+				for (int i = 0; i < Personaggi.personaggio.size(); i++)
+				{
+					
+					if (Personaggi.personaggio.get(i).inVita)
+						if (Personaggi.personaggio.get(i).squadra == turno)
+							if (ArrayClick[0] == Personaggi.personaggio.get(i).x
+									&& ArrayClick[1] == Personaggi.personaggio.get(i).y)
 							{
-								Personaggi.personaggio.get(i).selezionato = true;
+								
+								if (Personaggi.personaggio.get(i).selezionato == false)
+								{
+									
+									Personaggi.personaggio.get(i).selezionato = true;
+									Personaggi.attaccante = Personaggi.personaggio.get(i);
+									for (int j = 0; j < Personaggi.personaggio.size(); j++)
+									{
+										if (j != i)
+										{
+											Personaggi.personaggio.get(j).selezionato = false;
+										}
+									}
+									break;
+								}
+								else
+								{
+									Personaggi.personaggio.get(i).selezionato = false;
+									Personaggi.attaccante = null;
+									info = null;
+									potenz.Elimina();
+								}
 							}
 							else
+							{
 								Personaggi.personaggio.get(i).selezionato = false;
-						}
-						else
-						{
-							Personaggi.personaggio.get(i).selezionato = false;
-						}
+								Personaggi.attaccante = null;
+								info = null;
+								potenz.Elimina();
+							}
+				}
 				
 			}
 		}
@@ -169,29 +216,56 @@ public class Gioca extends BasicGameState {
 						if (Math.abs(Personaggi.personaggio.get(i).x - ArrayClick[0])
 								+ Math.abs(Personaggi.personaggio.get(i).y - ArrayClick[1]) <= Personaggi.personaggio.get(i).raggio)
 						{
+							Personaggi.attaccante = Personaggi.personaggio.get(i);
 							Personaggi.difensore = Personaggi.clickSuPersonaggioNemico(Personaggi.personaggio.get(i),
 									ArrayClick[1], ArrayClick[0]);
 							if (Personaggi.difensore != null)
 							{
-								Personaggi.attaccante = Personaggi.personaggio.get(i);
 								
 								Battaglia.caricato = false;
 								Battaglia.risolto = false;
 								Battaglia.timer = 0;
+								Personaggi.personaggio.get(i).selezionato = false;
 								sbg.enterState(Main.battaglia);
-								Personaggi.attaccante.selezionato = false;
+								
 								break;
 								
 							}
 							else if (Materiale.Controllo(ArrayClick))
 							{
-								Personaggi.personaggio.get(i).Sposta(ArrayClick[1], ArrayClick[0]);
+								boolean problema = false;
+								for (int j = 0; j < Personaggi.personaggio.size(); j++)
+								{
+									if (Personaggi.personaggio.get(j).x == ArrayClick[0]
+											&& Personaggi.personaggio.get(j).y == ArrayClick[1])
+										problema = true;
+								}
+								if (!problema)
+								{
+									Personaggi.personaggio.get(i).Sposta(ArrayClick[1], ArrayClick[0]);
+									Personaggi.attaccante = null;
+								}
 								// break;
 							}
 						}
+						
 					}
 			}
-		
+		if (Personaggi.attaccante != null)
+		{
+			if (Personaggi.attaccante.selezionato)
+				if (Personaggi.attaccante != pPrec)
+				{
+					potenz.Ripristina();
+					info = new FinestraInfo(Personaggi.attaccante);
+					pPrec = Personaggi.attaccante;
+				}
+		}
+		else
+		{
+			info = null;
+			pPrec = null;
+		}
 	}
 	
 }

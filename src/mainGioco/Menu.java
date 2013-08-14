@@ -1,7 +1,6 @@
 package mainGioco;
 
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -10,11 +9,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
-
 import entities.Nuvola;
-import gui.Bottone;
 
 public class Menu  extends BasicGameState {
 	private int offset = 100;
@@ -24,8 +19,6 @@ public class Menu  extends BasicGameState {
 	private boolean indietro;
 	private Animation allies;
 	private int	spostamento = 0;
-	
-	private Bottone test;
 	public Menu(int menu2) {
 		// TODO Auto-generated constructor stub
 	}
@@ -34,7 +27,6 @@ public class Menu  extends BasicGameState {
 	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
 		// TODO Auto-generated method stub
 		
-		test = new Bottone("rtt");
 		menu = new Image("res/GUI/Menu.png");
 		selettore = new Image("res/GUI/Selettore.png");
 		SpriteSheet sheetAllies = new SpriteSheet("res/GUI/allies.png", 32, 32);
@@ -55,7 +47,6 @@ public class Menu  extends BasicGameState {
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException {
 		// TODO Auto-generated method stub
 		menu.draw(0,0,Config.Scala);
-		test.Disegna(100, 100);
 		for(int i = 0;i<4;i++)
 		{
 			nuvole[i].immagine.draw(nuvole[i].x*Config.Scala, nuvole[i].y*Config.Scala,nuvole[i].scala*Config.Scala);
@@ -84,16 +75,16 @@ public class Menu  extends BasicGameState {
 		Input input = gc.getInput();
 		
 		
-		if(input.isKeyPressed(input.KEY_UP) || input.isKeyPressed(input.KEY_W))
+		if(input.isKeyPressed(Input.KEY_UP) || input.isKeyPressed(Input.KEY_W))
 		{
 			selezionato --;
-		}else if(input.isKeyPressed(input.KEY_DOWN) || input.isKeyPressed(input.KEY_S))
+		}else if(input.isKeyPressed(Input.KEY_DOWN) || input.isKeyPressed(Input.KEY_S))
 		{
 			selezionato ++;
 		}
 		
 		
-		if(input.isKeyPressed(input.KEY_ENTER))
+		if(input.isKeyPressed(Input.KEY_ENTER))
 			switch(selezionato)
 			{
 				case 0:

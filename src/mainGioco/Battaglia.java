@@ -156,6 +156,8 @@ public class Battaglia extends BasicGameState {
 		
 		if (timer > 5000)
 		{
+			Personaggi.attaccante = null;
+			Personaggi.difensore = null;
 			sbg.enterState(Main.gioca, new FadeOutTransition(), new FadeInTransition());
 		}
 		

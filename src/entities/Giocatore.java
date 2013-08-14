@@ -27,7 +27,7 @@ public class Giocatore {
 		this.elementi=elementi;
 		System.out.println(this.elementi.get(0));
 		base = new Image("res/Giocatori/Base.png");
-		testo = new Testo(Font.BOLD, 16);
+		testo = new Testo("Verdana",Font.BOLD, 16, java.awt.Color.white);
 	}
 	
 	
@@ -38,7 +38,7 @@ public class Giocatore {
 			new Image("res/Giocatori/" + i + "/" + elementi.get(i) + ".png", false,
 					Image.FILTER_NEAREST).draw(f, g, 2.0f);
 		
-		testo.disegna(nome,(int) (f*Config.Scala + 100*Config.Scala),(int) (g*Config.Scala + 80*Config.Scala), Color.white, gc);
+		testo.disegna(nome,(int) (f*Config.Scala + 100*Config.Scala),(int) (g*Config.Scala + 80*Config.Scala));
 		
 	}
 }

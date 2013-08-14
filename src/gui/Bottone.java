@@ -17,18 +17,38 @@ public class Bottone {
 	private Font font=new Font("Verdana", Font.PLAIN,(int)(16*Config.Scala));   //il testo e' verdana 16 normale PLAIN
 	private TrueTypeFont ttf = new TrueTypeFont(font, true);  //creo la ttf per stamparlo a video
 	
-	private boolean visualizza=true,cliccabile=true;
-	private float x, y, larghezza, altezza;
-
+	public boolean visualizza=true,cliccabile=true;
+	public float x, y, larghezza, altezza;
+	float LunghezzaTesto,AltezzaTesto,coeffLungh,coeffAltez;
 	public Bottone(String contenuto) throws SlickException {
 		Immagine = new Image("res/GUI/Bottone.png", false, Image.FILTER_NEAREST);   //uso l'ultimo parametro per rimuovere il blur dell'immagine
+		Immagine = Immagine.getScaledCopy(Config.Scala);
 		Testo = contenuto;
 		visualizza=true;
 		cliccabile=true;
+		LunghezzaTesto=ttf.getWidth(Testo);
+		AltezzaTesto=ttf.getHeight(Testo);
+		coeffLungh=(LunghezzaTesto/Immagine.getWidth());   //determina l'ingrossamento del bottone
+		coeffAltez=(AltezzaTesto/Immagine.getHeight());
+		larghezza=Immagine.getWidth()*coeffLungh+50*Config.Scala*coeffLungh;
+		altezza=Immagine.getHeight()*coeffAltez+15*Config.Scala*coeffAltez;
 	}
 
 	public void Disegna(float x, float y) {
-		if(visualizza&&Immagine!=null)
+		if(Immagine!=null)
+		{
+			this.x = x;
+			this.y = y;
+			
+			Immagine.draw(this.x, this.y, larghezza, altezza);   //disegno l'immagine
+			
+			ttf.drawString(this.x+larghezza/2-LunghezzaTesto/2, this.y+altezza/2-AltezzaTesto/2, Testo, Color.black);  //scrivo il testo nel centro
+		}
+
+	}
+	
+	public void Disegna(float x, float y, Color color) {
+		if(Immagine!=null)
 		{
 			this.x = x*Config.Scala;
 			this.y = y*Config.Scala;
@@ -37,16 +57,16 @@ public class Bottone {
 			float AltezzaTesto=ttf.getHeight(Testo);
 			float coeffLungh=(LunghezzaTesto/Immagine.getWidth());   //determina l'ingrossamento del bottone
 			float coeffAltez=(AltezzaTesto/Immagine.getHeight());
-			
-			larghezza=Immagine.getWidth()*coeffLungh+15*coeffLungh;  
-			altezza=Immagine.getHeight()*coeffAltez+100*coeffAltez;
+			larghezza=Immagine.getWidth()*coeffLungh+50*Config.Scala*coeffLungh;
+			altezza=Immagine.getHeight()*coeffAltez+15*Config.Scala*coeffAltez;
 	
-			Immagine.draw(x, y, larghezza, altezza);   //disegno l'immagine
+			Immagine.draw(this.x, this.y, larghezza, altezza,color);   //disegno l'immagine
 			
-			ttf.drawString(x+larghezza/2-LunghezzaTesto/2, y+altezza/2-AltezzaTesto/2, Testo, Color.red);  //scrivo il testo nel centro
+			ttf.drawString(this.x+larghezza/2-LunghezzaTesto/2, this.y+altezza/2-AltezzaTesto/2, Testo, Color.black);  //scrivo il testo nel centro
 		}
 
 	}
+	
 
 	public boolean Cliccato(){
 		float MouseY=Config.ALTEZZA-Mouse.getY()-1;  //la gestione della Y e' stupida, per avere quella vera devo comportarmi cosi'
@@ -56,9 +76,9 @@ public class Bottone {
 			
 			if(Mouse.getX()>x&&Mouse.getX()<(x+larghezza))
 			{
-
 				if(MouseY>y&&MouseY<(y+altezza))
 				{
+					
 					return true;
 				}
 			}
@@ -70,8 +90,15 @@ public class Bottone {
 	public void Elimina()
 	{
 		visualizza=false;
+		cliccabile = false;
 	}
 
+	public void Ripristina()
+	{
+		visualizza=true;
+		cliccabile = true;
+	}
+	
 	public boolean Visibile(){
 		return visualizza;
 	}
