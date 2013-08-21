@@ -29,10 +29,6 @@ public class Battaglia extends BasicGameState {
 	private Animation			attGenerico, difGenerico;
 	public static final String	Path	= "res/Battaglia/";
 	
-	public Battaglia(int state) {
-		
-	}
-	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		
@@ -48,12 +44,14 @@ public class Battaglia extends BasicGameState {
 			
 			for (int i = 0; i < Math.round(attaccante.vita / 10); i++)
 			{
-				//attSpecifico.draw(posXAtt[i] * Config.Scala, posYAtt[i] * Config.Scala, attaccante.colore);
+				// attSpecifico.draw(posXAtt[i] * Config.Scala, posYAtt[i] *
+				// Config.Scala, attaccante.colore);
 				attGenerico.draw(posXAtt[i], posYAtt[i]);
 			}
 			for (int i = 0; i < Math.round(difensore.vita / 10); i++)
 			{
-				//difSpecifico.draw(posXDif[i] * Config.Scala, posYDif[i] * Config.Scala, difensore.colore);
+				// difSpecifico.draw(posXDif[i] * Config.Scala, posYDif[i] *
+				// Config.Scala, difensore.colore);
 				difGenerico.draw(posXDif[i], posYDif[i]);
 				
 			}
@@ -85,23 +83,20 @@ public class Battaglia extends BasicGameState {
 			yDif = difensore.y;
 			
 			attGenerico = new Animation();
-			new Animation();
 			difGenerico = new Animation();
-			new Animation();
-			SpriteSheet sheetAttaccanteGenerico = new SpriteSheet("res/sprite/" +attaccante.squadra +""+  Tipo.tipo.get(attaccante.Classe) + ".png", 32,
-					32);
-			//SpriteSheet sheetAttaccanteSpecifico = new SpriteSheet("res/Battaglia/" + attaccante.Classe + "SparoSpecifico.png",
-					//80, 57);
-			SpriteSheet sheetDifensoreGenerico = new SpriteSheet("res/sprite/" +difensore.squadra +""+  Tipo.tipo.get(difensore.Classe) + ".png", 32,
-					32);
-			//SpriteSheet sheetDifensoreSpecifico = new SpriteSheet("res/Battaglia/" + difensore.Classe + "SparoSpecifico.png", 80,
-					//57);
+			
+			SpriteSheet sheetAttaccanteGenerico = new SpriteSheet(Path + attaccante.squadra + ""
+					+ Tipo.tipo.get(attaccante.Classe) + ".png", 32, 32);
+			
+			SpriteSheet sheetDifensoreGenerico = new SpriteSheet(Path + difensore.squadra + "" + Tipo.tipo.get(difensore.Classe)
+					+ ".png", 32, 32);
+			
 			for (int i = 0; i < 2; i++)
 			{
 				attGenerico.addFrame(sheetAttaccanteGenerico.getSprite(i, 1).getFlippedCopy(true, false), 150);
-				//attSpecifico.addFrame(sheetAttaccanteSpecifico.getSprite(i, 0).getFlippedCopy(true, false), 150);
+				
 				difGenerico.addFrame(sheetDifensoreGenerico.getSprite(i, 1), 150);
-				//difSpecifico.addFrame(sheetDifensoreSpecifico.getSprite(i, 0), 150);
+				
 			}
 			
 			for (int i = 0; i < 2; i++)
@@ -125,14 +120,14 @@ public class Battaglia extends BasicGameState {
 			for (int i = 0; i < nAttaccanti; i++)
 			{
 				posXAtt[i] = rnd.nextInt((int) (Config.LARGHEZZA / 2 - 32 * Config.Scala));
-				posYAtt[i] = (int) (Config.ALTEZZA/2 +  rnd.nextInt((int) (Config.ALTEZZA/2 - 32 * Config.Scala)));
+				posYAtt[i] = (int) (Config.ALTEZZA / 2 + rnd.nextInt((int) (Config.ALTEZZA / 2 - 32 * Config.Scala)));
 				System.out.println(posYAtt[i]);
 			}
 			
 			for (int i = 0; i < nDifensori; i++)
 			{
 				posXDif[i] = Config.LARGHEZZA / 2 + rnd.nextInt((int) (Config.LARGHEZZA / 2 - 32 * Config.Scala));
-				posYDif[i] = (int) (Config.ALTEZZA/2 +  rnd.nextInt((int) (Config.ALTEZZA/2 - 32 * Config.Scala)));
+				posYDif[i] = (int) (Config.ALTEZZA / 2 + rnd.nextInt((int) (Config.ALTEZZA / 2 - 32 * Config.Scala)));
 			}
 			
 		}
@@ -165,46 +160,46 @@ public class Battaglia extends BasicGameState {
 	
 	private void risolviBattaglia(PersonaggioGenerico attaccante, PersonaggioGenerico difensore) {
 		// da bilanciare!!
-		int potenzaAttacco = 0,potenzaDifesa = 0;
+		int potenzaAttacco = 0, potenzaDifesa = 0;
 		
-		if(attaccante.Classe.matches("Soldato"))
+		if (attaccante.Classe.matches("Soldato"))
 		{
 			potenzaAttacco += 5;
-			if(attaccante.piuAttacco)
+			if (attaccante.piuAttacco)
 				potenzaAttacco += 5;
 		}
-		else if(attaccante.Classe.matches("Carro"))
+		else if (attaccante.Classe.matches("Carro"))
 		{
 			potenzaAttacco += 5;
-			if(attaccante.piuAttacco)
+			if (attaccante.piuAttacco)
 				potenzaAttacco += 5;
 		}
 		
-		if(difensore.Classe.matches("Soldato"))
+		if (difensore.Classe.matches("Soldato"))
 		{
 			potenzaDifesa += 5;
-			if(difensore.piuAttacco)
+			if (difensore.piuAttacco)
 				potenzaDifesa += 5;
 		}
-		else if(difensore.Classe.matches("Carro"))
+		else if (difensore.Classe.matches("Carro"))
 		{
 			potenzaDifesa += 5;
-			if(difensore.piuAttacco)
+			if (difensore.piuAttacco)
 				potenzaDifesa += 5;
 		}
 		
 		/* calcolo dell'attacco, della difesa, del danno, ecc. per tipo unita */
 		if (attaccante.veicolo)
-			if(attaccante.vsFanteria &&  !difensore.veicolo)
+			if (attaccante.vsFanteria && !difensore.veicolo)
 				potenzaAttacco += 5;
 		
 		/* calcolo i vantaggi e gli svantaggi tra unita vs unita */
-		if(attaccante.veicolo && !difensore.veicolo)
+		if (attaccante.veicolo && !difensore.veicolo)
 		{
 			potenzaAttacco += 5;
 			potenzaDifesa -= 5;
 		}
-		else if(!attaccante.veicolo && difensore.veicolo)
+		else if (!attaccante.veicolo && difensore.veicolo)
 		{
 			potenzaDifesa += 5;
 			potenzaAttacco -= 5;
@@ -213,9 +208,9 @@ public class Battaglia extends BasicGameState {
 		potenzaAttacco = Math.round(potenzaAttacco * (attaccante.vita / 100));
 		potenzaDifesa = Math.round(potenzaDifesa * (difensore.vita / 100));
 		
-		attaccante.vita -=potenzaDifesa;
-		difensore.vita -=potenzaAttacco;
-			
+		attaccante.vita -= potenzaDifesa;
+		difensore.vita -= potenzaAttacco;
+		
 	}
 	
 	@Override

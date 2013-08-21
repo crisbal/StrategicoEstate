@@ -14,7 +14,7 @@ public class Testo {
 	
 	private UnicodeFont font;
 	private Font fontAppoggio;
-	public static TrueTypeFont ttf;
+	public TrueTypeFont ttf;
 	private int	x,y,accumulatoreY;
 	
 	public static final int CENTROORIZ = -1;

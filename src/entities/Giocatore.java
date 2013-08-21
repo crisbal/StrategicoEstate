@@ -19,7 +19,7 @@ public class Giocatore {
 	public Map<Integer, Integer> elementi = new HashMap<Integer, Integer>();
 	Image base;
 	Testo testo;
-	public boolean piuAttaccoSoldato,piuAttaccoCarro,piuDifesaSoldato,piuDifesaCarro;
+	public int soldi;
 	public Giocatore(String nome, Map<Integer, Integer> elementi) throws SlickException
 	{
 		System.out.println(elementi.get(0));
@@ -28,6 +28,7 @@ public class Giocatore {
 		System.out.println(this.elementi.get(0));
 		base = new Image("res/Giocatori/Base.png");
 		testo = new Testo("Verdana",Font.BOLD, 16, java.awt.Color.white);
+		soldi = Config.soldi;
 	}
 	
 	

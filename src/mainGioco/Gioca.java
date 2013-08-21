@@ -7,23 +7,19 @@ import entities.Personaggi;
 import entities.PersonaggioGenerico;
 import entities.QuadratoMovimento;
 import entities.Squadra;
-import entities.Tipo;
 import gui.Bottone;
+import gui.FinestraBase;
 import gui.FinestraInfo;
 import gui.Testo;
 import materiali.Materiale;
 import materiali.QuadratoMappa;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import utils.CaricaMappa;
 import utils.GestoreMouse;
@@ -31,19 +27,19 @@ import utils.GestoreMouse;
 public class Gioca extends BasicGameState {
 	
 	public static QuadratoMappa[][]			mappa;
-	private ArrayList<QuadratoMovimento>	movimenti	= new ArrayList<QuadratoMovimento>();
-	private int[]							ArrayClick	= new int[2];
-	private boolean							inBattaglia	= false, caricato = false;
-	private Bottone							banner;
+	private ArrayList<QuadratoMovimento>	movimenti		= new ArrayList<QuadratoMovimento>();
+	private int[]							ArrayClick		= new int[2];
+	private boolean							caricato		= false;
+	private Bottone							bottoneCliccaPerPosizionare;
 	private int								turno, turnoTotale;
 	private Testo							testoTurno;
-	FinestraInfo							info		= null;
+	private FinestraInfo					info			= null;
+	private FinestraBase					base			= null;
 	private PersonaggioGenerico				pPrec;
-	Bottone									potenz;
-	
-	public Gioca(int state) { // costruttore inutile per ora, ma necessario
-	
-	}
+	private Bottone							potenz;
+	private ArrayList<Bottone>				bottoniBase		= new ArrayList<Bottone>();
+	private String[]						infoAggiuntivePlayerScelto;
+	private boolean							staComprando	= false;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
@@ -89,20 +85,47 @@ public class Gioca extends BasicGameState {
 				}
 			}
 			
-			g.setColor(Color.black);
-			g.fillRect(0, Config.RIGHE * Config.DIMENSIONE_IMMAGINE * Config.Scala, Config.LARGHEZZA, Config.ALTEZZA);
+			// g.setColor(Color.black);
+			// g.fillRect(0, Config.RIGHE * Config.DIMENSIONE_IMMAGINE *
+			// Config.Scala, Config.LARGHEZZA, Config.ALTEZZA);
 			
 			// Personaggi.giocatori[turno-1].Disegna(0*Config.Scala,
 			// 600*Config.Scala, gc);
 			
-			if (info != null)
+			if (info != null && potenz != null)
 			{
 				info.Disegna(g, gc);
-				potenz.Disegna((int) (Personaggi.attaccante.x>Config.COLONNE/2 ? 0 + (info.larghezza - potenz.larghezza)/2:Config.LARGHEZZA - info.larghezza + (info.larghezza - potenz.larghezza)/2),75);
+				potenz.Disegna((int) (Personaggi.attaccante.x > Config.COLONNE / 2 ? 0 + (info.larghezza - potenz.larghezza) / 2
+						: Config.LARGHEZZA - info.larghezza + (info.larghezza - potenz.larghezza) / 2), 75);
+				base = null;
 			}
-			
+			if (base != null)
+			{
+				base.Disegna(g, gc);
+				int i = 0;
+				for (Bottone bottone : bottoniBase)
+				{
+					if (Personaggi.giocatori[turno - 1].soldi >= Integer.parseInt(bottone.infoAggiuntive[1]))
+					{
+						bottone.Disegna(
+								(int) (Personaggi.attaccante.x > Config.COLONNE / 2 ? 0 + (bottone.larghezza - potenz.larghezza) / 2
+										: Config.LARGHEZZA - bottone.larghezza + (bottone.larghezza - potenz.larghezza) / 2),
+								75 + (i * bottone.altezza));
+						i++;
+					}
+					
+				}
+				info = null;
+			}
 			testoTurno.disegna("Turno " + Integer.toString(turnoTotale), Testo.CENTROORIZ,
 					gc.getHeight() - testoTurno.ttf.getHeight("Turno"));
+			
+			testoTurno.disegna(Integer.toString(Personaggi.giocatori[turno - 1].soldi), 0, 700);
+			if (staComprando)
+			{
+				bottoneCliccaPerPosizionare.Disegna(Config.LARGHEZZA / 2 - bottoneCliccaPerPosizionare.larghezza / 2,
+						gc.getHeight() - bottoneCliccaPerPosizionare.altezza);
+			}
 		}
 	}
 	
@@ -115,93 +138,118 @@ public class Gioca extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		Input input = gc.getInput();
+		ArrayClick = GestoreMouse.ZonaClick();
+		boolean cliccato = false;
 		
 		if (!caricato)
 		{
-			potenz = new Bottone("Potenziamenti");
-			potenz.Elimina();
 			caricato = !caricato;
-			testoTurno = new Testo("Verdana", Font.BOLD, 20,(java.awt.Color) Squadra.squadraAWT.get(1));
+			
+			caricaBottoni();
+			
 			turno = turnoTotale = 1;
-			if (Config.mappa != "")
-				mappa = CaricaMappa.caricaQuadrati(Config.mappa);
+			
+			mappa = CaricaMappa.caricaQuadrati(Config.mappa);
 		}
-		ArrayClick = GestoreMouse.ZonaClick();
-		// delta indica il tempo in ms passato dall'ultimo
-		// update dello schermo. utile per standardizzare
-		// animazioni/movimenti
-		
-		/*
-		 * qui va inserito tutto quello che si vuole venga eseguito ad ogni
-		 * update
-		 */
 		
 		if (input.isKeyPressed(input.KEY_SPACE))
 		{
-			turno++;
-			turnoTotale++;
-			if (turno > 2)
-				turno = 1;
-			testoTurno = new Testo("Verdana", Font.BOLD, 20,(java.awt.Color) Squadra.squadraAWT.get(turno));
-			
-			for (int i = 0; i < Personaggi.personaggio.size(); i++)
+			if (!staComprando)
 			{
-				Personaggi.personaggio.get(i).selezionato = false;
+				
+				turno++;
+				turnoTotale++;
+				
+				if (turno > 2)
+					turno = 1;
+				
+				testoTurno = new Testo("Verdana", Font.BOLD, 20, (java.awt.Color) Squadra.squadraAWT.get(turno));
+				
+				deselezionaPersonaggi();
+				
+				pulisciGUI();
+				
 			}
-			Personaggi.attaccante = null;
-			info = null;
-			potenz.Elimina();
 		}
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
 		{
 			// ottendo la casella // su
 			// cui ha // cliccato
-			if (potenz.Cliccato())
+			if (staComprando)
 			{
-				System.out.println("gnomo");
+				staComprando = false;
+				if (Personaggi.giocatori[turno - 1].soldi >= Integer.parseInt(infoAggiuntivePlayerScelto[1]))
+				{
+					Personaggi.personaggio.add(new PersonaggioGenerico(ArrayClick[1], ArrayClick[0],
+							infoAggiuntivePlayerScelto[0], turno, Personaggi.personaggio.size()));
+					
+					Personaggi.giocatori[turno - 1].soldi -= Integer.parseInt(infoAggiuntivePlayerScelto[1]);
+				}
+				pulisciGUI();
+				
+				deselezionaPersonaggi();
 			}
 			else
 			{
-				for (int i = 0; i < Personaggi.personaggio.size(); i++)
+				for (Bottone bottone : bottoniBase)
+				{
+					if (bottone.Cliccato())
+					{
+						infoAggiuntivePlayerScelto = bottone.infoAggiuntive;
+						staComprando = true;
+						cliccato = true;
+					}
+				}
+				if (!cliccato)
 				{
 					
-					if (Personaggi.personaggio.get(i).inVita)
-						if (Personaggi.personaggio.get(i).squadra == turno)
-							if (ArrayClick[0] == Personaggi.personaggio.get(i).x
-									&& ArrayClick[1] == Personaggi.personaggio.get(i).y)
-							{
-								
-								if (Personaggi.personaggio.get(i).selezionato == false)
-								{
-									
-									Personaggi.personaggio.get(i).selezionato = true;
-									Personaggi.attaccante = Personaggi.personaggio.get(i);
-									for (int j = 0; j < Personaggi.personaggio.size(); j++)
+					if (potenz.Cliccato())
+					{
+						System.out.println("gnomo");
+					}
+					
+					else
+					{
+						for (int i = 0; i < Personaggi.personaggio.size(); i++)
+						{
+							
+							if (Personaggi.personaggio.get(i).inVita)
+								if (Personaggi.personaggio.get(i).squadra == turno)
+									if (ArrayClick[0] == Personaggi.personaggio.get(i).x
+											&& ArrayClick[1] == Personaggi.personaggio.get(i).y)
 									{
-										if (j != i)
+										
+										if (Personaggi.personaggio.get(i).selezionato == false)
 										{
-											Personaggi.personaggio.get(j).selezionato = false;
+											
+											Personaggi.personaggio.get(i).selezionato = true;
+											pulisciGUI();
+											Personaggi.attaccante = Personaggi.personaggio.get(i);
+											for (int j = 0; j < Personaggi.personaggio.size(); j++)
+											{
+												if (j != i)
+												{
+													Personaggi.personaggio.get(j).selezionato = false;
+												}
+											}
+											break;
+										}
+										else
+										{
+											Personaggi.personaggio.get(i).selezionato = false;
+											Personaggi.attaccante = null;
+											pulisciGUI();
 										}
 									}
-									break;
-								}
-								else
-								{
-									Personaggi.personaggio.get(i).selezionato = false;
-									Personaggi.attaccante = null;
-									info = null;
-									potenz.Elimina();
-								}
-							}
-							else
-							{
-								Personaggi.personaggio.get(i).selezionato = false;
-								Personaggi.attaccante = null;
-								info = null;
-								potenz.Elimina();
-							}
+									else
+									{
+										Personaggi.personaggio.get(i).selezionato = false;
+										Personaggi.attaccante = null;
+										pulisciGUI();
+									}
+						}
+					}
 				}
-				
 			}
 		}
 		
@@ -226,6 +274,7 @@ public class Gioca extends BasicGameState {
 								Battaglia.risolto = false;
 								Battaglia.timer = 0;
 								Personaggi.personaggio.get(i).selezionato = false;
+								pulisciGUI();
 								sbg.enterState(Main.battaglia);
 								
 								break;
@@ -256,16 +305,69 @@ public class Gioca extends BasicGameState {
 			if (Personaggi.attaccante.selezionato)
 				if (Personaggi.attaccante != pPrec)
 				{
-					potenz.Ripristina();
-					info = new FinestraInfo(Personaggi.attaccante);
+					if (!Personaggi.attaccante.Classe.equals("Base"))
+					{
+						potenz.Ripristina();
+						info = new FinestraInfo(Personaggi.attaccante);
+						base = null;
+						for (Bottone bottone : bottoniBase)
+						{
+							bottone.Elimina();
+						}
+					}
+					else
+					{
+						base = new FinestraBase(Personaggi.attaccante);
+						for (Bottone bottone : bottoniBase)
+						{
+							bottone.Ripristina();
+						}
+						info = null;
+						potenz.Elimina();
+					}
+					
 					pPrec = Personaggi.attaccante;
 				}
 		}
 		else
 		{
-			info = null;
-			pPrec = null;
+			pulisciGUI();
 		}
 	}
 	
+	private void pulisciGUI() {
+		info = null;
+		potenz.Elimina();
+		base = null;
+		for (Bottone bottone : bottoniBase)
+		{
+			bottone.Elimina();
+		}
+		
+	}
+	
+	private void deselezionaPersonaggi() {
+		
+		for (int i = 0; i < Personaggi.personaggio.size(); i++)
+		{
+			Personaggi.personaggio.get(i).selezionato = false;
+		}
+		
+		Personaggi.attaccante = null;
+		
+	}
+	
+	private void caricaBottoni() throws SlickException {
+		bottoneCliccaPerPosizionare = new Bottone("Clicca sulla casella dove \nvuoi posizionare l'unità appena comprata!");
+		potenz = new Bottone("Potenziamenti");
+		potenz.Elimina();
+		
+		bottoniBase.add(new Bottone("Soldato (50)", "Soldato", "50"));
+		bottoniBase.get(0).Elimina();
+		bottoniBase.add(new Bottone("Carro (100)", "Carro", "100"));
+		bottoniBase.get(1).Elimina();
+		
+		testoTurno = new Testo("Verdana", Font.BOLD, 20, (java.awt.Color) Squadra.squadraAWT.get(1));
+		
+	}
 }

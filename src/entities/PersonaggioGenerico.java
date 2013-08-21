@@ -20,7 +20,7 @@ public class PersonaggioGenerico {
 	
 	public int		vita		= 100;
 	public int		squadra;
-	public int		raggio		= 2;
+	public int		raggio		= 0;
 	public int		potenzaAttacco, potenzaDifesa;
 	public int		Identificativo;
 	

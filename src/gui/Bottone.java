@@ -20,6 +20,8 @@ public class Bottone {
 	public boolean visualizza=true,cliccabile=true;
 	public float x, y, larghezza, altezza;
 	float LunghezzaTesto,AltezzaTesto,coeffLungh,coeffAltez;
+	
+	public String[] infoAggiuntive;
 	public Bottone(String contenuto) throws SlickException {
 		Immagine = new Image("res/GUI/Bottone.png", false, Image.FILTER_NEAREST);   //uso l'ultimo parametro per rimuovere il blur dell'immagine
 		Immagine = Immagine.getScaledCopy(Config.Scala);
@@ -34,6 +36,24 @@ public class Bottone {
 		altezza=Immagine.getHeight()*coeffAltez+15*Config.Scala*coeffAltez;
 	}
 
+	
+	public Bottone(String contenuto, String... infoAggiuntive) throws SlickException {
+		Immagine = new Image("res/GUI/Bottone.png", false, Image.FILTER_NEAREST);   //uso l'ultimo parametro per rimuovere il blur dell'immagine
+		Immagine = Immagine.getScaledCopy(Config.Scala);
+		Testo = contenuto;
+		visualizza=true;
+		cliccabile=true;
+		LunghezzaTesto=ttf.getWidth(Testo);
+		AltezzaTesto=ttf.getHeight(Testo);
+		coeffLungh=(LunghezzaTesto/Immagine.getWidth());   //determina l'ingrossamento del bottone
+		coeffAltez=(AltezzaTesto/Immagine.getHeight());
+		larghezza=Immagine.getWidth()*coeffLungh+50*Config.Scala*coeffLungh;
+		altezza=Immagine.getHeight()*coeffAltez+15*Config.Scala*coeffAltez;
+		this.infoAggiuntive = infoAggiuntive;
+	}
+	
+	
+	
 	public void Disegna(float x, float y) {
 		if(Immagine!=null)
 		{
