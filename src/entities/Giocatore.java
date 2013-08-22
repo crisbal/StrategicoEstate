@@ -8,7 +8,6 @@ import java.util.Map;
 
 import mainGioco.Config;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -20,7 +19,8 @@ public class Giocatore {
 	Image base;
 	Testo testo;
 	public int soldi;
-	public Giocatore(String nome, Map<Integer, Integer> elementi) throws SlickException
+	public int squadra;
+	public Giocatore(String nome, Map<Integer, Integer> elementi,int Squadra) throws SlickException
 	{
 		System.out.println(elementi.get(0));
 		this.nome=nome;
@@ -29,6 +29,7 @@ public class Giocatore {
 		base = new Image("res/Giocatori/Base.png");
 		testo = new Testo("Verdana",Font.BOLD, 16, java.awt.Color.white);
 		soldi = Config.soldi;
+		squadra = Squadra;
 	}
 	
 	

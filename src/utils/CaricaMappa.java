@@ -37,6 +37,9 @@ public class CaricaMappa {
 			
 			Config.RIGHE = Integer.parseInt(doc.getElementsByTagName("altezza").item(0).getTextContent());
 			Config.COLONNE = Integer.parseInt(doc.getElementsByTagName("larghezza").item(0).getTextContent());
+			Config.nSquadre = Integer.parseInt(doc.getElementsByTagName("giocatori").item(0).getTextContent());
+			Config.soldi = Integer.parseInt(doc.getElementsByTagName("soldiPartenza").item(0).getTextContent());
+			
 			
 			mappa = new String[Config.RIGHE][Config.COLONNE];
 			
@@ -66,7 +69,7 @@ public class CaricaMappa {
 			Squadra.squadraAWT.put(2, java.awt.Color.yellow);
 			Tipo.tipo.put("Soldato", 0);
 			Tipo.tipo.put("Carro", 1);
-			
+			Tipo.tipo.put("Aereo", 2);
 			NodeList personaggi = doc.getElementsByTagName("personaggio");
 			for (int i = 0; i < personaggi.getLength(); i++)
 			{

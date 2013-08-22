@@ -8,16 +8,19 @@ public class Personaggi {
 	
 	public static ArrayList<PersonaggioGenerico>	personaggio	= new ArrayList<PersonaggioGenerico>();
 	public static PersonaggioGenerico				attaccante, difensore;
-	public static Giocatore[] giocatori = new Giocatore[4];
+	public static ArrayList<Giocatore>				giocatori	= new ArrayList<Giocatore>();
+	
 	public static void pulisciLista() throws SlickException {
 		personaggio.clear();
+		attaccante = null;
+		difensore = null;
 	}
 	
 	public static PersonaggioGenerico clickSuPersonaggioNemico(PersonaggioGenerico personaggioAttuale, int yClick, int xClick) {
 		for (int i = 0; i < personaggio.size(); i++)
 		{
 			if (personaggio.get(i).x == xClick && personaggio.get(i).y == yClick
-					&& personaggioAttuale.squadra != personaggio.get(i).squadra)
+					&& personaggioAttuale.squadra != personaggio.get(i).squadra && personaggio.get(i).inVita)
 			{
 				return personaggio.get(i);
 			}

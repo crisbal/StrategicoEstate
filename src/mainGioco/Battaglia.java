@@ -3,6 +3,7 @@ package mainGioco;
 import java.util.Random;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -15,6 +16,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import entities.Personaggi;
 import entities.PersonaggioGenerico;
+import entities.Squadra;
 import entities.Tipo;
 
 public class Battaglia extends BasicGameState {
@@ -22,7 +24,7 @@ public class Battaglia extends BasicGameState {
 	private int	nAttaccanti, nDifensori;
 	public static boolean	caricato, risolto;
 	private int[]			posXAtt, posYAtt, posXDif, posYDif;
-	public static Image		sfondoAtt, sfondoDif;
+	public static Image		sfondoAtt, sfondoDif, baseGen, baseSpec;
 	public static int		timer;
 	private PersonaggioGenerico	attaccante, difensore;
 	private int					idAtt, idDif;
@@ -42,18 +44,29 @@ public class Battaglia extends BasicGameState {
 			sfondoAtt.draw(0, 0, Config.Scala);
 			sfondoDif.draw(Config.LARGHEZZA / 2, 0, Config.Scala);
 			
-			for (int i = 0; i < Math.round(attaccante.vita / 10); i++)
+			if (!attaccante.Classe.equals("Base"))
+				for (int i = 0; i < Math.round(attaccante.vita / 10); i++)
+				{
+					// attSpecifico.draw(posXAtt[i] * Config.Scala, posYAtt[i] *
+					// Config.Scala, attaccante.colore);
+					attGenerico.draw(posXAtt[i], posYAtt[i]);
+				}
+			else
 			{
-				// attSpecifico.draw(posXAtt[i] * Config.Scala, posYAtt[i] *
-				// Config.Scala, attaccante.colore);
-				attGenerico.draw(posXAtt[i], posYAtt[i]);
+				attaccante.DisegnaXYScala(gc.getWidth() / 4 - (attaccante.getWidth() * 5f) / 2, 200 * Config.Scala, 5f);
 			}
-			for (int i = 0; i < Math.round(difensore.vita / 10); i++)
+			if (!difensore.Classe.equals("Base"))
+				for (int i = 0; i < Math.round(difensore.vita / 10); i++)
+				{
+					// difSpecifico.draw(posXDif[i] * Config.Scala, posYDif[i] *
+					// Config.Scala, difensore.colore);
+					difGenerico.draw(posXDif[i], posYDif[i]);
+					
+				}
+			else
 			{
-				// difSpecifico.draw(posXDif[i] * Config.Scala, posYDif[i] *
-				// Config.Scala, difensore.colore);
-				difGenerico.draw(posXDif[i], posYDif[i]);
-				
+				difensore.DisegnaXYScala(gc.getWidth() / 2 + gc.getWidth() / 4 - (difensore.getWidth() * 5f) / 2,
+						200 * Config.Scala, 5f);
 			}
 			
 			g.drawString("Attaccante : " + Integer.toString(attaccante.vita), 50, 50);
@@ -82,27 +95,29 @@ public class Battaglia extends BasicGameState {
 			xDif = difensore.x;
 			yDif = difensore.y;
 			
-			attGenerico = new Animation();
-			difGenerico = new Animation();
-			
-			SpriteSheet sheetAttaccanteGenerico = new SpriteSheet(Path + attaccante.squadra + ""
-					+ Tipo.tipo.get(attaccante.Classe) + ".png", 32, 32);
-			
-			SpriteSheet sheetDifensoreGenerico = new SpriteSheet(Path + difensore.squadra + "" + Tipo.tipo.get(difensore.Classe)
-					+ ".png", 32, 32);
-			
-			for (int i = 0; i < 2; i++)
+			if (!attaccante.Classe.equals("Base"))
 			{
-				attGenerico.addFrame(sheetAttaccanteGenerico.getSprite(i, 1).getFlippedCopy(true, false), 150);
-				
-				difGenerico.addFrame(sheetDifensoreGenerico.getSprite(i, 1), 150);
-				
+				attGenerico = new Animation();
+				SpriteSheet sheetAttaccanteGenerico = new SpriteSheet(Path + attaccante.squadra + ""
+						+ Tipo.tipo.get(attaccante.Classe) + ".png", 64, 64);
+				for (int i = 0; i < 2; i++)
+				{
+					attGenerico.addFrame(sheetAttaccanteGenerico.getSprite(i, 1).getFlippedCopy(true, false), 150);
+				}
 			}
 			
-			for (int i = 0; i < 2; i++)
+			if (!difensore.Classe.equals("Base"))
 			{
+				difGenerico = new Animation();
+				SpriteSheet sheetDifensoreGenerico = new SpriteSheet(Path + difensore.squadra + ""
+						+ Tipo.tipo.get(difensore.Classe) + ".png", 64, 64);
 				
+				for (int i = 0; i < 2; i++)
+				{
+					difGenerico.addFrame(sheetDifensoreGenerico.getSprite(i, 1), 150);
+				}
 			}
+			
 			sfondoAtt = new Image(Path + Gioca.mappa[yAtt][xAtt].tipo + ".png");
 			sfondoDif = new Image(Path + Gioca.mappa[yDif][xDif].tipo + ".png");
 			
@@ -112,23 +127,39 @@ public class Battaglia extends BasicGameState {
 				nAttaccanti = 1;
 			if (nDifensori < 1)
 				nDifensori = 1;
-			posXAtt = new int[nAttaccanti];
-			posYAtt = new int[nAttaccanti];
-			posXDif = new int[nDifensori];
-			posYDif = new int[nDifensori];
-			
-			for (int i = 0; i < nAttaccanti; i++)
+			posXAtt = new int[10];
+			posYAtt = new int[10];
+			posXDif = new int[10];
+			posYDif = new int[10];
+			int k = 0, j = 0;
+			for (int i = 0; i < 10; i++)
 			{
-				posXAtt[i] = rnd.nextInt((int) (Config.LARGHEZZA / 2 - 32 * Config.Scala));
-				posYAtt[i] = (int) (Config.ALTEZZA / 2 + rnd.nextInt((int) (Config.ALTEZZA / 2 - 32 * Config.Scala)));
-				System.out.println(posYAtt[i]);
+				posXAtt[i] = (int) (100 * Config.Scala + (100 * Config.Scala + attGenerico.getWidth() * Config.Scala) * j);
+				posYAtt[i] = (int) (350 * Config.Scala + attGenerico.getHeight() * Config.Scala * k);
+				posXDif[9 - i] = (int) (Config.LARGHEZZA - posXAtt[i] - attGenerico.getWidth()*Config.Scala);
+				posYDif[i] = posYAtt[i];
+				k++;
+				if (i == (int) (nAttaccanti / 2) - 1)
+				{
+					j = 1;
+					k = 0;
+				}
+				
 			}
-			
+			/*j = 0;
+			k = 0;
 			for (int i = 0; i < nDifensori; i++)
 			{
-				posXDif[i] = Config.LARGHEZZA / 2 + rnd.nextInt((int) (Config.LARGHEZZA / 2 - 32 * Config.Scala));
-				posYDif[i] = (int) (Config.ALTEZZA / 2 + rnd.nextInt((int) (Config.ALTEZZA / 2 - 32 * Config.Scala)));
-			}
+				posXDif[i] = Config.LARGHEZZA
+						- (int) (100 * Config.Scala + (100 * Config.Scala + difGenerico.getWidth() * Config.Scala) * j);
+				posYDif[i] = (int) (350 * Config.Scala + attGenerico.getHeight() * Config.Scala * k);
+				k++;
+				if (i == (int) (nDifensori / 2) - 1)
+				{
+					j = 1;
+					k = 0;
+				}
+			}*/
 			
 		}
 		timer += delta;

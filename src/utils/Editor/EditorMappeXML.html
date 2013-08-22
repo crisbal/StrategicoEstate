@@ -13,128 +13,130 @@
 		width:50px; height: 50px;
 	}
 
-		.unita td
-		{
-			border: solid 1px black;
-			padding-left: 1em;
-			padding-right: 1em;
-		}
+	.unita td
+	{
+		border: solid 1px black;
+		padding-left: 1em;
+		padding-right: 1em;
+	}
 
 	table{
 		margin-left: 1em;
 	}
-		</style>
-		<script type="text/javascript">
+	</style>
+	<script type="text/javascript">
 
-		var ALTEZZA=10;
-		var LARGHEZZA=10;
+	var ALTEZZA=parseInt(prompt("ALTEZZA MAPPA (MAX 10)","10"));
+	var LARGHEZZA=parseInt(prompt("LARGHEZZA MAPPA (MAX 20)","20"));
 
-		function cambia(i,j)
-		{
-			var tile=document.getElementById('tile').value;
-			var tileSrc = tile + ".png";
-			document.getElementById(i+","+j).alt = tile
-			document.getElementById(i+","+j).src="resHTML/"+tileSrc;
+	function cambia(i,j)
+	{
+		var tile=document.getElementById('tile').value;
+		var tileSrc = tile + ".png";
+		document.getElementById(i+","+j).alt = tile
+		document.getElementById(i+","+j).src="resHTML/"+tileSrc;
+	}
+
+	function genera()
+	{
+
+		var xml = '<?xml version="1.0"?>';
+		var xml =  xml + "<mappa>\n<nome>" + document.getElementById("nomemappa").value + "</nome>\n<larghezza>" + LARGHEZZA + "</larghezza>\n<altezza>"+ ALTEZZA +"</altezza>\n<giocatori>" + document.getElementById("giocatori").value + "</giocatori><soldiPartenza>" + document.getElementById("soldi").value + "</soldiPartenza>\n<quadrati>\n";
+		for (var i = 0; i<ALTEZZA;i++)
+			for(var j = 0;j<LARGHEZZA;j++)
+			{
+				var immagine = document.getElementById(i+","+j).getAttribute("src") ;
+
+				xml = xml + '<tile x="'+(j)+'" y="'+(i)+'" >'+ document.getElementById(i+","+j).alt + '</tile>\n';
+			}
+			xml = xml + "</quadrati>\n";
+
+
+			xml = xml + "<personaggi>\n";
+			for (var i = 0; i < document.getElementsByClassName('selUnita').length; i++) 
+			{
+				var tipo = document.getElementsByClassName('selUnita')[i].value;
+				var squadra = document.getElementsByClassName('selSquadra')[i].value;
+				var posOriz = document.getElementsByClassName('posOriz')[i].value;
+				var posVert = document.getElementsByClassName('posVert')[i].value;
+				xml = xml + "<personaggio x = '"+posOriz+"' y='"+posVert+"' squadra ='"+squadra+"'>"+tipo+"</personaggio>\n";
+			}
+			xml = xml + "</personaggi>\n";
+			xml = xml + "</mappa>\n";
+			console.log(xml);
+			document.getElementById("codice").innerHTML = xml;
 		}
 
-		function genera()
-		{
+		function aggiungiRiga(){
 
-			var xml = '<?xml version="1.0"?>';
-			var xml =  xml + "<mappa>\n<nome>" + document.getElementById("nomemappa").value + "</nome>\n<larghezza>" + LARGHEZZA + "</larghezza>\n<altezza>"+ ALTEZZA +"</altezza>\n<quadrati>\n";
-			for (var i = 0; i<ALTEZZA;i++)
-				for(var j = 0;j<LARGHEZZA;j++)
+			var riga = '<tr class="unita"> <td> <select name="selUnita" id="selUnita" class="selUnita"><option value="Soldato">SOLDATO</option> <option value="Base">BASE</option><option value="Carro">CARRO</option> <option value="Aereo">AEREO</option> </select> </td> <td> <select name="selSquadra" id="selSquadra" class="selSquadra"> <option value="2">GIALLO</option> <option value="1">ROSSA</option> <option value="3">VERDE</option> </select> </td> <td> <input type="number" class="posOriz" value="0"> </td> <td> <input type="number" class="posVert" value="0"> </td> </tr>'; 
+
+			$('#tabellaUnita').append(riga); 
+
+		}
+		</script>
+	</head>
+	<body>
+		<script src="jquery.js"></script>
+
+		<select name="tile" id="tile" onchange"aggiornaSelect()">
+			<option value="erba">Erba</option>
+			<option value="acqua">Acqua</option>
+			<option value="strada">Strada</option>
+			<option value="stradaOriz">Strada Orizzontale</option>
+			<option value="stradaVert">Strada Verticale</option>
+			<option value="montagna">Montagna</option>
+			<option value="foresta">Foresta</option>
+			<option value="acquaBoA">Acqua Bordo Alto</option>
+			<option value="acquaBoB">Acqua Bordo Basso</option>
+			<option value="acquaBoS">Acqua Bordo Sinistra</option>
+			<option value="acquaBoD">Acqua Bordo Destra</option>
+			<option value="acquaAS">Acqua Alto Sinistra</option>
+			<option value="acquaAD">Acqua Alto Destra</option>
+			<option value="acquaAS">Acqua Alto Sinistra</option>
+			<option value="acquaBS">Acqua Basso Sinistra</option>
+			<option value="acquaBD">Acqua Basso Destra</option>
+			<option value="acquaDBO">Acqua Doppio Bordo Oriz</option>
+			<option value="acquaDBV">Acqua Doppio Bordo Vert</option>
+			<option value="ponteO">Ponte Ori</option>
+			<option value="ponteV">Ponte Vert</option>
+		</select>
+		<label>Nome Mappa:</label><input type="text" id="nomemappa" name="nomemappa" />
+		<label>Giocatori:</label><input type="text" id="giocatori" name="giocatori" value="2"/>
+		<label>Soldi Partenza:</label><input type="text" id="soldi" name="soldi" value="1000"/>
+		<table>
+			<script>
+			for(var i=0;i<ALTEZZA;i++)
+			{
+				document.write("<tr>");
+				for(var j=0;j<LARGHEZZA;j++)
 				{
-					var immagine = document.getElementById(i+","+j).getAttribute("src") ;
-
-					xml = xml + '<tile x="'+(j)+'" y="'+(i)+'" >'+ document.getElementById(i+","+j).alt + '</tile>\n';
+					document.write('<td class="td" onclick="cambia('+i+','+j+')" ><img alt="erba" src="resHTML/erba.png" id="'+i+','+j+'" />');
+					document.write('</td>');
 				}
-				xml = xml + "</quadrati>\n";
-
-
-				xml = xml + "<personaggi>\n";
-				for (var i = 0; i < document.getElementsByClassName('selUnita').length; i++) 
-				{
-					var tipo = document.getElementsByClassName('selUnita')[i].value;
-					var squadra = document.getElementsByClassName('selSquadra')[i].value;
-					var posOriz = document.getElementsByClassName('posOriz')[i].value;
-					var posVert = document.getElementsByClassName('posVert')[i].value;
-					xml = xml + "<personaggio x = '"+posOriz+"' y='"+posVert+"' squadra ='"+squadra+"'>"+tipo+"</personaggio>\n";
-				}
-				xml = xml + "</personaggi>\n";
-				xml = xml + "</mappa>\n";
-				console.log(xml);
-				document.getElementById("codice").innerHTML = xml;
-			}
-
-			function aggiungiRiga(){
-
-				var riga = '<tr class="unita"> <td> <select name="selUnita" id="selUnita" class="selUnita"><option value="Soldato">SOLDATO</option> <option value="Base">BASE</option><option value="Carro">CARRO</option> <option value="Aereo">AEREO</option> </select> </td> <td> <select name="selSquadra" id="selSquadra" class="selSquadra"> <option value="2">GIALLO</option> <option value="1">ROSSA</option> <option value="3">VERDE</option> </select> </td> <td> <input type="number" class="posOriz" value="0"> </td> <td> <input type="number" class="posVert" value="0"> </td> </tr>'; 
-
-				$('#tabellaUnita').append(riga); 
-
+				document.write("</tr>")
 			}
 			</script>
-		</head>
-		<body>
-			<script src="jquery.js"></script>
-
-			<select name="tile" id="tile" onchange"aggiornaSelect()">
-				<option value="erba">Erba</option>
-				<option value="acqua">Acqua</option>
-				<option value="strada">Strada</option>
-				<option value="stradaOriz">Strada Orizzontale</option>
-				<option value="stradaVert">Strada Verticale</option>
-				<option value="montagna">Montagna</option>
-				<option value="foresta">Foresta</option>
-				<option value="acquaBoA">Acqua Bordo Alto</option>
-				<option value="acquaBoB">Acqua Bordo Basso</option>
-				<option value="acquaBoS">Acqua Bordo Sinistra</option>
-				<option value="acquaBoD">Acqua Bordo Destra</option>
-				<option value="acquaAS">Acqua Alto Sinistra</option>
-				<option value="acquaAD">Acqua Alto Destra</option>
-				<option value="acquaAS">Acqua Alto Sinistra</option>
-				<option value="acquaBS">Acqua Basso Sinistra</option>
-				<option value="acquaBD">Acqua Basso Destra</option>
-				<option value="acquaDBO">Acqua Doppio Bordo Oriz</option>
-				<option value="acquaDBV">Acqua Doppio Bordo Vert</option>
-				<option value="ponteO">Ponte Ori</option>
-				<option value="ponteV">Ponte Vert</option>
-			</select>
-			<label>Nome Mappa:</label><input type="text" id="nomemappa" name="nomemappa" />
-			<table>
-				<script>
-				for(var i=0;i<ALTEZZA;i++)
-				{
-					document.write("<tr>");
-					for(var j=0;j<LARGHEZZA;j++)
-					{
-						document.write('<td class="td" onclick="cambia('+i+','+j+')" ><img alt="erba" src="resHTML/erba.png" id="'+i+','+j+'" />');
-						document.write('</td>');
-					}
-					document.write("</tr>")
-				}
-				</script>
-			</table>
-
-
-
-			<table id="tabellaUnita">
-				<tr class="unita">
-					<td>Unita'</td>
-					<td>Squadra</td>
-					<td>Pos Orizz.</td>
-					<td>Pos Verticale</td>
-				</tr>
-			</table>
-			<input type="button" value ="Nuova Riga Unita'" onclick="aggiungiRiga();">
-			<br>
-			<br>
-			<br>
-
-			<input type="button" onclick="genera()" value="Genera il codice della mappa!">
-			<br><textarea id="codice" rows="25" cols="50"></textarea>
 		</table>
-	</body>
-	</html>
+
+
+
+		<table id="tabellaUnita">
+			<tr class="unita">
+				<td>Unita'</td>
+				<td>Squadra</td>
+				<td>Pos Orizz.</td>
+				<td>Pos Verticale</td>
+			</tr>
+		</table>
+		<input type="button" value ="Nuova Riga Unita'" onclick="aggiungiRiga();">
+		<br>
+		<br>
+		<br>
+
+		<input type="button" onclick="genera()" value="Genera il codice della mappa!">
+		<br><textarea id="codice" rows="25" cols="50"></textarea>
+	</table>
+</body>
+</html>
 

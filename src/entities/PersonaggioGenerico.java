@@ -78,6 +78,14 @@ public class PersonaggioGenerico {
 		
 	}
 	
+	public void DisegnaXYScala(float x, float y,float scala) {
+		TextureSpecifica.setFilter(Image.FILTER_NEAREST);
+		TextureSpecifica.draw(x, y, Config.Scala * scala, colore);
+		TextureGenerica.setFilter(Image.FILTER_NEAREST);
+		TextureGenerica.draw(x, y, Config.Scala * scala);
+		
+	}
+	
 	public void Sposta(int y, int x) {
 		this.x = x;
 		this.y = y;

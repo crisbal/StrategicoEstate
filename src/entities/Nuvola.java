@@ -16,8 +16,9 @@ public class Nuvola {
 		
 		Random rnd = new Random();
 		immagine = new Image("res/GUI/nuvola.png");
-		boolean orien = rnd.nextBoolean();
 		/*
+		 * boolean orien = rnd.nextBoolean();
+		 * 
 		 * if(!orien) { x = 0 - rnd.nextInt(200); y =
 		 * rnd.nextInt(100)*Config.Scala; do{ speed = rnd.nextFloat() + 0.1f;
 		 * }while(speed >0.5 || speed <0.2);

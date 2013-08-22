@@ -20,9 +20,10 @@ public class Menu extends BasicGameState {
 	private Animation	allies;
 	private int			spostamento	= 0;
 	
-	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+	
+	
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		// TODO Auto-generated method stub
-		
 		menu = new Image("res/GUI/Menu.png");
 		selettore = new Image("res/GUI/Selettore.png");
 		SpriteSheet sheetAllies = new SpriteSheet("res/GUI/allies.png", 32, 32);
@@ -38,7 +39,7 @@ public class Menu extends BasicGameState {
 		
 	}
 	
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException {
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		// TODO Auto-generated method stub
 		menu.draw(0, 0, Config.Scala);
 		for (int i = 0; i < 4; i++)

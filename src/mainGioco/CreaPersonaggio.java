@@ -24,9 +24,9 @@ public class CreaPersonaggio extends BasicGameState {
 	
 	Image					Base;
 	Image[]					ImmagineElementi	= new Image[4];
-	int						puntatore			= 0,nAdd = 0;
+	int						puntatore			= 0, nAdd = 0;
 	TextField				nome;
-	Giocatore[] gDaAggiungere = new Giocatore[2];
+	Giocatore				gDaAggiungere;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
@@ -63,7 +63,7 @@ public class CreaPersonaggio extends BasicGameState {
 		{
 			ImmagineElementi[i] = new Image("res/Giocatori/" + i + "/" + ElementiPersonaggio.get(i) + ".png", false,
 					Image.FILTER_NEAREST);
-}
+		}
 		
 		Input input = gc.getInput();
 		
@@ -95,19 +95,20 @@ public class CreaPersonaggio extends BasicGameState {
 		
 		if (input.isKeyPressed(Input.KEY_ENTER))
 		{
-			gDaAggiungere[nAdd] = new Giocatore("Player" + nAdd, ElementiPersonaggio);
+
+			gDaAggiungere = new Giocatore("Player" + nAdd, ElementiPersonaggio, Personaggi.giocatori.size() + 1);
 			
-			Personaggi.giocatori[nAdd]=(gDaAggiungere[nAdd]);
+			Personaggi.giocatori.add(gDaAggiungere);
 			nAdd++;
-			//System.out.println(Personaggi.giocatori.get(0).elementi.get(0));
-			if(nAdd<2)
+			// System.out.println(Personaggi.giocatori.get(0).elementi.get(0));
+			if (nAdd < Config.nSquadre)
 			{
 				init(gc, sbg);
-				
 			}
 			else
 			{
-				//Personaggi.giocatori.addAll();
+				// Personaggi.giocatori.addAll();
+				Gioca.caricato = false;
 				sbg.enterState(Main.gioca);
 			}
 		}
