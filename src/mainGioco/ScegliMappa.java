@@ -1,5 +1,6 @@
 package mainGioco;
 
+import entities.Personaggi;
 import gui.Testo;
 
 import java.awt.Font;
@@ -86,9 +87,10 @@ public class ScegliMappa extends BasicGameState {
 			mappa = CaricaMappa.caricaQuadrati(files[puntatore].getName());
 		}
 		
-		if (input.isKeyPressed(Input.KEY_ENTER))
+		if (input.isKeyPressed(Input.KEY_ENTER) || input.isKeyPressed(Input.KEY_SPACE))
 		{
 			Config.mappa = files[puntatore].getName();
+			Personaggi.giocatori.clear();
 			sbg.enterState(Main.creaPersonaggio);
 			// sbg.enterState(Main.gioca,new FadeOutTransition(Color.black),new
 			// FadeInTransition(Color.black));

@@ -62,14 +62,17 @@ public class CaricaMappa {
 			Personaggi.pulisciLista();
 			Config.conBasi = false;
 			Squadra.squadra.put(1, new Color(1f, 0f, 0f));
-			Squadra.squadra.put(3, new Color(0f, 1f, 0f));
 			Squadra.squadra.put(2, new Color(1f, 0.906f, 0.004f));
+			Squadra.squadra.put(3, new Color(0f, 1f, 0f));
+			
 			Squadra.squadraAWT.put(1, java.awt.Color.red);
-			Squadra.squadraAWT.put(3, java.awt.Color.green);
 			Squadra.squadraAWT.put(2, java.awt.Color.yellow);
+			Squadra.squadraAWT.put(3, java.awt.Color.green);
+
 			Tipo.tipo.put("Soldato", 0);
 			Tipo.tipo.put("Carro", 1);
 			Tipo.tipo.put("Aereo", 2);
+			
 			NodeList personaggi = doc.getElementsByTagName("personaggio");
 			for (int i = 0; i < personaggi.getLength(); i++)
 			{

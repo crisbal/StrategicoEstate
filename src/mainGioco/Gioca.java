@@ -1,5 +1,6 @@
 package mainGioco;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 
@@ -16,10 +17,13 @@ import materiali.QuadratoMappa;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import utils.CaricaMappa;
 import utils.GestoreMouse;
@@ -32,7 +36,7 @@ public class Gioca extends BasicGameState {
 	public static boolean					caricato		= false;
 	private Bottone							bottoneCliccaPerPosizionare;
 	private int								turno			= 1, turnoTotale = 1;
-	private Testo							testoTurno;
+	private Testo							testoTurno, testoVittoria;
 	private FinestraInfo					info			= null;
 	private FinestraBase					base			= null;
 	private PersonaggioGenerico				pPrec;
@@ -42,6 +46,9 @@ public class Gioca extends BasicGameState {
 	private boolean							staComprando	= false;
 	private int								vittoria		= -1;
 	private boolean							controllo;
+	private Image							coin, menu, menuChild;
+	private boolean							inMenu			= false;
+	private Bottone[]						opzioniMenu;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
@@ -49,7 +56,14 @@ public class Gioca extends BasicGameState {
 		 * codice per inizializzare (eseguito all'avvio della classe, quando si
 		 * entra nello stato
 		 */
+		coin = new Image("res/GUI/Coin.png");
+		menu = new Image("res/GUI/InGameMenu.png");
+		menuChild = new Image("res/GUI/InGameMenuMenu.png");
 		
+		opzioniMenu = new Bottone[3];
+		opzioniMenu[0] = new Bottone("Riprendi Partita");
+		opzioniMenu[1] = new Bottone("Menu Principale");
+		opzioniMenu[2] = new Bottone("Esci dal Gioco");
 	}
 	
 	@Override
@@ -59,6 +73,7 @@ public class Gioca extends BasicGameState {
 		
 		if (caricato)
 		{
+			
 			for (int i = 0; i < Config.RIGHE; i++)
 			{
 				for (int j = 0; j < Config.COLONNE; j++)
@@ -83,48 +98,65 @@ public class Gioca extends BasicGameState {
 						mappa[i][j].Disegna();
 				}
 			}
-			
-			// g.setColor(Color.black);
-			// g.fillRect(0, Config.RIGHE * Config.DIMENSIONE_IMMAGINE *
-			// Config.Scala, Config.LARGHEZZA, Config.ALTEZZA);
-			
-			// Personaggi.giocatori[turno-1].Disegna(0*Config.Scala,
-			// 600*Config.Scala, gc);
-			
-			if (info != null && potenz != null)
+			if (vittoria == -1)
 			{
-				info.Disegna(g, gc);
-				potenz.Disegna((int) (Personaggi.attaccante.x > Config.COLONNE / 2 ? 0 + (info.larghezza - potenz.larghezza) / 2
-						: Config.LARGHEZZA - info.larghezza + (info.larghezza - potenz.larghezza) / 2), 75);
-				base = null;
 				
-			}
-			if (base != null)
-			{
-				base.Disegna(g, gc);
-				int i = 0;
-				for (Bottone bottone : bottoniBase)
+				if (info != null && potenz != null)
 				{
-					if (Personaggi.giocatori.get(turno - 1).soldi >= Integer.parseInt(bottone.infoAggiuntive[1]))
+					info.Disegna(g, gc);
+					potenz.Disegna(
+							(int) (Personaggi.attaccante.x > Config.COLONNE / 2 ? 0 + (info.larghezza - potenz.larghezza) / 2
+									: Config.LARGHEZZA - info.larghezza + (info.larghezza - potenz.larghezza) / 2), 75);
+					base = null;
+					
+				}
+				if (base != null)
+				{
+					base.Disegna(g, gc);
+					int i = 0;
+					for (Bottone bottone : bottoniBase)
 					{
-						bottone.Disegna(
-								(int) (Personaggi.attaccante.x > Config.COLONNE / 2 ? 0 + (bottone.larghezza - potenz.larghezza) / 2
-										: Config.LARGHEZZA - bottone.larghezza + (bottone.larghezza - potenz.larghezza) / 2),
-								75 + (i * bottone.altezza));
-						i++;
+						if (Personaggi.giocatori.get(turno - 1).soldi >= Integer.parseInt(bottone.infoAggiuntive[1]))
+						{
+							bottone.Disegna(
+									(int) (Personaggi.attaccante.x > Config.COLONNE / 2 ? 0 + (bottone.larghezza - potenz.larghezza) / 2
+											: Config.LARGHEZZA - bottone.larghezza + (bottone.larghezza - potenz.larghezza) / 2),
+									75 + (i * bottone.altezza));
+							i++;
+						}
+						
+					}
+					info = null;
+				}
+				testoTurno.disegna("Turno " + Integer.toString(turnoTotale), Testo.CENTROORIZ,
+						gc.getHeight() - testoTurno.ttf.getHeight("Turno"));
+				coin.draw(0, (gc.getHeight() - coin.getHeight() * Config.Scala), Config.Scala);
+				
+				testoTurno.disegna(Integer.toString(Personaggi.giocatori.get(turno - 1).soldi),
+						(int) (coin.getWidth() * Config.Scala), (int) (gc.getHeight() - 25 * Config.Scala));
+				if (staComprando)
+				{
+					bottoneCliccaPerPosizionare.Disegna(Config.LARGHEZZA / 2 - bottoneCliccaPerPosizionare.larghezza / 2,
+							gc.getHeight() - bottoneCliccaPerPosizionare.altezza);
+				}
+				
+				if (inMenu)
+				{
+					menu.draw(0, 0, Config.Scala);
+					menuChild.draw(gc.getWidth() / 2 - menuChild.getWidth() / 2, gc.getHeight() / 2 - menuChild.getHeight() / 2);
+					for (int i = 0; i < opzioniMenu.length; i++)
+					{
+						opzioniMenu[i].Disegna(gc.getWidth() / 2 - opzioniMenu[i].larghezza / 2, (int) (gc.getHeight() / 2
+								- menuChild.getHeight() / 2 * Config.Scala + opzioniMenu[i].altezza * (i + 1) + 180
+								* Config.Scala * i));
 					}
 					
 				}
-				info = null;
 			}
-			testoTurno.disegna("Turno " + Integer.toString(turnoTotale), Testo.CENTROORIZ,
-					gc.getHeight() - testoTurno.ttf.getHeight("Turno"));
-			
-			testoTurno.disegna(Integer.toString(Personaggi.giocatori.get(turno - 1).soldi), 0, 700);
-			if (staComprando)
+			else
 			{
-				bottoneCliccaPerPosizionare.Disegna(Config.LARGHEZZA / 2 - bottoneCliccaPerPosizionare.larghezza / 2,
-						gc.getHeight() - bottoneCliccaPerPosizionare.altezza);
+				menu.draw(0, 0, Config.Scala);
+				testoVittoria.disegna("VITTORIA", Testo.CENTROORIZ, Testo.CENTROVERT);
 			}
 		}
 	}
@@ -141,8 +173,11 @@ public class Gioca extends BasicGameState {
 		ArrayClick = GestoreMouse.ZonaClick();
 		
 		boolean cliccato = false;
+		
+		// carica le cose che deve caricare
 		if (!caricato)
 		{
+			System.out.println("Sto caricando!");
 			caricato = !caricato;
 			
 			caricaBottoni();
@@ -152,115 +187,200 @@ public class Gioca extends BasicGameState {
 			mappa = CaricaMappa.caricaQuadrati(Config.mappa);
 		}
 		
-		if (!Config.conBasi)
+		if (input.isKeyPressed(Input.KEY_ESCAPE))
 		{
-			for (int i = 0; i < Personaggi.giocatori.size(); i++)
+			if (!controllo)
+				controllo = !controllo;
+			else
 			{
-				if (nUnitaSquadra(Personaggi.giocatori.get(i).squadra) == 0)
-				{
-					vittoria = Personaggi.giocatori.get(i).squadra;
-					break;
-				}
-				else
-					vittoria = -1;
+				inMenu = !inMenu;
 			}
+			
 		}
-		else
-		{
-			// TODO GESTIRE LA DISTRUZIONE DELLE TORRI
-		}
-		
-		if (vittoria == -1)
+		// condizioni di vittoria
+		if (!inMenu)
 		{
 			
-			if (input.isKeyPressed(Input.KEY_SPACE))
+			// non ha vinto
+			if (vittoria == -1)
 			{
-				if (!staComprando)
+				if (caricato)
 				{
-					if (!controllo)
-						controllo = !controllo;
-					else
-					{
-						turno++;
-						turnoTotale++;
-						
-						if (turno > Config.nSquadre)
-							turno = 1;
-						
-						testoTurno = new Testo("Verdana", Font.BOLD, 20, (java.awt.Color) Squadra.squadraAWT.get(turno));
-						
-						deselezionaPersonaggi();
-						
-						pulisciGUI();
-					}
 					
-				}
-			}
-			controllo = true;
-			
-			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
-			{
-				// ottendo la casella // su
-				// cui ha // cliccato
-				
-				if (staComprando)
-				{
-					staComprando = false;
-					if (Personaggi.giocatori.get(turno - 1).soldi >= Integer.parseInt(infoAggiuntivePlayerScelto[1]))
+					if (!Config.conBasi)
 					{
-						Personaggi.personaggio.add(new PersonaggioGenerico(ArrayClick[1], ArrayClick[0],
-								infoAggiuntivePlayerScelto[0], turno, Personaggi.personaggio.size()));
-						
-						Personaggi.giocatori.get(turno - 1).soldi -= Integer.parseInt(infoAggiuntivePlayerScelto[1]);
-					}
-					pulisciGUI();
-					
-					deselezionaPersonaggi();
-				}
-				else
-				{
-					for (Bottone bottone : bottoniBase)
-					{
-						if (bottone.Cliccato())
+						for (int i = 0; i < Personaggi.giocatori.size(); i++)
 						{
-							infoAggiuntivePlayerScelto = bottone.infoAggiuntive;
-							staComprando = true;
-							cliccato = true;
-						}
-					}
-					if (!cliccato)
-					{
-						
-						if (potenz.Cliccato())
-						{
-							//TODO CODICE DI BARILANI!!!!
-						}
-						
-						else
-						{
-							for (int i = 0; i < Personaggi.personaggio.size(); i++)
+							if (nUnitaSquadra(Personaggi.giocatori.get(i).squadra) == 0)
 							{
 								
-								if (Personaggi.personaggio.get(i).inVita)
-									if (Personaggi.personaggio.get(i).squadra == turno)
-										if (ArrayClick[0] == Personaggi.personaggio.get(i).x
-												&& ArrayClick[1] == Personaggi.personaggio.get(i).y)
-										{
-											
-											if (Personaggi.personaggio.get(i).selezionato == false)
+								vittoria = Personaggi.giocatori.get(i).squadra;
+								break;
+							}
+							else
+								vittoria = -1;
+						}
+					}
+					else
+					{
+						for (int i = 0; i < Personaggi.giocatori.size(); i++)
+						{
+							if (!cercaBase(Personaggi.giocatori.get(i).squadra))
+							{
+								Personaggi.giocatori.remove(i);
+							}
+						}
+						
+						if (Personaggi.giocatori.size() == 1)
+						{
+							System.out.println("vincitore trovato!" + Personaggi.giocatori.get(0).squadra);
+							vittoria = Personaggi.giocatori.get(0).squadra;
+							testoVittoria = new Testo("Verdana", Font.BOLD, 56, (Color) Squadra.squadraAWT.get(vittoria));
+						}
+					}
+				}
+				// skip turno
+				if (input.isKeyPressed(Input.KEY_SPACE))
+				{
+					if (!staComprando)
+					{
+						if (!controllo) // controllo serve per evitare che //
+										// accumuli la coda dei tasti premuti,//
+										// se uno preme spazio nella selezione//
+										// della// mappa rischia che gli salta
+										// il turno. // cosi' si sistema tutto
+							controllo = !controllo;
+						else
+						{
+							turno++;
+							turnoTotale++;
+							
+							if (turno > Personaggi.giocatori.size())
+								turno = 1;
+							
+							testoTurno = new Testo("Verdana", Font.BOLD, 20, (java.awt.Color) Squadra.squadraAWT.get(turno));
+							
+							deselezionaPersonaggi();
+							
+							pulisciGUI();
+						}
+					}
+				}
+				controllo = true;
+				
+				if (input.isKeyPressed(Input.KEY_2))
+				{
+					Personaggi.giocatori.remove(0);
+					vittoria = Personaggi.giocatori.get(0).squadra;
+					testoVittoria = new Testo("Verdana", Font.BOLD, 56, (Color) Squadra.squadraAWT.get(vittoria));
+				}
+				
+				if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
+				{
+					if (staComprando) // se clicca quando sta comprando metto il
+										// giocatore che ha comprato nella
+										// casella
+										// cliccata
+					{
+						staComprando = false;
+						if (Personaggi.giocatori.get(turno - 1).soldi >= Integer.parseInt(infoAggiuntivePlayerScelto[1])) // se
+																															// ha
+																															// i
+																															// soldi
+						{
+							Personaggi.personaggio.add(new PersonaggioGenerico(ArrayClick[1], ArrayClick[0],
+									infoAggiuntivePlayerScelto[0], turno, Personaggi.personaggio.size()));
+							
+							Personaggi.giocatori.get(turno - 1).soldi -= Integer.parseInt(infoAggiuntivePlayerScelto[1]);
+						}
+						pulisciGUI();
+						
+						deselezionaPersonaggi();
+					}
+					else
+					// il click e' un azione di selezione/deselezione o di click
+					// su
+					// un bottone
+					{
+						for (Bottone bottone : bottoniBase)
+						{
+							if (bottone.Cliccato()) // se ha cliccato un bottone
+													// di
+													// acquisto
+							{
+								infoAggiuntivePlayerScelto = bottone.infoAggiuntive;
+								staComprando = true;
+								cliccato = true;
+							}
+						}
+						if (!cliccato)
+						{
+							
+							if (potenz.Cliccato()) // potrebbe aver cliccato il
+													// tasto di potenziamento
+							{
+								controllo = false;
+								sbg.enterState(Main.potenziamento);
+							}
+							
+							else
+							// ha forse clicacto un personaggio
+							{
+								for (int i = 0; i < Personaggi.personaggio.size(); i++)
+								{
+									
+									if (Personaggi.personaggio.get(i).inVita) // se
+																				// e'
+																				// in
+																				// vita
+										if (Personaggi.personaggio.get(i).squadra == turno) // se
+																							// e'
+																							// della
+																							// sua
+																							// squadra
+											if (ArrayClick[0] == Personaggi.personaggio.get(i).x
+													&& ArrayClick[1] == Personaggi.personaggio.get(i).y) // se
+																											// la
+																											// x
+																											// e
+																											// la
+																											// y
+																											// corrispondono
 											{
 												
-												Personaggi.personaggio.get(i).selezionato = true;
-												pulisciGUI();
-												Personaggi.attaccante = Personaggi.personaggio.get(i);
-												for (int j = 0; j < Personaggi.personaggio.size(); j++)
+												if (Personaggi.personaggio.get(i).selezionato == false) // se
+																										// non
+																										// e'
+																										// selezionato
 												{
-													if (j != i)
+													
+													Personaggi.personaggio.get(i).selezionato = true; // lo
+																										// seleziono
+													pulisciGUI();
+													Personaggi.attaccante = Personaggi.personaggio.get(i); // lo
+																											// metto
+																											// come
+																											// attaccante
+													for (int j = 0; j < Personaggi.personaggio.size(); j++) // deseleziono
+																											// gli
+																											// altri
 													{
-														Personaggi.personaggio.get(j).selezionato = false;
+														if (j != i)
+														{
+															Personaggi.personaggio.get(j).selezionato = false;
+														}
 													}
+													break;
 												}
-												break;
+												else
+												// e' selezionato lo devo
+												// deselezionare
+												{
+													Personaggi.personaggio.get(i).selezionato = false;
+													Personaggi.attaccante = null;
+													pPrec = null;
+													pulisciGUI();
+												}
 											}
 											else
 											{
@@ -269,107 +389,188 @@ public class Gioca extends BasicGameState {
 												pPrec = null;
 												pulisciGUI();
 											}
-										}
-										else
+								}
+							}
+						}
+					}
+				}
+				
+				if (input.isMousePressed(Input.MOUSE_RIGHT_BUTTON))
+					// se preme il tasto destro
+					
+					for (int i = 0; i < Personaggi.personaggio.size(); i++)
+					{
+						if (Personaggi.personaggio.get(i).inVita)
+							if (Personaggi.personaggio.get(i).selezionato) // prendo
+																			// l'unico
+																			// selezionato
+							{
+								
+								if (Math.abs(Personaggi.personaggio.get(i).x - ArrayClick[0])
+										+ Math.abs(Personaggi.personaggio.get(i).y - ArrayClick[1]) <= Personaggi.personaggio
+											.get(i).raggio) // guardo
+															// se
+															// e'
+															// in
+															// range
+								{
+									Personaggi.attaccante = Personaggi.personaggio.get(i); // metto
+																							// come
+																							// attaccante
+																							// questo
+																							// personaggio
+									Personaggi.difensore = Personaggi.clickSuPersonaggioNemico(Personaggi.personaggio.get(i), // metto
+																																// come
+																																// difensore
+																																// l'eventuale
+																																// personaggio
+																																// che
+																																// c'è
+											ArrayClick[1], ArrayClick[0]);
+									if (Personaggi.difensore != null) // se
+																		// effettivamente
+																		// c'è
+																		// un
+																		// difensore
+																		// allor
+																		// e'
+																		// una
+																		// battaglia
+																		// vera
+																		// e
+																		// propria
+									{
+										
+										Battaglia.caricato = false;
+										Battaglia.risolto = false;
+										Battaglia.timer = 0;
+										Personaggi.personaggio.get(i).selezionato = false;
+										pPrec = null;
+										pulisciGUI();
+										sbg.enterState(Main.battaglia);
+										
+										break;
+										
+									}
+									else if (Materiale.Controllo(ArrayClick)) // else
+																				// e'
+																				// uno
+																				// spostamento,
+																				// allra
+																				// controllo
+																				// che
+																				// puo'
+																				// andare
+																				// su
+																				// quella
+																				// casella
+									{
+										boolean problema = false;
+										for (int j = 0; j < Personaggi.personaggio.size(); j++) // controllo
+																								// che
+																								// la
+																								// casella
+																								// non
+																								// e'
+																								// occupata
 										{
-											Personaggi.personaggio.get(i).selezionato = false;
+											if (Personaggi.personaggio.get(j).x == ArrayClick[0]
+													&& Personaggi.personaggio.get(j).y == ArrayClick[1])
+												problema = true;
+										}
+										if (!problema) // se non e' occupata
+										{
+											Personaggi.personaggio.get(i).Sposta(ArrayClick[1], ArrayClick[0]); // lo
+																												// sposto
+											pulisciGUI();
 											Personaggi.attaccante = null;
 											pPrec = null;
-											pulisciGUI();
 										}
+										// break;
+									}
+								}
+								
 							}
-						}
 					}
-				}
-			}
-			
-			if (input.isMousePressed(Input.MOUSE_RIGHT_BUTTON))
-				for (int i = 0; i < Personaggi.personaggio.size(); i++)
+				
+				if (Personaggi.attaccante != null)
 				{
-					if (Personaggi.personaggio.get(i).inVita)
-						if (Personaggi.personaggio.get(i).selezionato)
+					if (Personaggi.attaccante.selezionato)
+						if (Personaggi.attaccante != pPrec)
 						{
-							ArrayClick = GestoreMouse.ZonaClick();
-							
-							if (Math.abs(Personaggi.personaggio.get(i).x - ArrayClick[0])
-									+ Math.abs(Personaggi.personaggio.get(i).y - ArrayClick[1]) <= Personaggi.personaggio.get(i).raggio)
+							if (!Personaggi.attaccante.Classe.equals("Base"))
 							{
-								Personaggi.attaccante = Personaggi.personaggio.get(i);
-								Personaggi.difensore = Personaggi.clickSuPersonaggioNemico(Personaggi.personaggio.get(i),
-										ArrayClick[1], ArrayClick[0]);
-								if (Personaggi.difensore != null)
+								potenz.Ripristina();
+								info = new FinestraInfo(Personaggi.attaccante);
+								base = null;
+								for (Bottone bottone : bottoniBase)
 								{
-									
-									Battaglia.caricato = false;
-									Battaglia.risolto = false;
-									Battaglia.timer = 0;
-									Personaggi.personaggio.get(i).selezionato = false;
-									pulisciGUI();
-									sbg.enterState(Main.battaglia);
-									
-									break;
-									
-								}
-								else if (Materiale.Controllo(ArrayClick))
-								{
-									boolean problema = false;
-									for (int j = 0; j < Personaggi.personaggio.size(); j++)
-									{
-										if (Personaggi.personaggio.get(j).x == ArrayClick[0]
-												&& Personaggi.personaggio.get(j).y == ArrayClick[1])
-											problema = true;
-									}
-									if (!problema)
-									{
-										Personaggi.personaggio.get(i).Sposta(ArrayClick[1], ArrayClick[0]);
-										pulisciGUI();
-										Personaggi.attaccante = null;
-									}
-									// break;
+									bottone.Elimina();
 								}
 							}
+							else
+							{
+								base = new FinestraBase(Personaggi.attaccante);
+								for (Bottone bottone : bottoniBase)
+								{
+									bottone.Ripristina();
+								}
+								info = null;
+								potenz.Elimina();
+							}
 							
+							pPrec = Personaggi.attaccante;
 						}
 				}
-			if (Personaggi.attaccante != null)
-			{
-				if (Personaggi.attaccante.selezionato)
-					if (Personaggi.attaccante != pPrec)
-					{
-						if (!Personaggi.attaccante.Classe.equals("Base"))
-						{
-							potenz.Ripristina();
-							info = new FinestraInfo(Personaggi.attaccante);
-							base = null;
-							for (Bottone bottone : bottoniBase)
-							{
-								bottone.Elimina();
-							}
-						}
-						else
-						{
-							base = new FinestraBase(Personaggi.attaccante);
-							for (Bottone bottone : bottoniBase)
-							{
-								bottone.Ripristina();
-							}
-							info = null;
-							potenz.Elimina();
-						}
-						
-						pPrec = Personaggi.attaccante;
-					}
+				else
+				{
+					pulisciGUI();
+				}
 			}
 			else
+			// c'è uno stato di vittoria
 			{
-				pulisciGUI();
+				System.out.println("ha vinto qualcuno!");
+				if (input.isKeyPressed(Input.KEY_ESCAPE) || input.isKeyPressed(Input.KEY_SPACE)
+						|| input.isKeyPressed(Input.KEY_ENTER))
+				{
+					Personaggi.giocatori.clear();
+					Personaggi.personaggio.clear();
+					CreaPersonaggio.nAdd = 0;
+					vittoria = -1;
+					turno = 1;
+					turnoTotale = 1;
+					caricato = false;
+					inMenu = false;
+					Personaggi.attaccante = null;
+					Personaggi.difensore = null;
+					pulisciGUI();
+					sbg.enterState(Main.menu, new FadeOutTransition(), new FadeInTransition());
+				}
+				
 			}
 		}
 		else
+		// e' nel menu
 		{
-			if (input.isKeyPressed(input.KEY_ESCAPE) || input.isKeyPressed(input.KEY_SPACE)
-					|| input.isKeyPressed(input.KEY_ENTER))
+			if (input.isKeyPressed(Input.KEY_SPACE))
+				;
+			if (input.isKeyPressed(Input.KEY_ENTER))
+				;
+			
+			if (opzioniMenu[0].Cliccato())
+			{
+				inMenu = !inMenu;
+			}
+			else if (opzioniMenu[1].Cliccato())
+			{
+				inMenu = !inMenu;
 				sbg.enterState(Main.menu);
+			}
+			else if (opzioniMenu[2].Cliccato())
+			{
+				gc.exit();
+			}
 		}
 	}
 	
@@ -400,6 +601,7 @@ public class Gioca extends BasicGameState {
 		potenz = new Bottone("Potenziamenti");
 		potenz.Elimina();
 		
+		bottoniBase.clear();
 		bottoniBase.add(new Bottone("Soldato (50)", "Soldato", "50"));
 		bottoniBase.get(0).Elimina();
 		bottoniBase.add(new Bottone("Carro (100)", "Carro", "100"));
@@ -420,9 +622,10 @@ public class Gioca extends BasicGameState {
 	}
 	
 	public boolean cercaBase(int squadra) {
+		
 		for (int i = 0; i < Personaggi.personaggio.size(); i++)
 		{
-			if (Personaggi.personaggio.get(i).squadra == squadra && Personaggi.personaggio.get(i).Classe == "Base"
+			if (Personaggi.personaggio.get(i).squadra == squadra && Personaggi.personaggio.get(i).Classe.equals("Base")
 					&& Personaggi.personaggio.get(i).inVita)
 				return true;
 		}

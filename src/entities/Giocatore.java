@@ -22,10 +22,9 @@ public class Giocatore {
 	public int squadra;
 	public Giocatore(String nome, Map<Integer, Integer> elementi,int Squadra) throws SlickException
 	{
-		System.out.println(elementi.get(0));
+		
 		this.nome=nome;
 		this.elementi=elementi;
-		System.out.println(this.elementi.get(0));
 		base = new Image("res/Giocatori/Base.png");
 		testo = new Testo("Verdana",Font.BOLD, 16, java.awt.Color.white);
 		soldi = Config.soldi;

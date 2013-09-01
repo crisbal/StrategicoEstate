@@ -37,6 +37,9 @@ public class Menu extends BasicGameState {
 			nuvole[i] = new Nuvola();
 		}
 		
+		
+		
+		
 	}
 	
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
@@ -79,7 +82,7 @@ public class Menu extends BasicGameState {
 			selezionato++;
 		}
 		
-		if (input.isKeyPressed(Input.KEY_ENTER))
+		if (input.isKeyPressed(Input.KEY_ENTER) || input.isKeyPressed(Input.KEY_SPACE))
 			switch (selezionato)
 			{
 				case 0:
@@ -89,6 +92,8 @@ public class Menu extends BasicGameState {
 					gc.exit();
 					break;
 			}
+		
+		
 		if (selezionato < 0)
 			selezionato = 2;
 		if (selezionato > 2)
@@ -115,6 +120,9 @@ public class Menu extends BasicGameState {
 		spostamento += 0.07f * delta;
 		if (spostamento > Config.LARGHEZZA * Config.Scala + allies.getWidth() * 20 * Config.Scala)
 			spostamento = (int) (-allies.getWidth() * 20 - 100);
+	
+		if(input.isKeyDown(input.KEY_ESCAPE));
+
 	}
 	
 	public int getID() {

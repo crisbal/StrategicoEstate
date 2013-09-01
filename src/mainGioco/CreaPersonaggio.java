@@ -24,7 +24,8 @@ public class CreaPersonaggio extends BasicGameState {
 	
 	Image					Base;
 	Image[]					ImmagineElementi	= new Image[4];
-	int						puntatore			= 0, nAdd = 0;
+	public int						puntatore			= 0;
+	public static int	nAdd = 0;
 	TextField				nome;
 	Giocatore				gDaAggiungere;
 	
