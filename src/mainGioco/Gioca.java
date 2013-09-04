@@ -214,11 +214,14 @@ public class Gioca extends BasicGameState {
 							if (nUnitaSquadra(Personaggi.giocatori.get(i).squadra) == 0)
 							{
 								
-								vittoria = Personaggi.giocatori.get(i).squadra;
-								break;
+								Personaggi.giocatori.remove(i);
 							}
-							else
-								vittoria = -1;
+							if (Personaggi.giocatori.size() == 1)
+							{
+								System.out.println("vincitore trovato!" + Personaggi.giocatori.get(0).squadra);
+								vittoria = Personaggi.giocatori.get(0).squadra;
+								testoVittoria = new Testo("Verdana", Font.BOLD, 56, (Color) Squadra.squadraAWT.get(vittoria));
+							}
 						}
 					}
 					else
@@ -261,7 +264,7 @@ public class Gioca extends BasicGameState {
 							testoTurno = new Testo("Verdana", Font.BOLD, 20, (java.awt.Color) Squadra.squadraAWT.get(turno));
 							
 							deselezionaPersonaggi();
-							
+							riscuotiBanca();
 							pulisciGUI();
 						}
 					}
@@ -294,7 +297,8 @@ public class Gioca extends BasicGameState {
 							Personaggi.giocatori.get(turno - 1).soldi -= Integer.parseInt(infoAggiuntivePlayerScelto[1]);
 						}
 						pulisciGUI();
-						
+						Personaggi.attaccante = null;
+						pPrec = null;
 						deselezionaPersonaggi();
 					}
 					else
@@ -574,6 +578,20 @@ public class Gioca extends BasicGameState {
 		}
 	}
 	
+	private void riscuotiBanca() {
+		for(int i=0;i<Personaggi.personaggio.size();i++)
+		{
+				if( Personaggi.giocatori.get(turno-1).squadra == Personaggi.personaggio.get(i).squadra)
+				{
+					if(Personaggi.personaggio.get(i).Classe.equals("Banca") && Personaggi.personaggio.get(i).inVita)
+					{
+						Personaggi.giocatori.get(turno-1).soldi+=20;
+					}
+				}
+		}
+		
+	}
+
 	private void pulisciGUI() {
 		info = null;
 		potenz.Elimina();
@@ -606,7 +624,8 @@ public class Gioca extends BasicGameState {
 		bottoniBase.get(0).Elimina();
 		bottoniBase.add(new Bottone("Carro (100)", "Carro", "100"));
 		bottoniBase.get(1).Elimina();
-		
+		bottoniBase.add(new Bottone("Banca (100)", "Banca", "100"));
+		bottoniBase.get(1).Elimina();
 		testoTurno = new Testo("Verdana", Font.BOLD, 20, (java.awt.Color) Squadra.squadraAWT.get(1));
 		
 	}

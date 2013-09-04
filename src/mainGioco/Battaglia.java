@@ -44,7 +44,7 @@ public class Battaglia extends BasicGameState {
 			sfondoAtt.draw(0, 0, Config.Scala);
 			sfondoDif.draw(Config.LARGHEZZA / 2, 0, Config.Scala);
 			
-			if (!attaccante.Classe.equals("Base"))
+			if (!attaccante.Classe.equals("Base") && !attaccante.Classe.equals("Banca"))
 				for (int i = 0; i < Math.round(attaccante.vita / 10); i++)
 				{
 					// attSpecifico.draw(posXAtt[i] * Config.Scala, posYAtt[i] *
@@ -55,7 +55,7 @@ public class Battaglia extends BasicGameState {
 			{
 				attaccante.DisegnaXYScala(gc.getWidth() / 4 - (attaccante.getWidth() * 5f) / 2, 200 * Config.Scala, 5f);
 			}
-			if (!difensore.Classe.equals("Base"))
+			if (!difensore.Classe.equals("Base") && !difensore.Classe.equals("Banca"))
 				for (int i = 0; i < Math.round(difensore.vita / 10); i++)
 				{
 					// difSpecifico.draw(posXDif[i] * Config.Scala, posYDif[i] *
@@ -95,28 +95,32 @@ public class Battaglia extends BasicGameState {
 			xDif = difensore.x;
 			yDif = difensore.y;
 			
-			if (!attaccante.Classe.equals("Base"))
+			if (!attaccante.Classe.equals("Base") && !attaccante.Classe.equals("Banca"))
 			{
 				attGenerico = new Animation();
 				SpriteSheet sheetAttaccanteGenerico = new SpriteSheet(Path + attaccante.squadra + ""
-						+ Tipo.tipo.get(attaccante.Classe) + ".png", 64, 64);
-				for (int i = 0; i < 2; i++)
+						+ Tipo.tipo.get(attaccante.Classe) + "A.png", 64, 64);
+				for (int i = 0; i < sheetAttaccanteGenerico.getWidth()/64; i++)
 				{
-					attGenerico.addFrame(sheetAttaccanteGenerico.getSprite(i, 1).getFlippedCopy(true, false), 150);
+					attGenerico.addFrame(sheetAttaccanteGenerico.getSprite(i, 0).getFlippedCopy(true, false), 150);
+				}
+			}
+			System.out.println(difensore.Classe);
+			if (!difensore.Classe.equals("Base") && !difensore.Classe.equals("Banca"))
+			{
+				
+				difGenerico = new Animation();
+				SpriteSheet sheetDifensoreGenerico = new SpriteSheet(Path + difensore.squadra + ""
+						+ Tipo.tipo.get(difensore.Classe) + "A.png", 64, 64);
+				
+				for (int i = 0; i < sheetDifensoreGenerico.getWidth()/64; i++)
+				{
+					difGenerico.addFrame(sheetDifensoreGenerico.getSprite(i, 0), 150);
 				}
 			}
 			
-			if (!difensore.Classe.equals("Base"))
-			{
-				difGenerico = new Animation();
-				SpriteSheet sheetDifensoreGenerico = new SpriteSheet(Path + difensore.squadra + ""
-						+ Tipo.tipo.get(difensore.Classe) + ".png", 64, 64);
-				
-				for (int i = 0; i < 2; i++)
-				{
-					difGenerico.addFrame(sheetDifensoreGenerico.getSprite(i, 1), 150);
-				}
-			}
+			
+			
 			
 			sfondoAtt = new Image(Path + Gioca.mappa[yAtt][xAtt].tipo + ".png");
 			sfondoDif = new Image(Path + Gioca.mappa[yDif][xDif].tipo + ".png");
