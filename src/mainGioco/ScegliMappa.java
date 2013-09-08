@@ -29,7 +29,7 @@ public class ScegliMappa extends BasicGameState {
 	File[]						files;
 	private QuadratoMappa[][]	mappa;
 	private int					puntatore;
-	Testo						testo, sottoTesto;
+	Testo						testo, sottoTesto,infoMappa;
 	Image						freccia, sfondo;
 	Rectangle					bordo;
 	
@@ -41,6 +41,7 @@ public class ScegliMappa extends BasicGameState {
 		mappa = CaricaMappa.caricaQuadrati(files[0].getName());
 		testo = new Testo("Verdana", Font.BOLD, 25, Color.red);
 		sottoTesto = new Testo("Verdana", Font.BOLD, 20, Color.black);
+		infoMappa = new Testo("Verdana", Font.BOLD, 23, Color.blue);
 		freccia = new Image("res/GUI/Selettore.png");
 		sfondo = new Image("res/GUI/MenuVuoto.png");
 	}
@@ -60,6 +61,11 @@ public class ScegliMappa extends BasicGameState {
 		{
 			for (int j = 0; j < Config.COLONNE; j++)
 				mappa[i][j].DisegnaScalato((int) ((Config.LARGHEZZA / Config.Scala) / 3), 70, 0.5f);
+		}
+		infoMappa.disegna("N° Squadre: " + Config.nSquadre,(Config.LARGHEZZA / Config.Scala) / 3, 400*Config.Scala);
+		if(Config.conBasi)
+		{
+			infoMappa.disegna("Soldi di partenza: " + Config.soldi,(Config.LARGHEZZA / Config.Scala) / 3, 400*Config.Scala+infoMappa.getTotalHeight("N° Squadre: " + Config.nSquadre));
 		}
 		freccia.draw((50 * Config.Scala), (70 * Config.Scala + puntatore * 50 * Config.Scala + freccia.getHeight() / 2),
 				Config.Scala);
@@ -91,6 +97,7 @@ public class ScegliMappa extends BasicGameState {
 		{
 			Config.mappa = files[puntatore].getName();
 			Personaggi.giocatori.clear();
+			
 			sbg.enterState(Main.creaPersonaggio);
 			// sbg.enterState(Main.gioca,new FadeOutTransition(Color.black),new
 			// FadeInTransition(Color.black));

@@ -15,4 +15,6 @@ public class Tipo {
 	public static final String	SOLDATO	= Path + "Soldato";
 	public static final String	CARRO	= Path + "Carro";
 	public static final String	AEREO	= Path + "Aereo";
+
+	public static final String AUTOBLINDO = Path + "Autoblindo";
 }

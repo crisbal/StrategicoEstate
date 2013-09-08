@@ -1,7 +1,11 @@
 package mainGioco;
 
+import gui.Punto;
+
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 public class Splash extends BasicGameState {
 
@@ -29,26 +33,26 @@ public class Splash extends BasicGameState {
 	/* velocita' con cui si spostano le fiamme */
 	float incrementoX;
 	
-	public Splash(int state){
+	public Splash(){
 		
 	}
 	
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException{
-		title = new Image("res/title/titolo2.png");
+		title = new Image("res/logo.png");
 		/* DA RIMPIAZZARE CON L'ALTEZZA E LA LARGHEZZA DELLO SCHERMO FINALE */
 		xTitle = (Config.LARGHEZZA/2)-(title.getWidth()/2);
 		yTitle = (Config.ALTEZZA/2)-(title.getHeight()/2);
-		copriTitolo = new Image("res/title/copriTitolo.png");
+		copriTitolo = new Image("res/Splash/copriTitolo.png");
 		
 		/*fiamme = 36; lo inizializzo nella dichirazione, altrimenti da' errore per la creazione
 		 * dell'array fiamme (Violazione di memoria) */
 		
 		/* ampiezza dell'onda */
-		ampiezza = 3;
+		ampiezza = 5;
 		/* velocita' con cui viene eseguita l'onda */
-		incrementoAngolo = 0.04f;
+		incrementoAngolo = 0.5f;
 		/* velocita' con cui si spostano le fiamme */
-		incrementoX = 0.1f;
+		incrementoX = 0.2f;
 		
 		/* creo i punti piu' piccoli */
 		imageRed = new Image("res/splash/red3.png");
@@ -86,25 +90,29 @@ public class Splash extends BasicGameState {
 		for(int i = 0;i < fiamme;i++)
 		{
 			/* incremento  la x per far scorrere le fiamme */
-			punto1[i].x += incrementoX;
 			punto1[i].Disegna(g);
-			punto2[i].x += incrementoX;
 			punto2[i].Disegna(g);
-			punto3[i].x += incrementoX;
 			punto3[i].Disegna(g);
 		}
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException{
 		Input input = gc.getInput();
+		
+		for(int i = 0;i < fiamme;i++)
+		{
+			punto1[i].x += incrementoX*delta;
+			punto2[i].x += incrementoX*delta;
+			punto3[i].x += incrementoX*delta;
+		}
 		if(input.isKeyDown(Input.KEY_ESCAPE))
 			sbg.enterState(Main.menu);
 		/* DA RIMPIAZZARE CON L'ALTEZZA E LA LARGHEZZA DELLO SCHERMO FINALE */
 		if(punto1[0].x > Config.LARGHEZZA)
-			sbg.enterState(Main.menu);
+			sbg.enterState(Main.menu, new FadeOutTransition(), new FadeInTransition());
 	}
 	
 	public int getID(){
-		return 2;
+		return Main.splash;
 	}
 }

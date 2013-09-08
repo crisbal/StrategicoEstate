@@ -35,7 +35,7 @@ public class SplashScreen extends BasicGameState {
 	
 	@Override
 	public int getID() {
-		return Main.splash;
+		return -1;
 	}
 	
 }

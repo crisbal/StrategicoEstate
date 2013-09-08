@@ -17,7 +17,7 @@ public class Testo {
 	private UnicodeFont font;
 	private Font fontAppoggio;
 	public TrueTypeFont ttf;
-	private int	x,y,accumulatoreY;
+	private float x,y,accumulatoreY;
 	
 	public static final int CENTROORIZ = -1;
 	public static final int CENTROVERT = -2;
@@ -35,14 +35,14 @@ public class Testo {
 	}
 	
 	
-	public void disegna(String testo,int x,int y)
+	public void disegna(String testo,float f,float g)
 	{
-		this.x = x;
-		this.y = y;
+		this.x = f;
+		this.y = g;
 		
-		if (x == CENTROORIZ)
+		if (f == CENTROORIZ)
 			this.x = Config.LARGHEZZA/ 2 - getMaxWidth(testo) / 2;
-		if (y == CENTROVERT)
+		if (g == CENTROVERT)
 			this.y = Config.ALTEZZA / 2 - getTotalHeight(testo) / 2;
 		
 		font.drawString(this.x, this.y, testo);
