@@ -80,7 +80,7 @@ public class Menu extends BasicGameState {
 			selettore.draw((550 * Config.Scala - offset), (375 * Config.Scala - selettore.getHeight() / 2));
 		}
 		opzioniMenuRosso.disegna("GIOCA", Testo.CENTROORIZ,(int) (200 * Config.Scala - opzioniMenuRosso.getTotalHeight("GIOCA")/2));
-		opzioniMenuVerde.disegna("OPZIONI", Testo.CENTROORIZ,(int) (285 * Config.Scala - opzioniMenuVerde.getTotalHeight("OPZIONI")/2));
+		opzioniMenuVerde.disegna("TUTORIAL", Testo.CENTROORIZ,(int) (285 * Config.Scala - opzioniMenuVerde.getTotalHeight("OPZIONI")/2));
 		opzioniMenuBlu.disegna("ESCI", Testo.CENTROORIZ,(int) (375 * Config.Scala - opzioniMenuBlu.getTotalHeight("ESCI")/2));
 		for (int i = 0; i < 10; i++)
 			for (int j = 0; j < 8; j++)
@@ -107,6 +107,9 @@ public class Menu extends BasicGameState {
 				case 0:
 					
 					sbg.enterState(Main.scegliMappa);
+					break;
+				case 1:
+					sbg.enterState(Main.tut);
 					break;
 				case 2:
 					gc.exit();

@@ -518,7 +518,6 @@ public class Gioca extends BasicGameState
 			} else
 			// c'è uno stato di vittoria
 			{
-				System.out.println("ha vinto qualcuno!");
 				if (input.isKeyPressed(Input.KEY_ESCAPE) || input.isKeyPressed(Input.KEY_SPACE) || input.isKeyPressed(Input.KEY_ENTER))
 				{
 					Personaggi.giocatori.clear();
