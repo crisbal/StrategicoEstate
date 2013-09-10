@@ -1,5 +1,6 @@
 package mainGioco;
 
+import java.awt.Font;
 import java.util.Random;
 
 import org.newdawn.slick.Animation;
@@ -18,6 +19,7 @@ import entities.Personaggi;
 import entities.PersonaggioGenerico;
 import entities.Squadra;
 import entities.Tipo;
+import gui.Testo;
 
 public class Battaglia extends BasicGameState
 {
@@ -31,11 +33,11 @@ public class Battaglia extends BasicGameState
 	private int idAtt, idDif;
 	private Animation attGenerico, difGenerico;
 	public static final String Path = "res/Battaglia/";
-
+	Testo vita;
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
 	{
-
+		vita = new Testo("Verdana", Font.BOLD, 46, java.awt.Color.blue);
 	}
 
 	@Override
@@ -71,8 +73,8 @@ public class Battaglia extends BasicGameState
 				difensore.DisegnaXYScala(gc.getWidth() / 2 + gc.getWidth() / 4 - (difensore.getWidth() * 5f) / 2, 200 * Config.Scala, 5f);
 			}
 
-			g.drawString("Attaccante : " + Integer.toString(attaccante.vita), 50, 50);
-			g.drawString("Difensore : " + Integer.toString(difensore.vita), 50, 100);
+			vita.disegna(Integer.toString(attaccante.vita), gc.getWidth()/4-vita.getMaxWidth(Integer.toString(attaccante.vita)), 50*Config.Scala);
+			vita.disegna(Integer.toString(difensore.vita), gc.getWidth()/4*3-vita.getMaxWidth(Integer.toString(attaccante.vita)), 50*Config.Scala);
 		}
 	}
 
@@ -174,49 +176,117 @@ public class Battaglia extends BasicGameState
 
 	private void risolviBattaglia(PersonaggioGenerico attaccante, PersonaggioGenerico difensore)
 	{
-		// da bilanciare!!
 		int potenzaAttacco = 0, potenzaDifesa = 0;
 
-		if (attaccante.Classe.matches("Soldato"))
+		if (attaccante.Classe.equals("Soldato"))
 		{
-			potenzaAttacco += 5;
+			potenzaAttacco += 8;
 			if (attaccante.piuAttacco)
 				potenzaAttacco += 5;
-		} else if (attaccante.Classe.matches("Carro"))
+			if(difensore.Classe.equals("Soldato"))
+				potenzaAttacco+=6;
+			if(difensore.Classe.equals("Aereo"))
+			{
+				potenzaAttacco+=10;
+			}
+			else if((difensore.Classe.equals("Carro") || difensore.Classe.equals("Autoblindo")) && attaccante.vsCorazzati)
+				potenzaAttacco+=10;
+		}
+		if (difensore.Classe.equals("Soldato"))
 		{
-			potenzaAttacco += 5;
+			potenzaDifesa += 8;
+			if (difensore.piuAttacco)
+				potenzaDifesa += 5;
+			if(attaccante.Classe.equals("Soldato"))
+				potenzaDifesa+=6;
+			if(attaccante.Classe.equals("Aereo"))
+			{
+				potenzaDifesa+=10;
+			}
+			else if((attaccante.Classe.equals("Carro") || attaccante.Classe.equals("Autoblindo")) && difensore.vsCorazzati)
+				potenzaDifesa+=10;
+		}
+		
+		if (attaccante.Classe.equals("Carro"))
+		{
+			potenzaAttacco += 13;
 			if (attaccante.piuAttacco)
+				potenzaAttacco += 8;
+			if(difensore.Classe.equals("Aereo")  && attaccante.vsAerei)
+			{
+				potenzaAttacco+=10;
+			}
+			if(difensore.Classe.equals("Soldato"))
+			{
+				potenzaAttacco+=8;
+			}
+		}
+		if (difensore.Classe.equals("Carro"))
+		{
+			potenzaDifesa += 13;
+			if (difensore.piuAttacco)
+				potenzaDifesa += 8;
+			if(attaccante.Classe.equals("Aereo") && difensore.vsAerei)
+			{
+				potenzaDifesa+=15;
+			}
+			if(attaccante.Classe.equals("Soldato"))
+			{
+				potenzaDifesa+=8;
+			}
+		}
+		if(attaccante.Classe.equals("Aereo"))
+		{
+			potenzaAttacco += 18;
+			if (attaccante.piuAttacco)
+				potenzaAttacco += 12;
+			if(difensore.Classe.equals("Carro"))
+				potenzaAttacco += 8;
+			if(difensore.Classe.equals("Carro") && difensore.vsAerei && attaccante.vsAA )
+				potenzaAttacco += 5;
+			if(difensore.Classe.equals("Soldato") && attaccante.vsFanteria )
 				potenzaAttacco += 5;
 		}
-
-		if (difensore.Classe.matches("Soldato"))
+		if(difensore.Classe.equals("Aereo"))
 		{
-			potenzaDifesa += 5;
+			potenzaDifesa += 18;
 			if (difensore.piuAttacco)
+				potenzaDifesa += 12;
+			if(attaccante.Classe.equals("Carro"))
+				potenzaDifesa += 8;
+			if(attaccante.Classe.equals("Carro") && attaccante.vsAerei && difensore.vsAA )
 				potenzaDifesa += 5;
-		} else if (difensore.Classe.matches("Carro"))
-		{
-			potenzaDifesa += 5;
-			if (difensore.piuAttacco)
+			if(attaccante.Classe.equals("Soldato") && difensore.vsFanteria )
 				potenzaDifesa += 5;
 		}
-
-		/* calcolo dell'attacco, della difesa, del danno, ecc. per tipo unita */
-		if (attaccante.veicolo)
-			if (attaccante.vsFanteria && !difensore.veicolo)
-				potenzaAttacco += 5;
-
-		/* calcolo i vantaggi e gli svantaggi tra unita vs unita */
-		if (attaccante.veicolo && !difensore.veicolo)
+		if(attaccante.Classe.equals("Autoblindo"))
 		{
-			potenzaAttacco += 5;
-			potenzaDifesa -= 5;
-		} else if (!attaccante.veicolo && difensore.veicolo)
-		{
-			potenzaDifesa += 5;
-			potenzaAttacco -= 5;
+			potenzaAttacco +=10;
+			if (attaccante.piuAttacco)
+				potenzaAttacco += 10;
+			if(difensore.Classe.equals("Soldato") && attaccante.vsFanteria)
+			{
+				potenzaAttacco += 8;
+			}
 		}
-
+		if(difensore.Classe.equals("Autoblindo"))
+		{
+			potenzaAttacco +=10;
+			if (difensore.piuAttacco)
+				potenzaAttacco += 10;
+			if(attaccante.Classe.equals("Soldato") && difensore.vsFanteria)
+			{
+				potenzaAttacco += 8;
+			}
+		}
+		if(difensore.Classe.equals("Banca"))
+		{
+			potenzaAttacco+=15;
+		}
+		if(attaccante.Classe.equals("Banca"))
+		{
+			potenzaDifesa+=15;
+		}
 		potenzaAttacco = Math.round(potenzaAttacco * (attaccante.vita / 100));
 		potenzaDifesa = Math.round(potenzaDifesa * (difensore.vita / 100));
 

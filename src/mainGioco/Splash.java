@@ -105,10 +105,9 @@ public class Splash extends BasicGameState {
 			punto2[i].x += incrementoX*delta;
 			punto3[i].x += incrementoX*delta;
 		}
-		if(input.isKeyDown(Input.KEY_ESCAPE))
-			sbg.enterState(Main.menu);
+
 		/* DA RIMPIAZZARE CON L'ALTEZZA E LA LARGHEZZA DELLO SCHERMO FINALE */
-		if(punto1[0].x > Config.LARGHEZZA)
+		if(punto1[0].x > Config.LARGHEZZA || input.isKeyPressed(Input.KEY_ESCAPE) || input.isKeyPressed(Input.KEY_ENTER) || input.isKeyPressed(Input.KEY_SPACE))
 			sbg.enterState(Main.menu, new FadeOutTransition(), new FadeInTransition());
 	}
 	

@@ -6,7 +6,9 @@ import mainGioco.Config;
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 
@@ -22,6 +24,7 @@ public class Bottone {
 	float LunghezzaTesto,AltezzaTesto,coeffLungh,coeffAltez;
 	
 	public String[] infoAggiuntive;
+	private boolean giaCliccato;
 	public Bottone(String contenuto) throws SlickException {
 		Immagine = new Image("res/GUI/Bottone.png", false, Image.FILTER_NEAREST);   //uso l'ultimo parametro per rimuovere il blur dell'immagine
 		Immagine = Immagine.getScaledCopy(Config.Scala);
@@ -89,20 +92,21 @@ public class Bottone {
 	
 
 	public boolean Cliccato(){
+		
 		float MouseY=Config.ALTEZZA-Mouse.getY()-1;  //la gestione della Y e' stupida, per avere quella vera devo comportarmi cosi'
 		
-		if(Mouse.isButtonDown(0)&&visualizza&&cliccabile)
+		
+		if(Mouse.isButtonDown(0)&&visualizza&&cliccabile&&!giaCliccato)
 		{
-			
 			if(Mouse.getX()>x&&Mouse.getX()<(x+larghezza))
 			{
 				if(MouseY>y&&MouseY<(y+altezza))
 				{
-					
 					return true;
 				}
 			}
 		}
+		
 		return false;
 	}
 	
@@ -111,12 +115,14 @@ public class Bottone {
 	{
 		visualizza=false;
 		cliccabile = false;
+		giaCliccato = false;
 	}
 
 	public void Ripristina()
 	{
 		visualizza=true;
 		cliccabile = true;
+		giaCliccato = false;
 	}
 	
 	public boolean Visibile(){

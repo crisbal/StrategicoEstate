@@ -37,8 +37,10 @@ public class Gioca extends BasicGameState
 	private int[] ArrayClick = new int[2];
 	public static boolean caricato = false;
 	private Bottone bottoneCliccaPerPosizionare;
-	private int turno = 1, turnoTotale = 1;
-	private Testo testoTurno, testoVittoria;
+	private int turnoTotale = 1;
+	public static int turno;
+	private Testo testoVittoria;
+	public static Testo testoTurno;
 	private FinestraInfo info = null;
 	private FinestraBase base = null;
 	private PersonaggioGenerico pPrec;
@@ -48,7 +50,8 @@ public class Gioca extends BasicGameState
 	private boolean staComprando = false;
 	private int vittoria = -1;
 	private boolean controllo;
-	private Image coin, menu, menuChild;
+	private Image  menu, menuChild;
+	public static Image coin;
 	private boolean inMenu = false;
 	private Bottone[] opzioniMenu;
 	private Sound click, movimento, battaglia;
@@ -138,7 +141,7 @@ public class Gioca extends BasicGameState
 				{
 					if(Personaggi.giocatori.get(i).squadra == turno)
 					{
-						Personaggi.giocatori.get(i).Disegna(0, gc.getHeight()-48*2f, gc);
+						Personaggi.giocatori.get(i).Disegna(0, gc.getHeight()-48*2f*Config.Scala, gc);
 					}
 				}
 				
@@ -570,6 +573,10 @@ public class Gioca extends BasicGameState
 				if (Personaggi.personaggio.get(i).Classe.equals("Banca") && Personaggi.personaggio.get(i).inVita)
 				{
 					Personaggi.giocatori.get(turno - 1).soldi += 20;
+					if(Personaggi.personaggio.get(i).piuSoldi)
+					{
+						Personaggi.giocatori.get(turno - 1).soldi += 10;
+					}
 				}
 			}
 		}
@@ -613,7 +620,7 @@ public class Gioca extends BasicGameState
 		bottoniBase.get(1).Elimina();
 		bottoniBase.add(new Bottone("Aereo (150)", "Aereo", "150"));
 		bottoniBase.get(2).Elimina();
-		bottoniBase.add(new Bottone("Autoblindo (75)", "Autoblindo", "75"));
+		bottoniBase.add(new Bottone("Blindato (75)", "Autoblindo", "75"));
 		bottoniBase.get(3).Elimina();
 		bottoniBase.add(new Bottone("Banca (100)", "Banca", "100"));
 		bottoniBase.get(4).Elimina();

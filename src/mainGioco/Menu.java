@@ -133,7 +133,7 @@ public class Menu extends BasicGameState {
 		for (int i = 0; i < 4; i++)
 		{
 			nuvole[i].x += nuvole[i].speed * delta;
-			if (nuvole[i].x < (-200 * Config.Scala) || nuvole[i].x > (Config.LARGHEZZA + 200*Config.Scala))
+			if (nuvole[i].x < (-400 * Config.Scala))
 				nuvole[i] = new Nuvola();
 		}
 		

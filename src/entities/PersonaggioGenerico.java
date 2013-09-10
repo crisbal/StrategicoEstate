@@ -22,11 +22,10 @@ public class PersonaggioGenerico {
 	public int vita = 100;
 	public int squadra;
 	public int raggio = 0;
-	public int potenzaAttacco, potenzaDifesa;
 	public int Identificativo;
 
 	public boolean veicolo;
-	public boolean piuAttacco, piuDifesa, vsVeicolo, vsFanteria;
+	public boolean piuAttacco, vsCorazzati, vsFanteria, vsAerei, vsAA, piuSoldi,vitaCaricata,piuRaggio;
 
 	public PersonaggioGenerico(int y, int x, String tipo, int squadra, int id)
 			throws SlickException {

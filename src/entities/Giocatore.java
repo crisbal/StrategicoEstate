@@ -38,9 +38,9 @@ public class Giocatore {
 	
 	public void Disegna(float f,float g,GameContainer gc) throws SlickException
 	{
-		base.draw(f*Config.Scala, g*Config.Scala, 2f*Config.Scala);
+		base.draw(f, g, 2f*Config.Scala);
 		for (int i = 0; i < elementi.length; i++)
 			new Image("res/Giocatori/" + i + "/" + elementi[i] + ".png", false,
-					Image.FILTER_NEAREST).draw(f*Config.Scala, g*Config.Scala, 2.0f*Config.Scala);
+					Image.FILTER_NEAREST).draw(f, g, 2.0f*Config.Scala);
 	}
 }

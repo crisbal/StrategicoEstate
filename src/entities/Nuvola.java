@@ -27,7 +27,7 @@ public class Nuvola {
 		 * } else
 		 */
 		{
-			x = Config.LARGHEZZA + rnd.nextInt((int) (200 * Config.Scala));
+			x = Config.LARGHEZZA + rnd.nextInt((int) (300 * Config.Scala));
 			y = rnd.nextInt((int) (100 * Config.Scala));
 			do
 			{
