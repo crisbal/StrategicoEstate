@@ -34,6 +34,7 @@ public class Battaglia extends BasicGameState
 	private Animation attGenerico, difGenerico;
 	public static final String Path = "res/Battaglia/";
 	Testo vita;
+
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException
 	{
@@ -73,8 +74,11 @@ public class Battaglia extends BasicGameState
 				difensore.DisegnaXYScala(gc.getWidth() / 2 + gc.getWidth() / 4 - (difensore.getWidth() * 5f) / 2, 200 * Config.Scala, 5f);
 			}
 
-			vita.disegna(Integer.toString(attaccante.vita), gc.getWidth()/4-vita.getMaxWidth(Integer.toString(attaccante.vita)), 50*Config.Scala);
-			vita.disegna(Integer.toString(difensore.vita), gc.getWidth()/4*3-vita.getMaxWidth(Integer.toString(attaccante.vita)), 50*Config.Scala);
+			if(attaccante.vita>0)
+				vita.disegna(Integer.toString(attaccante.vita), gc.getWidth() / 4 - vita.getMaxWidth(Integer.toString(attaccante.vita)), 50 * Config.Scala);
+			
+			if(difensore.vita>0)
+				vita.disegna(Integer.toString(difensore.vita), gc.getWidth() / 4 * 3 - vita.getMaxWidth(Integer.toString(attaccante.vita)), 50 * Config.Scala);
 		}
 	}
 
@@ -138,13 +142,20 @@ public class Battaglia extends BasicGameState
 			posYDif = new int[10];
 			int k = 0, j = 0;
 			Random gen = new Random();
+
 			for (int i = 0; i < 10; i++)
 			{
-				posXAtt[i] = gen.nextInt((int) (gc.getWidth()/2-attGenerico.getWidth()* Config.Scala));
-				posYAtt[i] = (int) (350*Config.Scala + gen.nextInt((int) (gc.getHeight()-350*Config.Scala-attGenerico.getHeight()*Config.Scala)));
+				if (!attaccante.Classe.equals("Base") && !attaccante.Classe.equals("Banca"))
+				{
 
-				posXDif[i] = gc.getWidth()/2 + gen.nextInt((int) (gc.getWidth()/2-difGenerico.getWidth()* Config.Scala));
-				posYDif[i] = (int) (350*Config.Scala + gen.nextInt((int) (gc.getHeight()-350*Config.Scala-difGenerico.getHeight()*Config.Scala)));
+					posXAtt[i] = gen.nextInt((int) (gc.getWidth() / 2 - attGenerico.getWidth() * Config.Scala));
+					posYAtt[i] = (int) (350 * Config.Scala + gen.nextInt((int) (gc.getHeight() - 350 * Config.Scala - attGenerico.getHeight() * Config.Scala)));
+				}
+				if (!difensore.Classe.equals("Base") && !difensore.Classe.equals("Banca"))
+				{
+					posXDif[i] = gc.getWidth() / 2 + gen.nextInt((int) (gc.getWidth() / 2 - difGenerico.getWidth() * Config.Scala));
+					posYDif[i] = (int) (350 * Config.Scala + gen.nextInt((int) (gc.getHeight() - 350 * Config.Scala - difGenerico.getHeight() * Config.Scala)));
+				}
 			}
 		}
 		timer += delta;
@@ -183,42 +194,42 @@ public class Battaglia extends BasicGameState
 			potenzaAttacco += 8;
 			if (attaccante.piuAttacco)
 				potenzaAttacco += 5;
-			if(difensore.Classe.equals("Soldato"))
-				potenzaAttacco+=6;
-			if(difensore.Classe.equals("Aereo"))
+			if (difensore.Classe.equals("Soldato"))
+				potenzaAttacco += 6;
+			if (difensore.Classe.equals("Aereo"))
 			{
-				potenzaAttacco+=10;
+				potenzaAttacco += 10;
 			}
-			else if((difensore.Classe.equals("Carro") || difensore.Classe.equals("Autoblindo")) && attaccante.vsCorazzati)
-				potenzaAttacco+=10;
+			if ((difensore.Classe.equals("Carro") || difensore.Classe.equals("Autoblindo")) && attaccante.vsCorazzati)
+				potenzaAttacco += 10;
 		}
 		if (difensore.Classe.equals("Soldato"))
 		{
 			potenzaDifesa += 8;
 			if (difensore.piuAttacco)
 				potenzaDifesa += 5;
-			if(attaccante.Classe.equals("Soldato"))
-				potenzaDifesa+=6;
-			if(attaccante.Classe.equals("Aereo"))
+			if (attaccante.Classe.equals("Soldato"))
+				potenzaDifesa += 6;
+			if (attaccante.Classe.equals("Aereo"))
 			{
-				potenzaDifesa+=10;
+				potenzaDifesa += 10;
 			}
-			else if((attaccante.Classe.equals("Carro") || attaccante.Classe.equals("Autoblindo")) && difensore.vsCorazzati)
-				potenzaDifesa+=10;
+			if ((attaccante.Classe.equals("Carro") || attaccante.Classe.equals("Autoblindo")) && difensore.vsCorazzati)
+				potenzaDifesa += 10;
 		}
-		
+
 		if (attaccante.Classe.equals("Carro"))
 		{
 			potenzaAttacco += 13;
 			if (attaccante.piuAttacco)
 				potenzaAttacco += 8;
-			if(difensore.Classe.equals("Aereo")  && attaccante.vsAerei)
+			if (difensore.Classe.equals("Aereo") && attaccante.vsAerei)
 			{
-				potenzaAttacco+=10;
+				potenzaAttacco += 10;
 			}
-			if(difensore.Classe.equals("Soldato"))
+			if (difensore.Classe.equals("Soldato"))
 			{
-				potenzaAttacco+=8;
+				potenzaAttacco += 8;
 			}
 		}
 		if (difensore.Classe.equals("Carro"))
@@ -226,69 +237,70 @@ public class Battaglia extends BasicGameState
 			potenzaDifesa += 13;
 			if (difensore.piuAttacco)
 				potenzaDifesa += 8;
-			if(attaccante.Classe.equals("Aereo") && difensore.vsAerei)
+			if (attaccante.Classe.equals("Aereo") && difensore.vsAerei)
 			{
-				potenzaDifesa+=15;
+				potenzaDifesa += 15;
 			}
-			if(attaccante.Classe.equals("Soldato"))
+			if (attaccante.Classe.equals("Soldato"))
 			{
-				potenzaDifesa+=8;
+				potenzaDifesa += 8;
 			}
 		}
-		if(attaccante.Classe.equals("Aereo"))
+		if (attaccante.Classe.equals("Aereo"))
 		{
 			potenzaAttacco += 18;
 			if (attaccante.piuAttacco)
 				potenzaAttacco += 12;
-			if(difensore.Classe.equals("Carro"))
+			if (difensore.Classe.equals("Carro"))
 				potenzaAttacco += 8;
-			if(difensore.Classe.equals("Carro") && difensore.vsAerei && attaccante.vsAA )
+			if (difensore.Classe.equals("Carro") && difensore.vsAerei && attaccante.vsAA)
 				potenzaAttacco += 5;
-			if(difensore.Classe.equals("Soldato") && attaccante.vsFanteria )
+			if (difensore.Classe.equals("Soldato") && attaccante.vsFanteria)
 				potenzaAttacco += 5;
 		}
-		if(difensore.Classe.equals("Aereo"))
+		if (difensore.Classe.equals("Aereo"))
 		{
 			potenzaDifesa += 18;
 			if (difensore.piuAttacco)
 				potenzaDifesa += 12;
-			if(attaccante.Classe.equals("Carro"))
+			if (attaccante.Classe.equals("Carro"))
 				potenzaDifesa += 8;
-			if(attaccante.Classe.equals("Carro") && attaccante.vsAerei && difensore.vsAA )
+			if (attaccante.Classe.equals("Carro") && attaccante.vsAerei && difensore.vsAA)
 				potenzaDifesa += 5;
-			if(attaccante.Classe.equals("Soldato") && difensore.vsFanteria )
+			if (attaccante.Classe.equals("Soldato") && difensore.vsFanteria)
 				potenzaDifesa += 5;
 		}
-		if(attaccante.Classe.equals("Autoblindo"))
+		if (attaccante.Classe.equals("Autoblindo"))
 		{
-			potenzaAttacco +=10;
+			potenzaAttacco += 10;
 			if (attaccante.piuAttacco)
 				potenzaAttacco += 10;
-			if(difensore.Classe.equals("Soldato") && attaccante.vsFanteria)
+			if (difensore.Classe.equals("Soldato") && attaccante.vsFanteria)
 			{
 				potenzaAttacco += 8;
 			}
 		}
-		if(difensore.Classe.equals("Autoblindo"))
+		if (difensore.Classe.equals("Autoblindo"))
 		{
-			potenzaAttacco +=10;
+			potenzaAttacco += 10;
 			if (difensore.piuAttacco)
 				potenzaAttacco += 10;
-			if(attaccante.Classe.equals("Soldato") && difensore.vsFanteria)
+			if (attaccante.Classe.equals("Soldato") && difensore.vsFanteria)
 			{
 				potenzaAttacco += 8;
 			}
 		}
-		if(difensore.Classe.equals("Banca"))
+		if (difensore.Classe.equals("Banca"))
 		{
-			potenzaAttacco+=15;
+			potenzaAttacco += 15;
 		}
-		if(attaccante.Classe.equals("Banca"))
+		if (attaccante.Classe.equals("Banca"))
 		{
-			potenzaDifesa+=15;
+			potenzaDifesa += 15;
 		}
-		potenzaAttacco = Math.round(potenzaAttacco * (attaccante.vita / 100));
-		potenzaDifesa = Math.round(potenzaDifesa * (difensore.vita / 100));
+		// potenzaAttacco = Math.round(potenzaAttacco * (attaccante.vita /
+		// 100));
+		// potenzaDifesa = Math.round(potenzaDifesa * (difensore.vita / 100));
 
 		attaccante.vita -= potenzaDifesa;
 		difensore.vita -= potenzaAttacco;

@@ -549,7 +549,18 @@ public class Gioca extends BasicGameState
 			} else if (opzioniMenu[1].Cliccato())
 			{
 				inMenu = !inMenu;
-				sbg.enterState(Main.menu);
+				Personaggi.giocatori.clear();
+				Personaggi.personaggio.clear();
+				CreaPersonaggio.nAdd = 0;
+				vittoria = -1;
+				turno = 1;
+				turnoTotale = 1;
+				caricato = false;
+				inMenu = false;
+				Personaggi.attaccante = null;
+				Personaggi.difensore = null;
+				pulisciGUI();
+				sbg.enterState(Main.menu, new FadeOutTransition(), new FadeInTransition());
 			} else if (opzioniMenu[2].Cliccato())
 			{
 				gc.exit();

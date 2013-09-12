@@ -54,10 +54,10 @@ public class PersonaggioGenerico {
 			veicolo = true;
 		}
 		if ((Tipo.Path + tipo).matches(Tipo.SOLDATO)) {
-			raggio = 3;
+			raggio = 2;
 		}
 		if ((Tipo.Path + tipo).matches(Tipo.AEREO)) {
-			raggio = 8;
+			raggio = 5;
 			veicolo = true;
 		}
 		Identificativo = id;
